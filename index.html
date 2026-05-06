@@ -230,6 +230,7 @@
   .claori-chats-btn:hover{background:rgba(255,255,255,0.2);}
   /* Share popup animation */
   @keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse-btn{0%{transform:scale(1)}50%{transform:scale(1.03);box-shadow:0 0 0 6px rgba(233,69,96,0.25)}100%{transform:scale(1)}}
 
 
   /* ── Mobile responsive ────────────────────────────────────── */
@@ -426,6 +427,15 @@
         <button class="dir-btn mode-btn" data-mode="memory" id="mode-memory">🧠 Memory</button>
       </div>
       <!-- Classic sub-types (shown when Classic is active) -->
+      <div id="memory-settings" style="margin-top:8px;display:none">
+        <label style="display:flex;align-items:center;gap:10px;font-size:13px;color:var(--text-muted);padding:8px 10px;background:var(--surface);border-radius:8px;border:1.5px solid var(--border)">
+          <span id="memory-preview-label">👁 Preview time:</span>
+          <input type="number" id="memory-preview-secs" min="5" max="15" value="8"
+            style="width:56px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:Heebo,sans-serif;font-size:14px;padding:4px 8px;outline:none;text-align:center">
+          <span id="memory-preview-unit">sec</span>
+        </label>
+      </div>
+      <!-- Classic sub-types (shown when Classic is active) -->
       <div id="classic-subtypes" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:8px">
         <label style="display:flex;align-items:center;gap:6px;cursor:pointer;font-size:13px;padding:6px 10px;background:var(--surface);border:1.5px solid var(--accent);border-radius:8px;user-select:none">
           <input type="checkbox" id="sub-typing" checked style="accent-color:var(--accent);width:14px;height:14px">
@@ -443,6 +453,9 @@
     </div>
 
     <button class="start-btn" id="start-btn" disabled>Start Quiz</button>
+    <button id="share-quiz-btn" style="width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:Heebo,sans-serif;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-top:-4px;transition:all 0.2s">
+      ↑ <span id="share-quiz-btn-label">Share Quiz</span>
+    </button>
 
     <button class="community-btn" id="community-btn">
       <span style="font-size:18px">🌐</span>
@@ -542,6 +555,13 @@
         <button id="create-shared-btn" style="margin-right:auto;padding:7px 13px;border-radius:8px;border:1px solid var(--accent);background:none;color:var(--accent);font-family:'Heebo',sans-serif;font-size:12px;cursor:pointer;font-weight:700">+ Create</button>
       </div>
       <input class="search-input" id="community-search" placeholder="🔍 Search by topic...">
+      <!-- Sort bar -->
+      <div id="community-sort-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 12px;">
+        <button class="sort-btn active" data-sort="langs" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--accent);background:rgba(233,69,96,0.12);color:var(--accent);cursor:pointer;font-family:Heebo,sans-serif;" id="sort-langs">🌐 <span id="sort-langs-label">Languages</span></button>
+        <button class="sort-btn" data-sort="date-new" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif;" id="sort-date-new">🆕 <span id="sort-date-new-label">Newest</span></button>
+        <button class="sort-btn" data-sort="date-old" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif;" id="sort-date-old">📅 <span id="sort-date-old-label">Oldest</span></button>
+        <button class="sort-btn" data-sort="creator" style="padding:5px 12px;border-radius:20px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif;" id="sort-creator">👤 <span id="sort-creator-label">By Creator</span></button>
+      </div>
       <div id="community-list"></div>
     </div>
   </div>
@@ -592,9 +612,52 @@
     <div class="scroll-area">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)">
         <button class="back-btn" id="saved-back">←</button>
-        <div>
+        <div style="flex:1">
           <div style="font-size:17px;font-weight:700" id="saved-screen-title">📚 My Quizzes</div>
           <div style="font-size:12px;color:var(--text-muted)" id="saved-screen-sub">Auto-saved quizzes</div>
+        </div>
+        <button id="saved-manage-btn" style="padding:7px 12px;border-radius:8px;border:1px solid var(--border);background:var(--surface2);color:var(--text-muted);font-family:Heebo,sans-serif;font-size:12px;cursor:pointer;font-weight:600">⚙️ <span id="saved-manage-label">Manage</span></button>
+      </div>
+      <!-- Management panel (collapsed by default) -->
+      <div id="saved-manage-panel" style="display:none;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px">
+        <!-- Sort/filter -->
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px" id="saved-sort-title">Sort & Filter</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px" id="saved-sort-bar">
+          <button class="saved-sort-btn active" data-sort="date-new" style="padding:5px 10px;border-radius:16px;font-size:12px;font-weight:600;border:1.5px solid var(--accent);background:rgba(233,69,96,0.12);color:var(--accent);cursor:pointer;font-family:Heebo,sans-serif">🆕 <span>Newest</span></button>
+          <button class="saved-sort-btn" data-sort="date-old" style="padding:5px 10px;border-radius:16px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif">📅 <span>Oldest</span></button>
+          <button class="saved-sort-btn" data-sort="lang" style="padding:5px 10px;border-radius:16px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif">🌐 <span>Language</span></button>
+          <button class="saved-sort-btn" data-sort="name" style="padding:5px 10px;border-radius:16px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif">🔤 <span>Name</span></button>
+          <button class="saved-sort-btn" data-sort="size" style="padding:5px 10px;border-radius:16px;font-size:12px;font-weight:600;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif">📊 <span>Size</span></button>
+        </div>
+        <!-- Filter by language -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px" id="saved-filter-lang-label">Filter by language:</div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap" id="saved-lang-filters">
+            <button class="saved-lang-filter active" data-lang="all" style="padding:4px 10px;border-radius:14px;font-size:12px;border:1.5px solid var(--accent);background:rgba(233,69,96,0.12);color:var(--accent);cursor:pointer;font-family:Heebo,sans-serif">All</button>
+          </div>
+        </div>
+        <!-- Divider -->
+        <div style="border-top:1px solid var(--border);margin:12px 0"></div>
+        <!-- Auto-delete -->
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px" id="saved-delete-title">Auto-Delete</div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <select id="saved-autodelete-mode" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:13px;padding:7px 10px;cursor:pointer;outline:none">
+            <option value="manual">Manual (default)</option>
+            <option value="auto">Every X time</option>
+          </select>
+          <div id="saved-autodelete-config" style="display:none;display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            <input type="number" id="saved-autodelete-num" min="1" value="7" style="width:60px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:13px;padding:6px 8px;outline:none;text-align:center">
+            <select id="saved-autodelete-unit" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:13px;padding:7px 10px;cursor:pointer;outline:none">
+              <option value="minutes">Minutes</option>
+              <option value="hours">Hours</option>
+              <option value="days" selected>Days</option>
+              <option value="weeks">Weeks</option>
+              <option value="months">Months</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:10px">
+          <button id="saved-delete-all-btn" style="padding:8px 14px;border-radius:8px;border:1px solid var(--danger);background:rgba(248,113,113,0.1);color:var(--danger);font-family:Heebo,sans-serif;font-size:13px;cursor:pointer;font-weight:600">🗑 Delete All Quizzes</button>
         </div>
       </div>
       <div id="saved-quizzes-list"></div>
@@ -726,6 +789,7 @@
   <div class="screen" id="screen-memory">
     <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-shrink:0">
       <button class="back-btn" id="memory-back">←</button>
+      <button id="memory-home-btn" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:13px;padding:5px 9px;cursor:pointer;font-family:Heebo,sans-serif">🏠</button>
       <div style="font-size:16px;font-weight:700">🧠 Memory Game</div>
       <button id="memory-pause-btn" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text-muted);font-size:16px;cursor:pointer;padding:4px 8px;line-height:1" title="Pause">⏸</button>
       <div style="margin-right:auto;font-size:12px;color:var(--text-muted)">Pairs: <span id="memory-pairs" style="color:var(--accent);font-weight:700">0/0</span></div>
@@ -768,44 +832,49 @@
 </div>
 <script>
 // ============================================================
-// STORAGE POLYFILL (for GitHub Pages / outside Claude.ai)
+// STORAGE — Firebase for shared data, localStorage for personal
 // ============================================================
+// 🔧 SETUP: Replace with your Firebase config from console.firebase.google.com
+const FIREBASE_CONFIG = {
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  databaseURL: "https://YOUR_PROJECT-default-rtdb.firebaseio.com",
+  projectId: "YOUR_PROJECT",
+};
+const FIREBASE_ENABLED = FIREBASE_CONFIG.apiKey !== "YOUR_API_KEY";
+
 if (!window.storage) {
   const _store = {};
   const _shared = {};
   window.storage = {
     get: async (key, shared) => {
-      const map = shared ? _shared : _store;
-      // Also check localStorage
       try {
         const lsKey = (shared ? 'shared_' : '') + key;
         const val = localStorage.getItem(lsKey);
         if (val !== null) return { key, value: val, shared: !!shared };
       } catch(e) {}
+      const map = shared ? _shared : _store;
       return map[key] ? { key, value: map[key], shared: !!shared } : null;
     },
     set: async (key, value, shared) => {
+      try { localStorage.setItem((shared ? 'shared_' : '') + key, value); } catch(e) {}
       const map = shared ? _shared : _store;
       map[key] = value;
-      try {
-        const lsKey = (shared ? 'shared_' : '') + key;
-        localStorage.setItem(lsKey, value);
-      } catch(e) {}
       return { key, value, shared: !!shared };
     },
     delete: async (key, shared) => {
+      try { localStorage.removeItem((shared ? 'shared_' : '') + key); } catch(e) {}
       const map = shared ? _shared : _store;
       delete map[key];
-      try { localStorage.removeItem((shared ? 'shared_' : '') + key); } catch(e) {}
       return { key, deleted: true, shared: !!shared };
     },
     list: async (prefix, shared) => {
       const keys = [];
       try {
+        const p = (shared ? 'shared_' : '') + (prefix||'');
         for (let i = 0; i < localStorage.length; i++) {
           const k = localStorage.key(i);
-          const p = shared ? 'shared_' : '';
-          if (k && k.startsWith(p + (prefix||''))) keys.push(k.slice(p.length));
+          if (k && k.startsWith(p)) keys.push(k.slice(shared ? 7 : 0));
         }
       } catch(e) {}
       return { keys, prefix, shared: !!shared };
@@ -813,6 +882,72 @@ if (!window.storage) {
   };
   console.log('[Storage] Using localStorage polyfill');
 }
+
+// Override shared storage with Firebase if configured
+if (FIREBASE_ENABLED) {
+  const loadFirebase = () => new Promise((resolve, reject) => {
+    if (window._firebaseDB) { resolve(window._firebaseDB); return; }
+    const s1 = document.createElement('script');
+    s1.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js';
+    s1.onload = () => {
+      const s2 = document.createElement('script');
+      s2.src = 'https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js';
+      s2.onload = () => {
+        try {
+          if (!firebase.apps.length) firebase.initializeApp(FIREBASE_CONFIG);
+          window._firebaseDB = firebase.database();
+          resolve(window._firebaseDB);
+        } catch(e) { reject(e); }
+      };
+      document.head.appendChild(s2);
+    };
+    document.head.appendChild(s1);
+  });
+  const _orig = window.storage;
+  window.storage = {
+    set: async (key, value, shared) => {
+      if (!shared) return _orig.set(key, value, false);
+      try {
+        const db = await loadFirebase();
+        await db.ref('shared/' + key.replace(/[.#$[\]]/g,'_')).set({value, t: Date.now()});
+        return {key,value,shared:true};
+      } catch(e) { return _orig.set(key,value,false); }
+    },
+    get: async (key, shared) => {
+      if (!shared) return _orig.get(key, false);
+      try {
+        const db = await loadFirebase();
+        const snap = await db.ref('shared/'+key.replace(/[.#$[\]]/g,'_')).once('value');
+        const d = snap.val();
+        return d ? {key, value: d.value, shared:true} : null;
+      } catch(e) { return _orig.get(key,false); }
+    },
+    list: async (prefix, shared) => {
+      if (!shared) return _orig.list(prefix, false);
+      try {
+        const db = await loadFirebase();
+        const snap = await db.ref('shared').orderByKey().startAt(prefix.replace(/[.#$[\]]/g,'_')).once('value');
+        const keys = [];
+        snap.forEach(c => { keys.push(c.key.replace(/_/g,':')); });
+        return {keys, prefix, shared:true};
+      } catch(e) { return _orig.list(prefix,false); }
+    },
+    delete: async (key, shared) => {
+      if (!shared) return _orig.delete(key, false);
+      try {
+        const db = await loadFirebase();
+        await db.ref('shared/'+key.replace(/[.#$[\]]/g,'_')).remove();
+        return {key,deleted:true,shared:true};
+      } catch(e) { return _orig.delete(key,false); }
+    }
+  };
+  console.log('[Storage] Firebase enabled');
+}
+
+
+// ============================================================
+// STORAGE — Firebase for shared data, localStorage for personal
+// ============================================================
 
 // ============================================================
 // UI LANGUAGES (31)
@@ -853,8 +988,8 @@ const UI_LANGS = [
 
 // Minimal T object — falls back to EN for unlisted langs
 const T = {
-  en:{appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',smartModeRemember:"Don't ask again"},
-  he:{appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'משהו השתבש. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש • לוקח דקה',showAllWords:'הצג הכל',collapseWords:'הצג פחות',smartModeRemember:'אל תשאל אותי שוב'},
+  en:{appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',sortLangs:'Languages',sortNewest:'Newest',sortOldest:'Oldest',sortCreator:'By Creator',loading:'Loading...',memoryPreviewLabel:'Memorize!',memoryPreviewSec:'sec',memoryPreviewTime:'Preview time:',shareSettingsTitle:'🔗 Share Settings',shareAccessLabel:'Access Level',shareAccessEdit:'Edit Mode',shareAccessEditDesc:'Recipient can edit words and take the quiz',shareAccessView:'View Only',shareAccessViewDesc:'Recipient can only take the quiz\, not edit',shareLinkLabel:'Share Link:',shareCopyBtn:'📋 Copy',shareGenerateBtn:'Generate Link 🔗',sharedQuizLoaded:'Shared quiz loaded!',viewOnlyMode:'View only — editing disabled',viewOnlyHint:'View only',shareQuizBtn:'Share Quiz',smartModeRemember:"Don't ask again"},
+  he:{appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בוחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בוחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בוחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בוחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בוחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'משהו השתבש. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש • לוקח דקה',showAllWords:'הצג הכל',collapseWords:'הצג פחות',sortLangs:'שפות',sortNewest:'חדש ראשון',sortOldest:'ישן ראשון',sortCreator:'לפי יוצר',loading:'טוען...',memoryPreviewLabel:'שנן!',memoryPreviewSec:'שנ׳',memoryPreviewTime:'זמן תצוגה:',savedManageLabel:'ניהול',savedSortTitle:'מיון וסינון',savedFilterLang:'סינון לפי שפה:',savedDeleteTitle:'מחיקה אוטומטית',savedDeleteAll:'מחק את כל הבחנים',confirmDeleteAll:'למחוק את כל הבחנים השמורים? פעולה זו אינה הפיכה.',autoDeleteManual:'ידני (ברירת מחדל)',autoDeleteEvery:'כל X זמן',savedSortNewest:'חדש ראשון',savedSortOldest:'ישן ראשון',savedSortLang:'שפה',savedSortName:'שם',savedSortSize:'גודל',shareSettingsTitle:'🔗 הגדרות שיתוף',shareAccessLabel:'רמת גישה',shareAccessEdit:'מצב עריכה',shareAccessEditDesc:'המקבל יכול לערוך מילים ולהתחיל בוחן',shareAccessView:'צפייה בלבד',shareAccessViewDesc:'המקבל יכול רק לבצע את הבוחן\, לא לערוך',shareLinkLabel:'קישור לשיתוף:',shareCopyBtn:'📋 העתק',shareGenerateBtn:'צור קישור 🔗',sharedQuizLoaded:'בוחן משותף נטען!',viewOnlyMode:'צפייה בלבד — עריכה מושבתת',viewOnlyHint:'צפייה בלבד',shareQuizBtn:'שתף בוחן',smartModeRemember:'אל תשאל אותי שוב'},
   ar:{appTitle:'تدريب المفردات',appSubtitle:'أضف كلمات واختبر نفسك',sectionLangs:'اللغات',lang1:'ل 1:',lang2:'ل 2:',chooseLang:'اختر...',sectionWords:'الكلمات',addWord:'+ أضف كلمة',quizDir:'اتجاه الاختبار',dir1to2:'ل1 → ترجمة',dir2to1:'ل2 → ترجمة',dirRandom:'عشوائي',startQuiz:'ابدأ الاختبار',connectGT:'ربط الترجمة',gtConnected:'الترجمة مرتبطة',gtDisconnect:'انقر لقطع الاتصال',gtAuto:'ترجمة تلقائية',whatIsThis:'ما هذا؟',gtInfoTitle:'الترجمة التلقائية',gtF1t:'اقتراحات فورية',gtF1d:'أثناء الكتابة، تظهر الترجمة تلقائياً.',gtF2t:'لوحة مفاتيح خاطئة',gtF2d:'كتبت على لوحة مفاتيح خاطئة؟ التطبيق يكتشف ويقترح.',gtF3t:'دائماً خيارك',gtF3d:'لا تُطبَّق الاقتراحات تلقائياً.',gtInfoConnectBtn:'ربط الترجمة التلقائية',gtInfoDisconnectBtn:'قطع الاتصال',gtSuggestionLabel:'اقتراح ترجمة',accept:'قبول',kbSuggestionLabel:'لوحة مفاتيح خاطئة؟',kbAccept:'تصحيح',quizPrompt:'ما ترجمة:',checkBtn:'تحقق ↵',nextBtn:'التالي →',finishBtn:'إنهاء',skipBtn:'تخطى',correct:'✓ صحيح!',wrongPrefix:'✗ الإجابة الصحيحة: ',scoreOf:'/',scoreGreat:'?? ممتاز!',scoreOk:'?? لا بأس!',scorePoor:'?? استمر!',resultsSubtitle:(c,t)=>`أجبت صحيحاً على ${c} من ${t}`,retryWrong:'?? اختبار الأخطاء',newQuiz:'?? اختبار جديد',goHome:'?? الرئيسية',skipped:'(تخطى)',youAnswered:'أجبت:',uiLangTitle:'لغة التطبيق',uiLangSearch:'?? بحث...',wordPlaceholderA:'كلمة',wordPlaceholderB:'ترجمة',deleteTitle:'حذف',noResults:'لم تُوجد لغات',communityBtn:'اختبار تعاوني',communityBtnSub:'تصفح وانشر اختبارات مشتركة',communityTitle:'الاختبارات التعاونية',communitySub:'ابحث وانشر اختبارات مشتركة',createSharedTitle:'اختبار مشترك جديد',createBtn:'+ إنشاء',communitySearch:'?? بحث بالموضوع...',sharedTopic:'موضوع الاختبار',topicPlaceholder:'مثال: طعام إيطالي...',sharedLangs:'اللغات',sharedGTLabel:'استخدم الترجمة التلقائية عند إضافة الكلمات',sharedAddWord:'+ أضف كلمة',publishBtn:'?? نشر الاختبار',publishingBtn:'جاري النشر...',publishedBtn:'✓ تم النشر!',startQuizCard:'▶ ابدأ الاختبار',copyEdit:'?? نسخ وتعديل',noQuizzes:'لا توجد اختبارات منشورة بعد.',noQuizzesSearch:(q)=>`لم تُوجد اختبارات لـ "${q}"`,storageUnavailable:'التخزين غير متاح.',wordCount:(n)=>`?? ${n} كلمات`,savedBtn:'اختباراتي',savedBtnSub:'عرض الاختبارات المحفوظة',savedTitle:'?? اختباراتي',savedSub:'اختبارات محفوظة تلقائياً',backToSaved:'?? اختباراتي',smartModeTitle:'?? الوضع الذكي',smartModeDesc:'تفعيل فحص إجابات أذكى:',smartModeTypo:'<strong>أخطاء إملائية</strong> — 1-2 حروف خاطئة لا تزال تُعد صحيحة',smartModeSyn:'<strong>نفس المعنى</strong> — المرادفات والترجمات المكافئة مقبولة',smartModeNo:'لا، عادي',smartModeYes:'نعم، ذكي ??',feedbackBtn:'ملاحظات',feedbackDesc:'لديك اقتراح أو وجدت خطأ؟ يسعدنا سماعك!',feedbackOpenBtn:'فتح نموذج الملاحظات →',feedbackNote:'يفتح في تبويب جديد',smartModeRemember:'لا تسألني مرة أخرى'},
   fr:{appTitle:'Entraînement vocabulaire',appSubtitle:'Ajoutez des mots et testez-vous',sectionLangs:'Langues',lang1:'L 1:',lang2:'L 2:',chooseLang:'Choisir...',sectionWords:'Mots',addWord:'+ Ajouter un mot',quizDir:'Direction du quiz',dir1to2:'L1 → Traduction',dir2to1:'L2 → Traduction',dirRandom:'Aléatoire',startQuiz:'Commencer le quiz',connectGT:'Connecter la traduction',gtConnected:'Traduction connectée',gtDisconnect:'Cliquer pour déconnecter',gtAuto:'Traduction automatique',whatIsThis:'C\'est quoi ?',gtInfoTitle:'Traduction automatique',gtF1t:'Suggestions instantanées',gtF1d:'En tapant, une traduction apparaît automatiquement.',gtF2t:'Mauvais clavier',gtF2d:'Tapé sur le mauvais clavier ? L\'app détecte et suggère.',gtF3t:'Toujours votre choix',gtF3d:'Les suggestions ne s\'appliquent jamais automatiquement.',gtInfoConnectBtn:'Connecter la traduction auto',gtInfoDisconnectBtn:'Déconnecter',gtSuggestionLabel:'Suggestion de traduction',accept:'Accepter',kbSuggestionLabel:'Mauvais clavier ?',kbAccept:'Corriger',quizPrompt:'Quelle est la traduction de :',checkBtn:'Vérifier ↵',nextBtn:'Suivant →',finishBtn:'Terminer',skipBtn:'Passer',correct:'✓ Correct !',wrongPrefix:'✗ Bonne réponse : ',scoreOf:'/',scoreGreat:'?? Excellent !',scoreOk:'?? Pas mal !',scorePoor:'?? Continuez !',resultsSubtitle:(c,t)=>`Vous avez eu ${c} sur ${t} correct`,retryWrong:'?? Revoir les erreurs',newQuiz:'?? Nouveau quiz',goHome:'?? Accueil',skipped:'(passé)',youAnswered:'Votre réponse :',uiLangTitle:'Langue de l\'app',uiLangSearch:'?? Rechercher...',wordPlaceholderA:'Mot',wordPlaceholderB:'Traduction',deleteTitle:'Supprimer',noResults:'Aucune langue trouvée',communityBtn:'Quiz collaboratif',communityBtnSub:'Parcourir et publier des quiz partagés',communityTitle:'Quiz collaboratifs',communitySub:'Trouver et publier des quiz partagés',createSharedTitle:'Nouveau quiz partagé',createBtn:'+ Créer',communitySearch:'?? Rechercher par thème...',sharedTopic:'Thème du quiz',topicPlaceholder:'ex. cuisine italienne...',sharedLangs:'Langues',sharedGTLabel:'Utiliser la traduction auto en ajoutant des mots',sharedAddWord:'+ Ajouter un mot',publishBtn:'?? Publier le quiz',publishingBtn:'Publication...',publishedBtn:'✓ Publié !',startQuizCard:'▶ Commencer',copyEdit:'?? Copier et modifier',noQuizzes:'Aucun quiz publié pour l\'instant.',noQuizzesSearch:(q)=>`Aucun quiz trouvé pour "${q}"`,storageUnavailable:'Stockage indisponible.',wordCount:(n)=>`?? ${n} mots`,savedBtn:'Mes quiz',savedBtnSub:'Voir les quiz sauvegardés',savedTitle:'?? Mes quiz',savedSub:'Quiz sauvegardés automatiquement',backToSaved:'?? Mes quiz',smartModeTitle:'?? Mode intelligent',smartModeDesc:'Activer une vérification des réponses plus intelligente :',smartModeTypo:'<strong>Fautes de frappe</strong> — 1-2 caractères erronés comptent quand même',smartModeSyn:'<strong>Même sens</strong> — synonymes et traductions équivalentes acceptés',smartModeNo:'Non, normal',smartModeYes:'Oui, intelligent ??',feedbackBtn:'Avis',feedbackDesc:'Une suggestion ou un bug ? Nous adorerions vous entendre!',feedbackOpenBtn:'Ouvrir le formulaire →',feedbackNote:'S\'ouvre dans un nouvel onglet',smartModeRemember:'Ne plus demander'},
   es:{appTitle:'Práctica de vocabulario',appSubtitle:'Agrega palabras y ponte a prueba',sectionLangs:'Idiomas',lang1:'Id 1:',lang2:'Id 2:',chooseLang:'Elegir...',sectionWords:'Palabras',addWord:'+ Agregar palabra',quizDir:'Dirección del quiz',dir1to2:'Id1 → Traducción',dir2to1:'Id2 → Traducción',dirRandom:'Aleatorio',startQuiz:'Iniciar quiz',connectGT:'Conectar traducción',gtConnected:'Traducción conectada',gtDisconnect:'Clic para desconectar',gtAuto:'Traducción automática',whatIsThis:'¿Qué es esto?',gtInfoTitle:'Traducción automática',gtF1t:'Sugerencias instantáneas',gtF1d:'Al escribir, una traducción aparece automáticamente.',gtF2t:'Teclado equivocado',gtF2d:'¿Escribiste en el teclado equivocado? La app detecta y sugiere.',gtF3t:'Siempre tu elección',gtF3d:'Las sugerencias nunca se aplican automáticamente.',gtInfoConnectBtn:'Conectar traducción auto',gtInfoDisconnectBtn:'Desconectar',gtSuggestionLabel:'Sugerencia de traducción',accept:'Aceptar',kbSuggestionLabel:'¿Teclado equivocado?',kbAccept:'Corregir',quizPrompt:'¿Cuál es la traducción de:',checkBtn:'Verificar ↵',nextBtn:'Siguiente →',finishBtn:'Finalizar',skipBtn:'Saltar',correct:'✓ ¡Correcto!',wrongPrefix:'✗ Respuesta correcta: ',scoreOf:'/',scoreGreat:'?? ¡Excelente!',scoreOk:'?? ¡No está mal!',scorePoor:'?? ¡Sigue intentando!',resultsSubtitle:(c,t)=>`Acertaste ${c} de ${t}`,retryWrong:'?? Repasar errores',newQuiz:'?? Nuevo quiz',goHome:'?? Inicio',skipped:'(omitido)',youAnswered:'Respondiste:',uiLangTitle:'Idioma de la app',uiLangSearch:'?? Buscar...',wordPlaceholderA:'Palabra',wordPlaceholderB:'Traducción',deleteTitle:'Eliminar',noResults:'No se encontraron idiomas',communityBtn:'Quiz colaborativo',communityBtnSub:'Explorar y publicar quiz compartidos',communityTitle:'Quiz colaborativos',communitySub:'Encontrar y publicar quiz compartidos',createSharedTitle:'Nuevo quiz compartido',createBtn:'+ Crear',communitySearch:'?? Buscar por tema...',sharedTopic:'Tema del quiz',topicPlaceholder:'ej. comida italiana...',sharedLangs:'Idiomas',sharedGTLabel:'Usar traducción auto al agregar palabras',sharedAddWord:'+ Agregar palabra',publishBtn:'?? Publicar quiz',publishingBtn:'Publicando...',publishedBtn:'✓ ¡Publicado!',startQuizCard:'▶ Iniciar',copyEdit:'?? Copiar y editar',noQuizzes:'Aún no hay quiz publicados.',noQuizzesSearch:(q)=>`No se encontraron quiz para "${q}"`,storageUnavailable:'Almacenamiento no disponible.',wordCount:(n)=>`?? ${n} palabras`,savedBtn:'Mis quiz',savedBtnSub:'Ver quiz guardados',savedTitle:'?? Mis quiz',savedSub:'Quiz guardados automáticamente',backToSaved:'?? Mis quiz',smartModeTitle:'?? Modo inteligente',smartModeDesc:'Activar verificación de respuestas más inteligente:',smartModeTypo:'<strong>Errores tipográficos</strong> — 1-2 caracteres incorrectos aún cuentan',smartModeSyn:'<strong>Mismo significado</strong> — sinónimos y traducciones equivalentes aceptados',smartModeNo:'No, normal',smartModeYes:'Sí, inteligente ??',feedbackBtn:'Opinión',feedbackDesc:'¿Tienes una sugerencia o encontraste un error? ¡Nos encantaría escucharte!',feedbackOpenBtn:'Abrir formulario →',feedbackNote:'Se abre en una nueva pestaña',smartModeRemember:'No preguntar de nuevo'},
@@ -1045,7 +1180,20 @@ function applyUILang(code) {
   set('btn-retry-wrong',t.retryWrong); set('btn-new-quiz',t.newQuiz); set('btn-home',t.goHome);
   set('btn-back-saved',t.backToSaved);
   set('ui-modal-title',t.uiLangTitle); setP('ui-modal-search',t.uiLangSearch);
-  set('community-btn-title',t.communityBtn); set('community-btn-sub',t.communityBtnSub);
+  set('community-btn-title',t.communityBtn);
+  // Saved management labels
+  const smLbl=document.getElementById('saved-manage-label');if(smLbl)smLbl.textContent=t.savedManageLabel||'Manage';
+  const sstEl=document.getElementById('saved-sort-title');if(sstEl)sstEl.textContent=t.savedSortTitle||'Sort & Filter';
+  const sflEl=document.getElementById('saved-filter-lang-label');if(sflEl)sflEl.textContent=t.savedFilterLang||'Filter by language:';
+  const sdtEl=document.getElementById('saved-delete-title');if(sdtEl)sdtEl.textContent=t.savedDeleteTitle||'Auto-Delete';
+  const sdaEl=document.getElementById('saved-delete-all-btn');if(sdaEl)sdaEl.textContent='🗑 '+(t.savedDeleteAll||'Delete All Quizzes');
+  // Memory preview labels in settings
+  const mplEl=document.getElementById('memory-preview-label');if(mplEl)mplEl.textContent=t.memoryPreviewTime||'👁 Preview time:';
+  const mpuEl=document.getElementById('memory-preview-unit');if(mpuEl)mpuEl.textContent=t.memoryPreviewSec||'sec';
+  const slEl=document.getElementById('sort-langs-label');if(slEl)slEl.textContent=t.sortLangs||'Languages';
+  const snEl=document.getElementById('sort-date-new-label');if(snEl)snEl.textContent=t.sortNewest||'Newest';
+  const soEl=document.getElementById('sort-date-old-label');if(soEl)soEl.textContent=t.sortOldest||'Oldest';
+  const scEl=document.getElementById('sort-creator-label');if(scEl)scEl.textContent=t.sortCreator||'By Creator'; set('community-btn-sub',t.communityBtnSub);
   set('community-title-el',t.communityTitle); set('community-sub-el',t.communitySub);
   set('create-shared-btn',t.createBtn); set('create-shared-title-el',t.createSharedTitle);
   setP('community-search',t.communitySearch);
@@ -1418,7 +1566,20 @@ function renderSavedQuizzesList(quizzes) {
 function loadSavedForPlay(q) {
   if(q.lang1){activePicker=0;selectLang(ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1,flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1,names:{}});}
   if(q.lang2){activePicker=1;selectLang(ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2,flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2,names:{}});}
-  words=(q.words||[]).map(w=>({a:w.a,b:w.b}));renderWords();quizSource='saved';showScreen('input');setTimeout(()=>startQuiz('normal',null,true),100);
+  words=(q.words||[]).map(w=>({a:w.a,b:w.b}));
+  renderWords();
+  quizSource='saved';
+  // Go to input screen so user can pick quiz mode/type before starting
+  showScreen('input');
+  // Scroll to start button and highlight it
+  setTimeout(()=>{
+    const btn = document.getElementById('start-btn');
+    if(btn){
+      btn.scrollIntoView({behavior:'smooth',block:'center'});
+      btn.style.animation='pulse-btn 0.6s ease 2';
+      setTimeout(()=>btn.style.animation='',1200);
+    }
+  }, 150);
 }
 function loadSavedForEdit(q) {
   if(q.lang1){activePicker=0;selectLang(ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1,flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1,names:{}});}
@@ -1436,21 +1597,46 @@ function selectLang(lang) {
 // ============================================================
 // COMMUNITY QUIZZES
 // ============================================================
+let _communitySort = 'langs'; // default sort
+
 async function loadCommunityQuizzes(filter) {
   const listEl=document.getElementById('community-list');
-  listEl.innerHTML='<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">Loading...</div>';
+  const t=getT();
+  listEl.innerHTML=`<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">⏳ ${t.loading||'Loading...'}</div>`;
   try {
     const res=await window.storage.list('quiz:',true);
     const keys=(res&&res.keys)?res.keys:[];
     const quizzes=[];
-    for(const key of keys){try{const item=await window.storage.get(key,true);if(item&&item.value)quizzes.push(JSON.parse(item.value));}catch(e){}}
+    for(const key of keys){
+      try{const item=await window.storage.get(key,true);if(item&&item.value)quizzes.push(JSON.parse(item.value));}catch(e){}
+    }
     const f=(filter||'').trim().toLowerCase();
-    const filtered=f?quizzes.filter(q=>q.topic.toLowerCase().includes(f)):quizzes;
-    filtered.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    let filtered=f?quizzes.filter(q=>(q.topic||'').toLowerCase().includes(f)):quizzes;
+
+    // Sort
+    if(_communitySort==='langs') {
+      filtered.sort((a,b)=>{
+        const la=(a.lang1||'')+(a.lang2||'');
+        const lb=(b.lang1||'')+(b.lang2||'');
+        return la.localeCompare(lb);
+      });
+    } else if(_communitySort==='date-new') {
+      filtered.sort((a,b)=>(b.createdAt||0)-(a.createdAt||0));
+    } else if(_communitySort==='date-old') {
+      filtered.sort((a,b)=>(a.createdAt||0)-(b.createdAt||0));
+    } else if(_communitySort==='creator') {
+      filtered.sort((a,b)=>(a.creatorId||'').localeCompare(b.creatorId||''));
+    }
+
     listEl.innerHTML='';
-    if(!filtered.length){const t=getT();listEl.innerHTML=`<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">${f?t.noQuizzesSearch(escHtml(f)):t.noQuizzes}</div>`;return;}
+    if(!filtered.length){
+      listEl.innerHTML=`<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">${f?t.noQuizzesSearch(escHtml(f)):t.noQuizzes}</div>`;
+      return;
+    }
     for(const q of filtered){const card=await buildQuizCard(q);listEl.appendChild(card);}
-  }catch(e){listEl.innerHTML=`<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">${getT().storageUnavailable}</div>`;}
+  }catch(e){
+    listEl.innerHTML=`<div style="text-align:center;color:var(--text-muted);padding:40px 0;font-size:14px">${t.storageUnavailable}</div>`;
+  }
 }
 
 async function buildQuizCard(q) {
@@ -2783,21 +2969,73 @@ function endAirplane(state, won) {
 // (later-decl) let memorySecs = 0;
 // (later-decl) let memoryPool = [];
 
+let _memoryPreviewSecs = 8;
+
 function startMemoryGame(wrongOnly=null) {
   const pool = wrongOnly || words.filter(w=>w.a.trim()&&w.b.trim());
   if (!pool.length) return;
   memoryPool = pool;
+
+  // Get preview seconds from input
+  const previewInput = document.getElementById('memory-preview-secs');
+  _memoryPreviewSecs = Math.min(15, Math.max(5, parseInt(previewInput?.value)||8));
+
   showScreen('memory');
-  _runMemory(pool);
+  _runMemoryPreview(pool);
+}
+
+function _runMemoryPreview(pool) {
+  const t = getT();
+  const grid = document.getElementById('memory-grid');
+  grid.innerHTML = '';
+  clearInterval(memoryTimerInt);
+
+  // Show all word pairs during preview
+  const pairs = [...pool].sort(()=>Math.random()-0.5).slice(0,8);
+  const cols = pairs.length<=4?2:pairs.length<=6?3:4;
+  grid.style.gridTemplateColumns = `repeat(${cols*2},1fr)`;
+
+  // Color palette — each pair gets a unique color
+  const pairColors = [
+    'linear-gradient(135deg,#e94560,#c73652)',
+    'linear-gradient(135deg,#4f8ef7,#2d6fd4)',
+    'linear-gradient(135deg,#f5a623,#d4891e)',
+    'linear-gradient(135deg,#34d399,#1a9e6e)',
+    'linear-gradient(135deg,#a855f7,#7c3aed)',
+    'linear-gradient(135deg,#f97316,#ea580c)',
+    'linear-gradient(135deg,#06b6d4,#0891b2)',
+    'linear-gradient(135deg,#ec4899,#db2777)',
+  ];
+  pairs.forEach((w, pairIdx) => {
+    const bg = pairColors[pairIdx % pairColors.length];
+    [w.a, w.b].forEach(text => {
+      const div = document.createElement('div');
+      div.style.cssText = `min-height:60px;background:${bg};border-radius:10px;display:flex;align-items:center;justify-content:center;padding:8px;font-size:14px;font-weight:600;color:#fff;text-align:center;word-break:break-word;`;
+      div.textContent = text;
+      grid.appendChild(div);
+    });
+  });
+
+  // Countdown overlay
+  document.getElementById('memory-pairs').textContent = t.memoryPreviewLabel || 'Memorize!';
+  document.getElementById('memory-timer').textContent = _memoryPreviewSecs + 's';
+
+  let secsLeft = _memoryPreviewSecs;
+  memoryTimerInt = setInterval(() => {
+    secsLeft--;
+    document.getElementById('memory-timer').textContent = secsLeft + 's';
+    if (secsLeft <= 0) {
+      clearInterval(memoryTimerInt);
+      _runMemory(pairs);
+    }
+  }, 1000);
 }
 
 function stopMemoryGame() { clearInterval(memoryTimerInt); }
 
-function _runMemory(pool) {
+function _runMemory(pairs) {
   clearInterval(memoryTimerInt);
   memorySecs = 0;
-
-  const pairs = [...pool].sort(()=>Math.random()-0.5).slice(0,8);
   const cards = [];
   pairs.forEach((w,i)=>{
     cards.push({id:i*2, pairId:i, text:w.a, flipped:false, matched:false});
@@ -2821,6 +3059,9 @@ function _runMemory(pool) {
     document.getElementById('memory-timer').textContent=`${m}:${s.toString().padStart(2,'0')}`;
   },1000);
 
+  // Same color palette as preview
+  const _pairColors=['linear-gradient(135deg,#e94560,#c73652)','linear-gradient(135deg,#4f8ef7,#2d6fd4)','linear-gradient(135deg,#f5a623,#d4891e)','linear-gradient(135deg,#34d399,#1a9e6e)','linear-gradient(135deg,#a855f7,#7c3aed)','linear-gradient(135deg,#f97316,#ea580c)','linear-gradient(135deg,#06b6d4,#0891b2)','linear-gradient(135deg,#ec4899,#db2777)'];
+
   cards.forEach(card=>{
     const div=document.createElement('div');
     div.style.cssText='min-height:72px;background:var(--surface);border:2px solid var(--border);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;font-weight:600;text-align:center;padding:8px;transition:all 0.25s;user-select:none;position:relative;';
@@ -2837,7 +3078,7 @@ function _runMemory(pool) {
       if(locked||card.matched||card.flipped) return;
       card.flipped=true;
       back.style.display='none'; front.style.display='';
-      div.style.background='var(--surface2)'; div.style.borderColor='var(--accent)';
+      div.style.background=_pairColors[card.pairId%_pairColors.length]; div.style.borderColor='transparent'; front.style.color='#fff';
       flippedEls.push({div,card});
 
       if(flippedEls.length===2){
@@ -2848,8 +3089,10 @@ function _runMemory(pool) {
           document.getElementById('memory-pairs').textContent=`${foundPairs}/${totalPairs}`;
           [a,b].forEach(el=>{
             el.card.matched=true;
-            el.div.style.background='rgba(74,222,128,0.15)';
-            el.div.style.borderColor='var(--success)';
+            el.div.style.background=_pairColors[el.card.pairId%_pairColors.length];
+            el.div.style.borderColor='transparent';
+            el.div.style.opacity='0.65';
+            el.div.style.cursor='default';
           });
           flippedEls=[]; locked=false;
           if(foundPairs===totalPairs){
@@ -2866,7 +3109,7 @@ function _runMemory(pool) {
               el.card.flipped=false;
               el.div.querySelector('div:first-child').style.display='';
               el.div.querySelector('div:last-child').style.display='none';
-              el.div.style.background='var(--surface)'; el.div.style.borderColor='var(--border)';
+              el.div.style.background='var(--surface)'; el.div.style.borderColor='var(--border)'; el.div.querySelector('div:last-child').style.color='';
             });
             flippedEls=[]; locked=false;
           },900);
@@ -2894,7 +3137,7 @@ function wireNewButtons() {
   // Camera input
   const camEl = document.getElementById('claori-camera');
   if (camEl) camEl.addEventListener('change', handleClaoriImage);
-  on('claori-share-chat', 'click', () => shareClaoriChat());
+  on('claori-share-chat', 'click', () => shareClaoriChatUrl());
   on('claori-bg-toggle', 'click', (e) => {
     e.stopPropagation();
     const p = document.getElementById('claori-bg-panel');
@@ -2941,6 +3184,8 @@ function wireNewButtons() {
       quizMode = btn.dataset.mode;
       const sub=document.getElementById('classic-subtypes');
       if(sub) sub.style.display=(quizMode==='classic')?'':'none';
+      const memSet=document.getElementById('memory-settings');
+      if(memSet) memSet.style.display=(quizMode==='memory')?'':'none';
     });
   });
   // Sub-type checkboxes → quizSubTypes
@@ -2976,6 +3221,8 @@ function wireNewButtons() {
       quizMode = btn.dataset.mode;
       const sub=document.getElementById('classic-subtypes');
       if(sub) sub.style.display=(quizMode==='classic')?'':'none';
+      const memSet=document.getElementById('memory-settings');
+      if(memSet) memSet.style.display=(quizMode==='memory')?'':'none';
     });
   });
   // Sub-type checkboxes → quizSubTypes
@@ -3033,6 +3280,7 @@ function wireNewButtons() {
 
   // memory game buttons
   on('memory-back', 'click', () => { stopMemoryGame(); showScreen('input'); });
+  on('memory-home-btn', 'click', () => { stopMemoryGame(); showScreen('input'); });
   on('mr-home', 'click', () => showScreen('input'));
   on('mr-retry', 'click', () => startMemoryGame(memoryPool));
 }
@@ -3169,17 +3417,8 @@ function shareQuiz(quiz) {
   shareContent(title, text, '');
 }
 
-function shareClaoriChat() {
-  if (!claoriCurrentChatId || !claoriChats[claoriCurrentChatId]) return;
-  const chat = claoriChats[claoriCurrentChatId];
-  const t = getT();
-  const excerpt = chat.messages.slice(0,4).map(m =>
-    (m.role==='user'?'👤 ':'🤖 ') + (typeof m.content==='string' ? m.content.slice(0,80) : '[image]')
-  ).join('\n');
-  const title = chat.title || 'Chat';
-  const text = '💬 ' + title + '\n\n' + excerpt + (chat.messages.length > 4 ? '\n...' : '');
-  shareContent(title, text, '');
-}
+// shareClaoriChat replaced by shareClaoriChatUrl above
+
 
 // ============================================================
 // PERSIST WORDS + LANGUAGES ACROSS REFRESH
@@ -3210,6 +3449,400 @@ async function loadWordsFromStorage() {
     }
     updateStartBtn();
   } catch(e) {}
+}
+
+// ============================================================
+// SAVED QUIZZES MANAGEMENT
+// ============================================================
+let _savedSort = 'date-new';
+let _savedLangFilter = 'all';
+let _autoDeleteTimer = null;
+
+function initSavedManagement() {
+  // Toggle manage panel
+  const manageBtn = document.getElementById('saved-manage-btn');
+  const panel = document.getElementById('saved-manage-panel');
+  if (manageBtn && panel) {
+    manageBtn.addEventListener('click', () => {
+      const open = panel.style.display !== 'none';
+      panel.style.display = open ? 'none' : 'block';
+      manageBtn.style.borderColor = open ? 'var(--border)' : 'var(--accent)';
+      manageBtn.style.color = open ? 'var(--text-muted)' : 'var(--accent)';
+      if (!open) _buildLangFilters();
+    });
+  }
+
+  // Sort buttons
+  document.querySelectorAll('.saved-sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      _savedSort = btn.dataset.sort;
+      document.querySelectorAll('.saved-sort-btn').forEach(b => {
+        const act = b === btn;
+        b.style.borderColor = act ? 'var(--accent)' : 'var(--border)';
+        b.style.background = act ? 'rgba(233,69,96,0.12)' : 'transparent';
+        b.style.color = act ? 'var(--accent)' : 'var(--text-muted)';
+      });
+      _renderSavedWithSort();
+    });
+  });
+
+  // Auto-delete mode
+  const modeSelect = document.getElementById('saved-autodelete-mode');
+  const config = document.getElementById('saved-autodelete-config');
+  if (modeSelect && config) {
+    modeSelect.addEventListener('change', () => {
+      const isAuto = modeSelect.value === 'auto';
+      config.style.display = isAuto ? 'flex' : 'none';
+      if (isAuto) _setupAutoDelete();
+      else { clearInterval(_autoDeleteTimer); _autoDeleteTimer = null; }
+    });
+  }
+
+  // Delete all
+  document.getElementById('saved-delete-all-btn')?.addEventListener('click', async () => {
+    const t = getT();
+    if (!confirm(t.confirmDeleteAll || 'Delete ALL saved quizzes? This cannot be undone.')) return;
+    try {
+      const res = await window.storage.list('quiz_saved_', false);
+      for (const key of (res?.keys||[])) await window.storage.delete(key, false);
+      savedQuizzesCache = [];
+      updateSavedBtn();
+      renderSavedQuizzesList([]);
+    } catch(e) {}
+  });
+}
+
+function _buildLangFilters() {
+  loadSavedQuizzes().then(quizzes => {
+    const langs = new Set();
+    quizzes.forEach(q => {
+      if (q.lang1) langs.add(q.lang1);
+      if (q.lang2) langs.add(q.lang2);
+    });
+    const container = document.getElementById('saved-lang-filters');
+    if (!container) return;
+    container.innerHTML = '';
+    const allBtn = document.createElement('button');
+    allBtn.className = 'saved-lang-filter';
+    allBtn.dataset.lang = 'all';
+    allBtn.textContent = 'All';
+    allBtn.style.cssText = 'padding:4px 10px;border-radius:14px;font-size:12px;border:1.5px solid var(--accent);background:rgba(233,69,96,0.12);color:var(--accent);cursor:pointer;font-family:Heebo,sans-serif';
+    allBtn.addEventListener('click', () => { _savedLangFilter='all'; _updateLangFilterUI(allBtn); _renderSavedWithSort(); });
+    container.appendChild(allBtn);
+    langs.forEach(lang => {
+      const btn = document.createElement('button');
+      btn.className = 'saved-lang-filter';
+      btn.dataset.lang = lang;
+      btn.textContent = lang;
+      btn.style.cssText = 'padding:4px 10px;border-radius:14px;font-size:12px;border:1.5px solid var(--border);background:transparent;color:var(--text-muted);cursor:pointer;font-family:Heebo,sans-serif';
+      btn.addEventListener('click', () => { _savedLangFilter=lang; _updateLangFilterUI(btn); _renderSavedWithSort(); });
+      container.appendChild(btn);
+    });
+  });
+}
+
+function _updateLangFilterUI(activeBtn) {
+  document.querySelectorAll('.saved-lang-filter').forEach(b => {
+    const act = b === activeBtn;
+    b.style.borderColor = act ? 'var(--accent)' : 'var(--border)';
+    b.style.background = act ? 'rgba(233,69,96,0.12)' : 'transparent';
+    b.style.color = act ? 'var(--accent)' : 'var(--text-muted)';
+  });
+}
+
+async function _renderSavedWithSort() {
+  let quizzes = await loadSavedQuizzes();
+  // Filter by language
+  if (_savedLangFilter !== 'all') {
+    quizzes = quizzes.filter(q => q.lang1===_savedLangFilter || q.lang2===_savedLangFilter);
+  }
+  // Sort
+  if (_savedSort === 'date-new') quizzes.sort((a,b)=>(b.savedAt||0)-(a.savedAt||0));
+  else if (_savedSort === 'date-old') quizzes.sort((a,b)=>(a.savedAt||0)-(b.savedAt||0));
+  else if (_savedSort === 'lang') quizzes.sort((a,b)=>((a.lang1||'')+(a.lang2||'')).localeCompare((b.lang1||'')+(b.lang2||'')));
+  else if (_savedSort === 'name') quizzes.sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  else if (_savedSort === 'size') quizzes.sort((a,b)=>(b.words?.length||0)-(a.words?.length||0));
+  renderSavedQuizzesList(quizzes);
+}
+
+function _setupAutoDelete() {
+  clearInterval(_autoDeleteTimer);
+  const num = parseInt(document.getElementById('saved-autodelete-num')?.value||7);
+  const unit = document.getElementById('saved-autodelete-unit')?.value||'days';
+  const ms = { minutes:60000, hours:3600000, days:86400000, weeks:604800000, months:2592000000 }[unit] * num;
+  _autoDeleteTimer = setInterval(async () => {
+    const quizzes = await loadSavedQuizzes();
+    const cutoff = Date.now() - ms;
+    for (const q of quizzes) {
+      if ((q.savedAt||0) < cutoff) {
+        try { await window.storage.delete('quiz_saved_'+q.id, false); } catch(e) {}
+      }
+    }
+    _renderSavedWithSort();
+  }, Math.min(ms, 3600000)); // check at most every hour
+}
+
+// ============================================================
+// SHARE VIA URL (compression + access control)
+// ============================================================
+
+// LZ-string lite — simple but effective URL compression
+const LZUrl = (() => {
+  const b64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-';
+  function compress(s) {
+    if (!s) return '';
+    try {
+      // Use built-in compression if available
+      const bytes = new TextEncoder().encode(s);
+      let b = '', bits = 0, buf = 0;
+      for (const byte of bytes) {
+        buf = (buf << 8) | byte; bits += 8;
+        while (bits >= 6) { bits -= 6; b += b64[(buf >> bits) & 63]; }
+      }
+      if (bits > 0) b += b64[(buf << (6 - bits)) & 63];
+      return b;
+    } catch(e) { return btoa(unescape(encodeURIComponent(s))).replace(/=/g,''); }
+  }
+  function decompress(s) {
+    if (!s) return '';
+    try {
+      const pad = (4 - s.length % 4) % 4;
+      return decodeURIComponent(escape(atob(s + '='.repeat(pad))));
+    } catch(e) { return ''; }
+  }
+  return { compress, decompress };
+})();
+
+function buildShareUrl(data, access) {
+  const payload = JSON.stringify({ v:1, access, ...data });
+  const compressed = LZUrl.compress(payload);
+  const base = window.location.href.split('?')[0].split('#')[0];
+  return base + '?share=' + encodeURIComponent(compressed);
+}
+
+function parseShareUrl() {
+  const params = new URLSearchParams(window.location.search);
+  const raw = params.get('share');
+  if (!raw) return null;
+  try {
+    const decompressed = LZUrl.decompress(decodeURIComponent(raw));
+    return JSON.parse(decompressed);
+  } catch(e) { return null; }
+}
+
+// Called on app load — check if opened via share link
+function checkShareLink() {
+  const data = parseShareUrl();
+  if (!data) return;
+
+  // Remove share param from URL (clean up)
+  const clean = window.location.href.split('?')[0];
+  window.history.replaceState({}, '', clean);
+
+  // Load the shared data
+  if (data.type === 'quiz') {
+    _loadSharedQuizFromUrl(data);
+  } else if (data.type === 'chat') {
+    _loadSharedChatFromUrl(data);
+  }
+}
+
+function _loadSharedQuizFromUrl(data) {
+  const t = getT();
+  const access = data.access || 'edit';
+  const isViewOnly = access === 'view';
+
+  // Load languages
+  if (data.lang1id) { activePicker=0; selectLang(ALL_LANGS.find(l=>l.id===data.lang1id)||{id:data.lang1id,flag:data.lang1flag||'🌐',native:data.lang1||'',names:{}}); }
+  if (data.lang2id) { activePicker=1; selectLang(ALL_LANGS.find(l=>l.id===data.lang2id)||{id:data.lang2id,flag:data.lang2flag||'🌐',native:data.lang2||'',names:{}}); }
+
+  // Load words
+  words = (data.words||[]).map(w=>({a:w.a,b:w.b}));
+  renderWords();
+  quizSource = 'shared';
+  showScreen('input');
+
+  // Apply view-only mode
+  if (isViewOnly) {
+    _applyViewOnly();
+  }
+
+  // Show welcome toast
+  setTimeout(() => {
+    showSaveToast('📥 ' + (t.sharedQuizLoaded || 'Shared quiz loaded!') + (isViewOnly ? ' (View only)' : ''));
+  }, 500);
+}
+
+function _loadSharedChatFromUrl(data) {
+  const access = data.access || 'view';
+  initClaori();
+  showScreen('claori');
+
+  setTimeout(() => {
+    // Load messages
+    if (data.messages?.length) {
+      claoriHistory = data.messages;
+      const msgs = document.getElementById('claori-messages');
+      if (msgs) {
+        msgs.innerHTML = '';
+        claoriHistory.forEach(m => {
+          if (typeof m.content === 'string') appendClaoriMsg(m.role, m.content);
+        });
+      }
+    }
+    if (access === 'view') {
+      // Disable input
+      const inp = document.getElementById('claori-input');
+      const send = document.querySelector('.claori-send-btn');
+      if (inp) { inp.disabled = true; inp.placeholder = getT().viewOnlyHint || 'View only'; inp.style.opacity='0.5'; }
+      if (send) { send.disabled = true; send.style.opacity='0.5'; }
+    }
+  }, 300);
+}
+
+function _applyViewOnly() {
+  // Disable all word inputs and add/delete buttons
+  document.querySelectorAll('.word-input').forEach(el => {
+    el.readOnly = true; el.style.opacity = '0.7';
+  });
+  document.querySelectorAll('.delete-btn').forEach(el => el.style.display='none');
+  const addBtn = document.getElementById('add-word-btn');
+  if (addBtn) addBtn.style.display = 'none';
+  document.querySelectorAll('.lang-picker-btn').forEach(el => {
+    el.disabled = true; el.style.opacity='0.7';
+  });
+  // Show view-only banner
+  const banner = document.createElement('div');
+  banner.style.cssText = 'background:rgba(233,69,96,0.1);border:1px solid var(--accent);border-radius:8px;padding:8px 12px;font-size:12px;color:var(--accent);text-align:center;margin-bottom:12px;';
+  banner.textContent = '👁 ' + (getT().viewOnlyMode || 'View only — editing disabled');
+  const screen = document.getElementById('screen-input');
+  if (screen) screen.insertBefore(banner, screen.firstChild);
+}
+
+// ── Share Settings Modal ──────────────────────────────────────
+function openShareSettings(type, data) {
+  // Remove existing
+  document.getElementById('share-settings-modal')?.remove();
+
+  const t = getT();
+  const modal = document.createElement('div');
+  modal.id = 'share-settings-modal';
+  modal.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;padding:20px;animation:fadeIn 0.2s ease';
+
+  modal.innerHTML = `
+    <div style="width:100%;max-width:420px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:24px;box-shadow:0 8px 40px rgba(0,0,0,0.4)">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+        <div style="font-size:17px;font-weight:700;color:var(--text)">${t.shareSettingsTitle||'🔗 Share Settings'}</div>
+        <button id="share-settings-close" style="background:none;border:none;color:var(--text-muted);font-size:20px;cursor:pointer">✕</button>
+      </div>
+
+      <div style="margin-bottom:18px">
+        <div style="font-size:12px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px">${t.shareAccessLabel||'Access Level'}</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--accent);border-radius:10px;cursor:pointer">
+            <input type="radio" name="share-access" value="edit" checked style="accent-color:var(--accent);width:16px;height:16px">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text)">✏️ ${t.shareAccessEdit||'Edit Mode'}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${t.shareAccessEditDesc||'Recipient can edit words and take the quiz'}</div>
+            </div>
+          </label>
+          <label style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface2);border:1.5px solid var(--border);border-radius:10px;cursor:pointer">
+            <input type="radio" name="share-access" value="view" style="accent-color:var(--accent);width:16px;height:16px">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:var(--text)">👁 ${t.shareAccessView||'View Only'}</div>
+              <div style="font-size:11px;color:var(--text-muted)">${t.shareAccessViewDesc||'Recipient can only take the quiz, not edit'}</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div id="share-link-area" style="display:none;margin-bottom:16px">
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px">${t.shareLinkLabel||'Share Link:'}</div>
+        <div style="display:flex;gap:8px">
+          <input id="share-link-input" readonly style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:11px;padding:8px 10px;outline:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+          <button id="share-copy-btn" style="padding:8px 14px;border-radius:8px;background:var(--accent);border:none;color:#fff;font-family:Heebo,sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap">${t.shareCopyBtn||'📋 Copy'}</button>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <a id="share-wa-btn" target="_blank" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;font-size:13px;font-weight:500">💬 WhatsApp</a>
+          <a id="share-mail-btn" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:10px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);text-decoration:none;font-size:13px;font-weight:500">📧 Email</a>
+        </div>
+      </div>
+
+      <button id="share-generate-btn" style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:700;cursor:pointer">
+        ${t.shareGenerateBtn||'Generate Link 🔗'}
+      </button>
+    </div>
+  `;
+
+  document.body.appendChild(modal);
+
+  // Radio style update
+  modal.querySelectorAll('input[name="share-access"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      modal.querySelectorAll('label').forEach(lbl => {
+        const r = lbl.querySelector('input[type=radio]');
+        if (r) lbl.style.borderColor = r.checked ? 'var(--accent)' : 'var(--border)';
+      });
+    });
+  });
+
+  // Close
+  document.getElementById('share-settings-close').addEventListener('click', () => modal.remove());
+  modal.addEventListener('click', e => { if (e.target === modal) modal.remove(); });
+
+  // Generate link
+  document.getElementById('share-generate-btn').addEventListener('click', () => {
+    const access = modal.querySelector('input[name="share-access"]:checked')?.value || 'edit';
+    const url = buildShareUrl({ type, ...data }, access);
+
+    const linkInput = document.getElementById('share-link-input');
+    linkInput.value = url;
+    document.getElementById('share-link-area').style.display = 'block';
+    document.getElementById('share-generate-btn').style.display = 'none';
+
+    const t = getT();
+    const text = type === 'quiz'
+      ? (t.shareQuizMsg||'Check out this vocabulary quiz!') + '\n' + url
+      : (t.shareChatMsg||'Check out this chat!') + '\n' + url;
+
+    document.getElementById('share-wa-btn').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+    document.getElementById('share-mail-btn').href = 'mailto:?subject=' + encodeURIComponent(t.shareQuizTitle||'Vocabulary Quiz') + '&body=' + encodeURIComponent(text);
+
+    document.getElementById('share-copy-btn').addEventListener('click', () => {
+      navigator.clipboard.writeText(url).then(() => {
+        const btn = document.getElementById('share-copy-btn');
+        btn.textContent = t.shareCopied || '✅ Copied!';
+        setTimeout(() => btn.textContent = t.shareCopyBtn||'📋 Copy', 2000);
+      }).catch(() => { linkInput.select(); document.execCommand('copy'); });
+    });
+  });
+}
+
+// ── Expose share for quiz ─────────────────────────────────────
+function shareCurrentQuiz() {
+  const validWords = words.filter(w=>w.a.trim()&&w.b.trim());
+  if (!validWords.length) return;
+  openShareSettings('quiz', {
+    words: validWords,
+    lang1: selectedLang[0]?.native || '',
+    lang2: selectedLang[1]?.native || '',
+    lang1id: selectedLang[0]?.id || '',
+    lang2id: selectedLang[1]?.id || '',
+    lang1flag: selectedLang[0]?.flag || '🌐',
+    lang2flag: selectedLang[1]?.flag || '🌐',
+  });
+}
+
+function shareClaoriChatUrl() {
+  if (!claoriCurrentChatId || !claoriChats[claoriCurrentChatId]) return;
+  const chat = claoriChats[claoriCurrentChatId];
+  const msgs = (chat.messages||[])
+    .filter(m => typeof m.content === 'string')
+    .slice(-30); // last 30 messages max
+  openShareSettings('chat', {
+    title: chat.title || 'Chat',
+    messages: msgs,
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -3316,6 +3949,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Community
   document.getElementById('community-btn').addEventListener('click', () => { loadCommunityQuizzes(''); showScreen('community'); });
+  // Sort buttons
+  document.querySelectorAll('.sort-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      _communitySort = btn.dataset.sort;
+      document.querySelectorAll('.sort-btn').forEach(b => {
+        const isActive = b === btn;
+        b.style.borderColor = isActive ? 'var(--accent)' : 'var(--border)';
+        b.style.background = isActive ? 'rgba(233,69,96,0.12)' : 'transparent';
+        b.style.color = isActive ? 'var(--accent)' : 'var(--text-muted)';
+      });
+      loadCommunityQuizzes(document.getElementById('community-search').value);
+    });
+  });
   document.getElementById('community-back').addEventListener('click', () => showScreen('input'));
   document.getElementById('community-search').addEventListener('input', e => loadCommunityQuizzes(e.target.value));
   document.getElementById('create-shared-btn').addEventListener('click', () => { resetCreateShared(); showScreen('create-shared'); });
@@ -3326,6 +3972,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('publish-btn').addEventListener('click', publishQuiz);
 
   // Saved quizzes
+  // Init saved management
+  initSavedManagement();
+  document.getElementById('share-quiz-btn')?.addEventListener('click', () => shareCurrentQuiz());
   document.getElementById('saved-quizzes-btn').addEventListener('click', async () => { const qs=await loadSavedQuizzes(); renderSavedQuizzesList(qs); showScreen('saved'); });
   document.getElementById('saved-back').addEventListener('click', () => showScreen('input'));
 
@@ -3354,6 +4003,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateSavedBtn();
   loadClaoriBg();
   loadWordsFromStorage();
+  checkShareLink();
 });
 
 
