@@ -292,6 +292,15 @@
   #feedback-send{width:100%;padding:12px;margin-top:10px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-family:'Heebo',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:opacity 0.2s;}
   #feedback-send:hover{opacity:0.88;}
   #feedback-thanks{display:none;text-align:center;padding:20px 10px;font-size:16px;font-weight:600;color:var(--success);}
+
+  /* Accent color picker */
+  #accent-picker-btn{width:32px;height:32px;border-radius:50%;border:2px solid rgba(255,255,255,0.3);cursor:pointer;transition:transform 0.2s;flex-shrink:0;background:var(--accent);}
+  #accent-picker-btn:hover{transform:scale(1.1);}
+  #accent-picker-panel{display:none;position:absolute;top:52px;right:12px;z-index:100;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,0.4);display:none;flex-wrap:wrap;gap:8px;width:176px;}
+  #accent-picker-panel.open{display:flex;}
+  .accent-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.18s;}
+  .accent-swatch:hover{transform:scale(1.12);}
+  .accent-swatch.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,0.5);}
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -306,7 +315,11 @@
       <p id="ui-subtitle">Add words and quiz yourself</p>
     </div>
     <div class="header-btns">
-      <button class="theme-btn" id="theme-btn" >☀️</button>
+      <button class="theme-btn" id="theme-btn">☀️</button>
+      <div style="position:relative">
+        <button id="accent-picker-btn" title="Accent color"></button>
+        <div id="accent-picker-panel"></div>
+      </div>
       <button class="ui-lang-btn" id="ui-lang-btn">
         <span id="ui-lang-flag">🌐</span><span id="ui-lang-name">EN</span>
       </button>
@@ -3911,6 +3924,69 @@ function shareClaoriChatUrl() {
   });
 }
 
+// ============================================================
+// ACCENT COLOR PICKER
+// ============================================================
+const ACCENT_COLORS = [
+  { id:'red',    label:'Red',    accent:'#e94560', accent2:'#c73652' },
+  { id:'orange', label:'Orange', accent:'#f97316', accent2:'#ea580c' },
+  { id:'yellow', label:'Yellow', accent:'#f59e0b', accent2:'#d97706' },
+  { id:'green',  label:'Green',  accent:'#22c55e', accent2:'#16a34a' },
+  { id:'blue',   label:'Blue',   accent:'#3b82f6', accent2:'#2563eb' },
+  { id:'purple', label:'Purple', accent:'#a855f7', accent2:'#9333ea' },
+];
+
+function applyAccent(colorId) {
+  const col = ACCENT_COLORS.find(c=>c.id===colorId) || ACCENT_COLORS[0];
+  document.documentElement.style.setProperty('--accent', col.accent);
+  document.documentElement.style.setProperty('--accent2', col.accent2);
+  // Update picker button color
+  const btn = document.getElementById('accent-picker-btn');
+  if (btn) btn.style.background = col.accent;
+  // Update active swatch
+  document.querySelectorAll('.accent-swatch').forEach(s => {
+    s.classList.toggle('active', s.dataset.color === colorId);
+  });
+  // Save preference
+  try { window.storage.set('_accentColor', colorId); } catch(e) {}
+}
+
+async function initAccentColor() {
+  // Build swatches
+  const panel = document.getElementById('accent-picker-panel');
+  if (!panel) return;
+  ACCENT_COLORS.forEach(col => {
+    const sw = document.createElement('button');
+    sw.className = 'accent-swatch';
+    sw.dataset.color = col.id;
+    sw.title = col.label;
+    sw.style.background = col.accent;
+    sw.addEventListener('click', (e) => {
+      e.stopPropagation();
+      applyAccent(col.id);
+    });
+    panel.appendChild(sw);
+  });
+
+  // Toggle panel
+  const btn = document.getElementById('accent-picker-btn');
+  if (btn) {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      panel.classList.toggle('open');
+    });
+  }
+  document.addEventListener('click', () => panel.classList.remove('open'));
+
+  // Load saved color (default: red)
+  try {
+    const r = await window.storage.get('_accentColor');
+    applyAccent(r?.value || 'red');
+  } catch(e) {
+    applyAccent('red');
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   wordsList = document.getElementById('words-list');
   startBtn  = document.getElementById('start-btn');
@@ -4065,6 +4141,7 @@ document.addEventListener('DOMContentLoaded', () => {
   })();
 
   initTheme();
+  initAccentColor();
   initSmartMode();
   updateSavedBtn();
   loadClaoriBg();
