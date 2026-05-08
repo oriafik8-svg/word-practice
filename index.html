@@ -645,6 +645,19 @@
       <!-- Not connected -->
       <div id="mp-connect-area">
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
+          <!-- Player count -->
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 14px">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px" id="mp-num-label">Max players (2-16):</div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <input type="range" id="mp-num-slider" min="2" max="16" value="6"
+                style="flex:1;accent-color:var(--accent)"
+                oninput="document.getElementById('mp-num-players').value=this.value;document.getElementById('mp-num-display').textContent=this.value">
+              <input type="number" id="mp-num-players" min="2" max="16" value="6"
+                style="width:52px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:Heebo,sans-serif;font-size:16px;font-weight:700;padding:6px 8px;text-align:center;outline:none"
+                oninput="document.getElementById('mp-num-slider').value=Math.min(16,Math.max(2,this.value));document.getElementById('mp-num-display').textContent=Math.min(16,Math.max(2,this.value))">
+              <span id="mp-num-display" style="font-size:20px;font-weight:900;color:var(--accent);min-width:24px">6</span>
+            </div>
+          </div>
           <button id="mp-create-btn" style="width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:Heebo,sans-serif;font-size:16px;font-weight:700;cursor:pointer">
             ⚔️ <span id="mp-create-label">Create Game</span>
           </button>
@@ -669,36 +682,21 @@
 
       <!-- Connected — lobby -->
       <div id="mp-lobby" style="display:none">
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <div style="font-weight:700" id="mp-you-label">You</div>
-            <div style="font-size:18px">⚔️</div>
-            <div style="font-weight:700" id="mp-opponent-label">Opponent</div>
-          </div>
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div style="font-size:24px;font-weight:900;color:var(--accent)" id="mp-my-score">0</div>
-            <div style="font-size:13px;color:var(--text-muted)" id="mp-vs-label">vs</div>
-            <div style="font-size:24px;font-weight:900;color:var(--text-muted)" id="mp-opp-score">0</div>
-          </div>
-        </div>
-        <button id="mp-start-game-btn" style="width:100%;padding:14px;border-radius:12px;background:var(--accent);border:none;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px" id="mp-start-label">
-          🚀 Start Battle!
+        <div style="font-size:12px;color:var(--text-muted);text-align:center;margin-bottom:10px" id="mp-player-count">1/6 players joined</div>
+        <div id="mp-scoreboard" style="margin-bottom:14px"></div>
+        <button id="mp-start-game-btn" style="width:100%;padding:14px;border-radius:12px;background:var(--accent);border:none;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px">
+          🚀 <span id="mp-start-label">Start Battle!</span>
         </button>
         <div style="text-align:center;font-size:12px;color:var(--text-muted)" id="mp-ready-status"></div>
       </div>
 
       <!-- In-game -->
       <div id="mp-game" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:10px 14px;background:var(--surface);border-radius:12px;border:1px solid var(--border)">
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)" id="mp-you-label2">You</div>
-            <div style="font-size:28px;font-weight:900;color:var(--accent)" id="mp-my-score2">0</div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 12px;margin-bottom:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+            <div style="font-size:11px;font-weight:700;color:var(--text-muted)" id="mp-progress-label">1 / 0</div>
           </div>
-          <div style="font-size:13px;color:var(--text-muted)" id="mp-progress-label">0 / 0</div>
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)" id="mp-opp-label2">Opponent</div>
-            <div style="font-size:28px;font-weight:900;color:var(--text-muted)" id="mp-opp-score2">0</div>
-          </div>
+          <div id="mp-live-board"></div>
         </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:16px">
           <div style="font-size:12px;color:var(--text-muted);margin-bottom:8px" id="mp-prompt-label">Translate:</div>
@@ -716,7 +714,7 @@
       <div id="mp-results" style="display:none;text-align:center">
         <div style="font-size:48px;margin:20px 0" id="mp-result-emoji">🏆</div>
         <div style="font-size:22px;font-weight:700;margin-bottom:8px" id="mp-result-title">You Win!</div>
-        <div style="font-size:14px;color:var(--text-muted);margin-bottom:24px" id="mp-result-scores"></div>
+        <div style="margin-bottom:20px;text-align:left" id="mp-result-scores"></div>
         <button id="mp-play-again-btn" style="width:100%;padding:13px;border-radius:12px;background:var(--accent);border:none;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px" id="mp-again-label">
           🔄 Play Again
         </button>
@@ -1173,8 +1171,8 @@ const UI_LANGS = [
 
 // Minimal T object — falls back to EN for unlisted langs
 const T = {
-  en:{appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',sortLangs:'Languages',sortNewest:'Newest',sortOldest:'Oldest',sortCreator:'By Creator',loading:'Loading...',memoryPreviewLabel:'Memorize!',memoryPreviewSec:'sec',memoryPreviewTime:'Preview time:',shareSettingsTitle:'🔗 Share Settings',shareAccessLabel:'Access Level',shareAccessEdit:'Edit Mode',shareAccessEditDesc:'Recipient can edit words and take the quiz',shareAccessView:'View Only',shareAccessViewDesc:'Recipient can only take the quiz\, not edit',shareLinkLabel:'Share Link:',shareCopyBtn:'📋 Copy',shareGenerateBtn:'Generate Link 🔗',sharedQuizLoaded:'Shared quiz loaded!',viewOnlyMode:'View only — editing disabled',viewOnlyHint:'View only',shareQuizBtn:'Share Quiz',claoriNetworkError:'Network error. Check your connection and try again.',dayStreak:'day streak',dailyMissions:'Daily Missions',adMinutes:'Minutes',adHours:'Hours',adDays:'Days',adWeeks:'Weeks',adMonths:'Months',autoDeleteManual:'Manual (default)',autoDeleteEvery:'Every X time',savedSortNewest:'Newest',savedSortOldest:'Oldest',savedSortLang:'Language',savedSortName:'Name',savedSortSize:'Size',mpTitle:'⚔️ Multiplayer',mpSub:'Challenge a friend!',mpCreateLabel:'Create Game',mpJoinLabel:'Join',mpEnterCode:'Enter a valid code',mpConnected:'✅ Connected! Ready to battle?',mpNeedWords:'Add at least 3 words to play!',mpWin:'You Win! 🎉',mpLose:'You Lose...',mpTie:"It\'s a Tie!",multiplayerBtn:'Multiplayer',undone:'Undone!',redone:'Redone!',mpBtnSub:'Challenge a friend in real-time',mpDisconnected:'😢 Opponent disconnected',smartModeRemember:"Don't ask again"},
-  he:{appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בוחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בוחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בוחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בוחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בוחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'שגיאה — אנא נסה שוב. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש • לוקח דקה',showAllWords:'הצג הכל',collapseWords:'הצג פחות',sortLangs:'שפות',sortNewest:'חדש ראשון',sortOldest:'ישן ראשון',sortCreator:'לפי יוצר',loading:'טוען...',memoryPreviewLabel:'שנן!',memoryPreviewSec:'שנ׳',memoryPreviewTime:'זמן תצוגה:',savedManageLabel:'ניהול',savedSortTitle:'מיון וסינון',savedFilterLang:'סינון לפי שפה:',savedDeleteTitle:'מחיקה אוטומטית',savedDeleteAll:'מחק את כל הבחנים',confirmDeleteAll:'למחוק את כל הבחנים השמורים? פעולה זו אינה הפיכה.',autoDeleteManual:'ידני (ברירת מחדל)',autoDeleteEvery:'כל X זמן',savedSortNewest:'חדש ראשון',savedSortOldest:'ישן ראשון',savedSortLang:'שפה',savedSortName:'שם',savedSortSize:'גודל',shareSettingsTitle:'🔗 הגדרות שיתוף',shareAccessLabel:'רמת גישה',shareAccessEdit:'מצב עריכה',shareAccessEditDesc:'המקבל יכול לערוך מילים ולהתחיל בוחן',shareAccessView:'צפייה בלבד',shareAccessViewDesc:'המקבל יכול רק לבצע את הבוחן\, לא לערוך',shareLinkLabel:'קישור לשיתוף:',shareCopyBtn:'📋 העתק',shareGenerateBtn:'צור קישור 🔗',sharedQuizLoaded:'בוחן משותף נטען!',viewOnlyMode:'צפייה בלבד — עריכה מושבתת',viewOnlyHint:'צפייה בלבד',shareQuizBtn:'שתף בוחן',claoriNetworkError:'שגיאת רשת. בדוק את החיבור ונסה שוב.',dayStreak:'ימים ברצף',dailyMissions:'משימות יומיות',adMinutes:'דקות',adHours:'שעות',adDays:'ימים',adWeeks:'שבועות',adMonths:'חודשים',mpTitle:'⚔️ משחק מרובה שחקנים',mpSub:'אתגר חבר!',mpCreateLabel:'צור משחק',mpJoinLabel:'הצטרף',mpEnterCode:'הכנס קוד תקין',mpConnected:'✅ מחובר! מוכן לקרב?',mpNeedWords:'הוסף לפחות 3 מילים למשחק!',mpWin:'ניצחת! 🎉',mpLose:'הפסדת...',mpTie:'תיקו!',multiplayerBtn:'מרובה שחקנים',undone:'בוטל!',redone:'בוצע מחדש!',mpBtnSub:'אתגר חבר בזמן אמת',mpDisconnected:'😢 היריב התנתק',smartModeRemember:'אל תשאל אותי שוב'},
+  en:{appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',sortLangs:'Languages',sortNewest:'Newest',sortOldest:'Oldest',sortCreator:'By Creator',loading:'Loading...',memoryPreviewLabel:'Memorize!',memoryPreviewSec:'sec',memoryPreviewTime:'Preview time:',shareSettingsTitle:'🔗 Share Settings',shareAccessLabel:'Access Level',shareAccessEdit:'Edit Mode',shareAccessEditDesc:'Recipient can edit words and take the quiz',shareAccessView:'View Only',shareAccessViewDesc:'Recipient can only take the quiz\, not edit',shareLinkLabel:'Share Link:',shareCopyBtn:'📋 Copy',shareGenerateBtn:'Generate Link 🔗',sharedQuizLoaded:'Shared quiz loaded!',viewOnlyMode:'View only — editing disabled',viewOnlyHint:'View only',shareQuizBtn:'Share Quiz',claoriNetworkError:'Network error. Check your connection and try again.',dayStreak:'day streak',dailyMissions:'Daily Missions',adMinutes:'Minutes',adHours:'Hours',adDays:'Days',adWeeks:'Weeks',adMonths:'Months',autoDeleteManual:'Manual (default)',autoDeleteEvery:'Every X time',savedSortNewest:'Newest',savedSortOldest:'Oldest',savedSortLang:'Language',savedSortName:'Name',savedSortSize:'Size',mpTitle:'⚔️ Multiplayer',mpSub:'Challenge a friend!',mpCreateLabel:'Create Game',mpJoinLabel:'Join',mpEnterCode:'Enter a valid code',mpConnected:'✅ Connected! Ready to battle?',mpNeedWords:'Add at least 3 words to play!',mpWin:'You Win! 🎉',mpLose:'You Lose...',mpTie:"It\'s a Tie!",multiplayerBtn:'Multiplayer',undone:'Undone!',redone:'Redone!',mpBtnSub:'Challenge a friend in real-time',mpDisconnected:'😢 Opponent disconnected',mpPoints:'pts',mpYou:'You',mpReset:'Score reset! Starting over...',mpWaitingOthers:'Waiting for others to finish...',mpWaitingHost:'Waiting for host to start...',mpWaitingStart:'Waiting for players... then press Start!',mpJoining:'Joining room...',mpRoomNotFound:'Room not found:',mpLoading:'Loading...',mpLoadFail:'Could not load. Check internet.',mpConnecting:'Connecting...',mpTimeout:'Timeout. Try again.',mpPlayersJoined:'players joined',mpTranslate:'Translate:',mpNumLabel:'Max players (2-16):',mpCopyCode:'Copy Code',mpStartLabel:'Start Battle!',smartModeRemember:"Don't ask again"},
+  he:{appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בוחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בוחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בוחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בוחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בוחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'שגיאה — אנא נסה שוב. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש • לוקח דקה',showAllWords:'הצג הכל',collapseWords:'הצג פחות',sortLangs:'שפות',sortNewest:'חדש ראשון',sortOldest:'ישן ראשון',sortCreator:'לפי יוצר',loading:'טוען...',memoryPreviewLabel:'שנן!',memoryPreviewSec:'שנ׳',memoryPreviewTime:'זמן תצוגה:',savedManageLabel:'ניהול',savedSortTitle:'מיון וסינון',savedFilterLang:'סינון לפי שפה:',savedDeleteTitle:'מחיקה אוטומטית',savedDeleteAll:'מחק את כל הבחנים',confirmDeleteAll:'למחוק את כל הבחנים השמורים? פעולה זו אינה הפיכה.',autoDeleteManual:'ידני (ברירת מחדל)',autoDeleteEvery:'כל X זמן',savedSortNewest:'חדש ראשון',savedSortOldest:'ישן ראשון',savedSortLang:'שפה',savedSortName:'שם',savedSortSize:'גודל',shareSettingsTitle:'🔗 הגדרות שיתוף',shareAccessLabel:'רמת גישה',shareAccessEdit:'מצב עריכה',shareAccessEditDesc:'המקבל יכול לערוך מילים ולהתחיל בוחן',shareAccessView:'צפייה בלבד',shareAccessViewDesc:'המקבל יכול רק לבצע את הבוחן\, לא לערוך',shareLinkLabel:'קישור לשיתוף:',shareCopyBtn:'📋 העתק',shareGenerateBtn:'צור קישור 🔗',sharedQuizLoaded:'בוחן משותף נטען!',viewOnlyMode:'צפייה בלבד — עריכה מושבתת',viewOnlyHint:'צפייה בלבד',shareQuizBtn:'שתף בוחן',claoriNetworkError:'שגיאת רשת. בדוק את החיבור ונסה שוב.',dayStreak:'ימים ברצף',dailyMissions:'משימות יומיות',adMinutes:'דקות',adHours:'שעות',adDays:'ימים',adWeeks:'שבועות',adMonths:'חודשים',mpTitle:'⚔️ משחק מרובה שחקנים',mpSub:'אתגר חבר!',mpCreateLabel:'צור משחק',mpJoinLabel:'הצטרף',mpEnterCode:'הכנס קוד תקין',mpConnected:'✅ מחובר! מוכן לקרב?',mpNeedWords:'הוסף לפחות 3 מילים למשחק!',mpWin:'ניצחת! 🎉',mpLose:'הפסדת...',mpTie:'תיקו!',multiplayerBtn:'מרובה שחקנים',undone:'בוטל!',redone:'בוצע מחדש!',mpBtnSub:'אתגר חבר בזמן אמת',mpDisconnected:'😢 היריב התנתק',mpPoints:'נק׳',mpYou:'את/ה',mpReset:'הניקוד אופס! מתחיל מחדש...',mpWaitingOthers:'ממתין לשאר הסיימו...',mpWaitingHost:'ממתין למארח שיתחיל...',mpWaitingStart:'ממתין לשחקנים... לאחר מכן לחץ התחל!',mpJoining:'מצטרף לחדר...',mpRoomNotFound:'חדר לא נמצא:',mpLoading:'טוען...',mpLoadFail:'לא ניתן לטעון. בדוק אינטרנט.',mpConnecting:'מתחבר...',mpTimeout:'תם הזמן. נסה שוב.',mpPlayersJoined:'שחקנים הצטרפו',mpTranslate:'תרגם:',mpNumLabel:'מקסימום שחקנים (2-16):',mpCopyCode:'העתק קוד',mpStartLabel:'התחל קרב!',smartModeRemember:'אל תשאל אותי שוב'},
   ar:{appTitle:'تدريب المفردات',appSubtitle:'أضف كلمات واختبر نفسك',sectionLangs:'اللغات',lang1:'ل 1:',lang2:'ل 2:',chooseLang:'اختر...',sectionWords:'الكلمات',addWord:'+ أضف كلمة',quizDir:'اتجاه الاختبار',dir1to2:'ل1 → ترجمة',dir2to1:'ل2 → ترجمة',dirRandom:'عشوائي',startQuiz:'ابدأ الاختبار',connectGT:'ربط الترجمة',gtConnected:'الترجمة مرتبطة',gtDisconnect:'انقر لقطع الاتصال',gtAuto:'ترجمة تلقائية',whatIsThis:'ما هذا؟',gtInfoTitle:'الترجمة التلقائية',gtF1t:'اقتراحات فورية',gtF1d:'أثناء الكتابة، تظهر الترجمة تلقائياً.',gtF2t:'لوحة مفاتيح خاطئة',gtF2d:'كتبت على لوحة مفاتيح خاطئة؟ التطبيق يكتشف ويقترح.',gtF3t:'دائماً خيارك',gtF3d:'لا تُطبَّق الاقتراحات تلقائياً.',gtInfoConnectBtn:'ربط الترجمة التلقائية',gtInfoDisconnectBtn:'قطع الاتصال',gtSuggestionLabel:'اقتراح ترجمة',accept:'قبول',kbSuggestionLabel:'لوحة مفاتيح خاطئة؟',kbAccept:'تصحيح',quizPrompt:'ما ترجمة:',checkBtn:'تحقق ↵',nextBtn:'التالي →',finishBtn:'إنهاء',skipBtn:'تخطى',correct:'✓ صحيح!',wrongPrefix:'✗ الإجابة الصحيحة: ',scoreOf:'/',scoreGreat:'?? ممتاز!',scoreOk:'?? لا بأس!',scorePoor:'?? استمر!',resultsSubtitle:(c,t)=>`أجبت صحيحاً على ${c} من ${t}`,retryWrong:'?? اختبار الأخطاء',newQuiz:'?? اختبار جديد',goHome:'?? الرئيسية',skipped:'(تخطى)',youAnswered:'أجبت:',uiLangTitle:'لغة التطبيق',uiLangSearch:'?? بحث...',wordPlaceholderA:'كلمة',wordPlaceholderB:'ترجمة',deleteTitle:'حذف',noResults:'لم تُوجد لغات',communityBtn:'اختبار تعاوني',communityBtnSub:'تصفح وانشر اختبارات مشتركة',communityTitle:'الاختبارات التعاونية',communitySub:'ابحث وانشر اختبارات مشتركة',createSharedTitle:'اختبار مشترك جديد',createBtn:'+ إنشاء',communitySearch:'?? بحث بالموضوع...',sharedTopic:'موضوع الاختبار',topicPlaceholder:'مثال: طعام إيطالي...',sharedLangs:'اللغات',sharedGTLabel:'استخدم الترجمة التلقائية عند إضافة الكلمات',sharedAddWord:'+ أضف كلمة',publishBtn:'?? نشر الاختبار',publishingBtn:'جاري النشر...',publishedBtn:'✓ تم النشر!',startQuizCard:'▶ ابدأ الاختبار',copyEdit:'?? نسخ وتعديل',noQuizzes:'لا توجد اختبارات منشورة بعد.',noQuizzesSearch:(q)=>`لم تُوجد اختبارات لـ "${q}"`,storageUnavailable:'التخزين غير متاح.',wordCount:(n)=>`?? ${n} كلمات`,savedBtn:'اختباراتي',savedBtnSub:'عرض الاختبارات المحفوظة',savedTitle:'?? اختباراتي',savedSub:'اختبارات محفوظة تلقائياً',backToSaved:'?? اختباراتي',smartModeTitle:'?? الوضع الذكي',smartModeDesc:'تفعيل فحص إجابات أذكى:',smartModeTypo:'<strong>أخطاء إملائية</strong> — 1-2 حروف خاطئة لا تزال تُعد صحيحة',smartModeSyn:'<strong>نفس المعنى</strong> — المرادفات والترجمات المكافئة مقبولة',smartModeNo:'لا، عادي',smartModeYes:'نعم، ذكي ??',feedbackBtn:'ملاحظات',feedbackDesc:'لديك اقتراح أو وجدت خطأ؟ يسعدنا سماعك!',feedbackOpenBtn:'فتح نموذج الملاحظات →',feedbackNote:'يفتح في تبويب جديد',smartModeRemember:'لا تسألني مرة أخرى'},
   fr:{appTitle:'Entraînement vocabulaire',appSubtitle:'Ajoutez des mots et testez-vous',sectionLangs:'Langues',lang1:'L 1:',lang2:'L 2:',chooseLang:'Choisir...',sectionWords:'Mots',addWord:'+ Ajouter un mot',quizDir:'Direction du quiz',dir1to2:'L1 → Traduction',dir2to1:'L2 → Traduction',dirRandom:'Aléatoire',startQuiz:'Commencer le quiz',connectGT:'Connecter la traduction',gtConnected:'Traduction connectée',gtDisconnect:'Cliquer pour déconnecter',gtAuto:'Traduction automatique',whatIsThis:'C\'est quoi ?',gtInfoTitle:'Traduction automatique',gtF1t:'Suggestions instantanées',gtF1d:'En tapant, une traduction apparaît automatiquement.',gtF2t:'Mauvais clavier',gtF2d:'Tapé sur le mauvais clavier ? L\'app détecte et suggère.',gtF3t:'Toujours votre choix',gtF3d:'Les suggestions ne s\'appliquent jamais automatiquement.',gtInfoConnectBtn:'Connecter la traduction auto',gtInfoDisconnectBtn:'Déconnecter',gtSuggestionLabel:'Suggestion de traduction',accept:'Accepter',kbSuggestionLabel:'Mauvais clavier ?',kbAccept:'Corriger',quizPrompt:'Quelle est la traduction de :',checkBtn:'Vérifier ↵',nextBtn:'Suivant →',finishBtn:'Terminer',skipBtn:'Passer',correct:'✓ Correct !',wrongPrefix:'✗ Bonne réponse : ',scoreOf:'/',scoreGreat:'?? Excellent !',scoreOk:'?? Pas mal !',scorePoor:'?? Continuez !',resultsSubtitle:(c,t)=>`Vous avez eu ${c} sur ${t} correct`,retryWrong:'?? Revoir les erreurs',newQuiz:'?? Nouveau quiz',goHome:'?? Accueil',skipped:'(passé)',youAnswered:'Votre réponse :',uiLangTitle:'Langue de l\'app',uiLangSearch:'?? Rechercher...',wordPlaceholderA:'Mot',wordPlaceholderB:'Traduction',deleteTitle:'Supprimer',noResults:'Aucune langue trouvée',communityBtn:'Quiz collaboratif',communityBtnSub:'Parcourir et publier des quiz partagés',communityTitle:'Quiz collaboratifs',communitySub:'Trouver et publier des quiz partagés',createSharedTitle:'Nouveau quiz partagé',createBtn:'+ Créer',communitySearch:'?? Rechercher par thème...',sharedTopic:'Thème du quiz',topicPlaceholder:'ex. cuisine italienne...',sharedLangs:'Langues',sharedGTLabel:'Utiliser la traduction auto en ajoutant des mots',sharedAddWord:'+ Ajouter un mot',publishBtn:'?? Publier le quiz',publishingBtn:'Publication...',publishedBtn:'✓ Publié !',startQuizCard:'▶ Commencer',copyEdit:'?? Copier et modifier',noQuizzes:'Aucun quiz publié pour l\'instant.',noQuizzesSearch:(q)=>`Aucun quiz trouvé pour "${q}"`,storageUnavailable:'Stockage indisponible.',wordCount:(n)=>`?? ${n} mots`,savedBtn:'Mes quiz',savedBtnSub:'Voir les quiz sauvegardés',savedTitle:'?? Mes quiz',savedSub:'Quiz sauvegardés automatiquement',backToSaved:'?? Mes quiz',smartModeTitle:'?? Mode intelligent',smartModeDesc:'Activer une vérification des réponses plus intelligente :',smartModeTypo:'<strong>Fautes de frappe</strong> — 1-2 caractères erronés comptent quand même',smartModeSyn:'<strong>Même sens</strong> — synonymes et traductions équivalentes acceptés',smartModeNo:'Non, normal',smartModeYes:'Oui, intelligent ??',feedbackBtn:'Avis',feedbackDesc:'Une suggestion ou un bug ? Nous adorerions vous entendre!',feedbackOpenBtn:'Ouvrir le formulaire →',feedbackNote:'S\'ouvre dans un nouvel onglet',smartModeRemember:'Ne plus demander'},
   es:{appTitle:'Práctica de vocabulario',appSubtitle:'Agrega palabras y ponte a prueba',sectionLangs:'Idiomas',lang1:'Id 1:',lang2:'Id 2:',chooseLang:'Elegir...',sectionWords:'Palabras',addWord:'+ Agregar palabra',quizDir:'Dirección del quiz',dir1to2:'Id1 → Traducción',dir2to1:'Id2 → Traducción',dirRandom:'Aleatorio',startQuiz:'Iniciar quiz',connectGT:'Conectar traducción',gtConnected:'Traducción conectada',gtDisconnect:'Clic para desconectar',gtAuto:'Traducción automática',whatIsThis:'¿Qué es esto?',gtInfoTitle:'Traducción automática',gtF1t:'Sugerencias instantáneas',gtF1d:'Al escribir, una traducción aparece automáticamente.',gtF2t:'Teclado equivocado',gtF2d:'¿Escribiste en el teclado equivocado? La app detecta y sugiere.',gtF3t:'Siempre tu elección',gtF3d:'Las sugerencias nunca se aplican automáticamente.',gtInfoConnectBtn:'Conectar traducción auto',gtInfoDisconnectBtn:'Desconectar',gtSuggestionLabel:'Sugerencia de traducción',accept:'Aceptar',kbSuggestionLabel:'¿Teclado equivocado?',kbAccept:'Corregir',quizPrompt:'¿Cuál es la traducción de:',checkBtn:'Verificar ↵',nextBtn:'Siguiente →',finishBtn:'Finalizar',skipBtn:'Saltar',correct:'✓ ¡Correcto!',wrongPrefix:'✗ Respuesta correcta: ',scoreOf:'/',scoreGreat:'?? ¡Excelente!',scoreOk:'?? ¡No está mal!',scorePoor:'?? ¡Sigue intentando!',resultsSubtitle:(c,t)=>`Acertaste ${c} de ${t}`,retryWrong:'?? Repasar errores',newQuiz:'?? Nuevo quiz',goHome:'?? Inicio',skipped:'(omitido)',youAnswered:'Respondiste:',uiLangTitle:'Idioma de la app',uiLangSearch:'?? Buscar...',wordPlaceholderA:'Palabra',wordPlaceholderB:'Traducción',deleteTitle:'Eliminar',noResults:'No se encontraron idiomas',communityBtn:'Quiz colaborativo',communityBtnSub:'Explorar y publicar quiz compartidos',communityTitle:'Quiz colaborativos',communitySub:'Encontrar y publicar quiz compartidos',createSharedTitle:'Nuevo quiz compartido',createBtn:'+ Crear',communitySearch:'?? Buscar por tema...',sharedTopic:'Tema del quiz',topicPlaceholder:'ej. comida italiana...',sharedLangs:'Idiomas',sharedGTLabel:'Usar traducción auto al agregar palabras',sharedAddWord:'+ Agregar palabra',publishBtn:'?? Publicar quiz',publishingBtn:'Publicando...',publishedBtn:'✓ ¡Publicado!',startQuizCard:'▶ Iniciar',copyEdit:'?? Copiar y editar',noQuizzes:'Aún no hay quiz publicados.',noQuizzesSearch:(q)=>`No se encontraron quiz para "${q}"`,storageUnavailable:'Almacenamiento no disponible.',wordCount:(n)=>`?? ${n} palabras`,savedBtn:'Mis quiz',savedBtnSub:'Ver quiz guardados',savedTitle:'?? Mis quiz',savedSub:'Quiz guardados automáticamente',backToSaved:'?? Mis quiz',smartModeTitle:'?? Modo inteligente',smartModeDesc:'Activar verificación de respuestas más inteligente:',smartModeTypo:'<strong>Errores tipográficos</strong> — 1-2 caracteres incorrectos aún cuentan',smartModeSyn:'<strong>Mismo significado</strong> — sinónimos y traducciones equivalentes aceptados',smartModeNo:'No, normal',smartModeYes:'Sí, inteligente ??',feedbackBtn:'Opinión',feedbackDesc:'¿Tienes una sugerencia o encontraste un error? ¡Nos encantaría escucharte!',feedbackOpenBtn:'Abrir formulario →',feedbackNote:'Se abre en una nueva pestaña',smartModeRemember:'No preguntar de nuevo'},
@@ -1401,6 +1399,8 @@ function applyUILang(code) {
   const mplEl=document.getElementById('memory-preview-label');if(mplEl)mplEl.textContent=t.memoryPreviewTime||'👁 Preview time:';
   const mpuEl=document.getElementById('memory-preview-unit');if(mpuEl)mpuEl.textContent=t.memoryPreviewSec||'sec';
   set('multiplayer-btn-label', t.multiplayerBtn||'Multiplayer');
+  set('mp-num-label', t.mpNumLabel||'Max players (2-16):');
+  set('mp-start-label', t.mpStartLabel||'Start Battle!');
   set('multiplayer-btn-sub', t.mpBtnSub||'Challenge a friend in real-time');
   set('mp-title', t.mpTitle||'⚔️ Multiplayer');
   set('mp-sub', t.mpSub||'Challenge a friend!');
@@ -4451,11 +4451,16 @@ function _dailyTrack(event, data={}) {
 }
 
 // ============================================================
-// MULTIPLAYER — WebRTC via PeerJS
+// MULTIPLAYER — WebRTC via PeerJS (2-16 players)
 // ============================================================
 let _mpPeer = null, _mpConn = null, _mpIsHost = false;
-let _mpWords = [], _mpIdx = 0, _mpMyScore = 0, _mpOppScore = 0;
-let _mpOppFinished = false, _mpMyFinished = false;
+let _mpConns = {}; // peerId -> connection (host only)
+let _mpPlayers = {}; // peerId -> {name, score, progress, total}
+let _mpMyId = null;
+let _mpWords = [], _mpIdx = 0, _mpMyScore = 0;
+let _mpMaxPlayers = 6; // default
+let _mpFinishedCount = 0;
+let _mpTotalPlayers = 0;
 
 function _mpStatus(msg) {
   const el = document.getElementById('mp-status');
@@ -4467,20 +4472,36 @@ function _mpGenCode() {
   return Array.from({length:4}, () => chars[Math.floor(Math.random()*chars.length)]).join('');
 }
 
+const _mpPeerConfig = {
+  debug: 0,
+  config: {
+    iceServers: [
+      { urls: 'stun:stun.l.google.com:19302' },
+      { urls: 'stun:stun1.l.google.com:19302' },
+      { urls: 'stun:global.stun.twilio.com:3478' },
+    ]
+  }
+};
+
 function initMultiplayer() {
   const t = getT();
-  // Show/hide areas
-  ['mp-connect-area','mp-lobby','mp-game','mp-results'].forEach((id, i) => {
+  ['mp-connect-area','mp-lobby','mp-game','mp-results'].forEach((id,i) => {
     const el = document.getElementById(id);
     if (el) el.style.display = i===0 ? '' : 'none';
   });
   document.getElementById('mp-my-code-box').style.display = 'none';
   _mpStatus('');
+  _mpConns = {}; _mpPlayers = {}; _mpFinishedCount = 0;
 
-  // Create game
-  document.getElementById('mp-create-btn').onclick = () => _mpCreate();
+  // Player count picker
+  const numInput = document.getElementById('mp-num-players');
+  if (numInput) numInput.value = _mpMaxPlayers;
 
-  // Join game
+  document.getElementById('mp-create-btn').onclick = () => {
+    const n = parseInt(document.getElementById('mp-num-players')?.value || 6);
+    _mpMaxPlayers = Math.min(16, Math.max(2, n));
+    _mpCreate();
+  };
   document.getElementById('mp-join-btn').onclick = () => {
     const code = document.getElementById('mp-code-input').value.trim().toUpperCase();
     if (code.length < 4) { _mpStatus(t.mpEnterCode||'Enter a valid code'); return; }
@@ -4489,26 +4510,18 @@ function initMultiplayer() {
   document.getElementById('mp-code-input').addEventListener('keydown', e => {
     if (e.key === 'Enter') document.getElementById('mp-join-btn').click();
   });
-
-  // Copy code
   document.getElementById('mp-copy-code-btn').onclick = () => {
     const code = document.getElementById('mp-my-code').textContent;
     navigator.clipboard.writeText(code).then(() => {
       document.getElementById('mp-copy-code-btn').textContent = '✅ ' + (t.shareCopied||'Copied!');
-      setTimeout(() => document.getElementById('mp-copy-code-btn').textContent = '📋 Copy Code', 2000);
+      setTimeout(() => document.getElementById('mp-copy-code-btn').textContent = '📋 ' + (t.mpCopyCode||'Copy Code'), 2000);
     });
   };
-
-  // Start battle
   document.getElementById('mp-start-game-btn').onclick = () => _mpStartBattle();
-
-  // Check answer
   document.getElementById('mp-check-btn').onclick = () => _mpCheckAnswer();
   document.getElementById('mp-answer').addEventListener('keydown', e => {
     if (e.key === 'Enter') _mpCheckAnswer();
   });
-
-  // Play again / Exit
   document.getElementById('mp-play-again-btn').onclick = () => initMultiplayer();
   document.getElementById('mp-exit-btn').onclick = () => { _mpDisconnect(); showScreen('input'); };
   document.getElementById('mp-back').onclick = () => { _mpDisconnect(); showScreen('input'); };
@@ -4516,168 +4529,204 @@ function initMultiplayer() {
 
 function _mpCreate() {
   if (!window.Peer) {
-    _mpStatus('⏳ Loading...');
-    // Wait up to 5s for PeerJS to load
+    _mpStatus('⏳ ' + (getT().mpLoading||'Loading...'));
     let waited = 0;
     const wait = setInterval(() => {
       waited += 300;
       if (window.Peer) { clearInterval(wait); _mpStatus(''); _mpCreate(); return; }
-      if (waited >= 5000) {
-        clearInterval(wait);
-        _mpStatus('❌ Could not load multiplayer. Check your internet connection.');
-      }
+      if (waited >= 5000) { clearInterval(wait); _mpStatus('❌ ' + (getT().mpLoadFail||'Could not load. Check internet.')); }
     }, 300);
     return;
   }
   const code = _mpGenCode();
   _mpIsHost = true;
-  _mpStatus('Connecting...');
+  _mpStatus('⏳ ' + (getT().mpConnecting||'Connecting to server...'));
   if (_mpPeer) _mpPeer.destroy();
-  // Use PeerJS with explicit reliable server config
-  const peerConfig = {
-    debug: 0,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' },
-      ]
-    }
-  };
-  _mpPeer = new Peer('vq_' + code, peerConfig);
-
-  // Timeout if connection takes too long
-  const connectTimeout = setTimeout(() => {
-    if (_mpPeer && !_mpPeer.open) {
-      _mpPeer.destroy();
-      _mpStatus('❌ Server timeout. Try again.');
-    }
+  _mpPeer = new Peer('vq_' + code, _mpPeerConfig);
+  const timeout = setTimeout(() => {
+    if (_mpPeer && !_mpPeer.open) { _mpPeer.destroy(); _mpStatus('❌ ' + (getT().mpTimeout||'Server timeout. Try again.')); }
   }, 10000);
 
   _mpPeer.on('open', id => {
-    clearTimeout(connectTimeout);
+    clearTimeout(timeout);
+    _mpMyId = id;
+    _mpPlayers[id] = { name: 'You', score: 0, progress: 0, total: 0 };
     document.getElementById('mp-my-code').textContent = code;
     document.getElementById('mp-my-code-box').style.display = 'block';
     _mpStatus('');
-    console.log('[MP] Host ready, peer ID:', id);
+    _mpUpdatePlayerCount();
   });
+
   _mpPeer.on('connection', conn => {
-    _mpConn = conn;
-    _mpSetupConn();
-    document.getElementById('mp-my-code-box').style.display = 'none';
-    _mpShowLobby();
+    const connCount = Object.keys(_mpConns).length + 1; // +1 for host
+    if (connCount >= _mpMaxPlayers) {
+      conn.close();
+      return;
+    }
+    _mpConns[conn.peer] = conn;
+    _mpPlayers[conn.peer] = { name: 'Player ' + (Object.keys(_mpConns).length + 1), score: 0, progress: 0, total: 0 };
+    _mpSetupHostConn(conn);
+    _mpUpdatePlayerCount();
   });
+
   _mpPeer.on('error', e => {
-    clearTimeout(connectTimeout);
-    console.error('[MP] Peer error:', e.type, e);
-    if (e.type === 'unavailable-id') {
-      // Code taken, generate new one
-      _mpCreate();
-    } else {
-      _mpStatus('❌ Error: ' + e.type + '. Try again.');
+    clearTimeout(timeout);
+    if (e.type === 'unavailable-id') { _mpCreate(); }
+    else { _mpStatus('❌ ' + e.type); }
+  });
+}
+
+function _mpUpdatePlayerCount() {
+  const connected = Object.keys(_mpConns).length + 1; // +1 for host
+  const status = document.getElementById('mp-player-count');
+  const t = getT();
+  if (status) status.textContent = `${connected}/${_mpMaxPlayers} ${t.mpPlayersJoined||'players joined'}`;
+  // Enable start button if at least 2 players
+  const startBtn = document.getElementById('mp-start-game-btn');
+  if (startBtn) startBtn.disabled = connected < 2;
+}
+
+function _mpSetupHostConn(conn) {
+  conn.on('open', () => {
+    // Sync existing players to new joiner
+    conn.send({ type: 'welcome', players: _mpPlayers, maxPlayers: _mpMaxPlayers });
+  });
+  conn.on('data', data => {
+    if (data.type === 'score') {
+      if (_mpPlayers[conn.peer]) {
+        _mpPlayers[conn.peer].score = data.score;
+        _mpPlayers[conn.peer].progress = data.progress;
+      }
+      _mpBroadcast({ type: 'scores', players: _mpPlayers });
+      _mpRenderScoreboard();
+    } else if (data.type === 'done') {
+      if (_mpPlayers[conn.peer]) {
+        _mpPlayers[conn.peer].score = data.score;
+        _mpPlayers[conn.peer].progress = data.total;
+      }
+      _mpFinishedCount++;
+      _mpBroadcast({ type: 'scores', players: _mpPlayers });
+      _mpRenderScoreboard();
+      if (_mpFinishedCount >= Object.keys(_mpPlayers).length) {
+        _mpBroadcast({ type: 'gameover', players: _mpPlayers });
+        _mpShowResults();
+      }
     }
   });
+  conn.on('close', () => {
+    delete _mpConns[conn.peer];
+    delete _mpPlayers[conn.peer];
+    _mpUpdatePlayerCount();
+    _mpBroadcast({ type: 'scores', players: _mpPlayers });
+    _mpRenderScoreboard();
+  });
+}
+
+function _mpBroadcast(data) {
+  Object.values(_mpConns).forEach(conn => { if (conn.open) conn.send(data); });
 }
 
 function _mpJoin(code) {
   if (!window.Peer) {
-    _mpStatus('⏳ Loading...');
+    _mpStatus('⏳ ' + (getT().mpLoading||'Loading...'));
     let waited = 0;
     const wait = setInterval(() => {
       waited += 300;
-      if (window.Peer) { clearInterval(wait); _mpStatus(''); _mpJoin(code); return; }
-      if (waited >= 5000) { clearInterval(wait); _mpStatus('❌ Could not load. Check internet.'); }
+      if (window.Peer) { clearInterval(wait); _mpJoin(code); return; }
+      if (waited >= 5000) { clearInterval(wait); _mpStatus('❌ ' + (getT().mpLoadFail||'Could not load.')); }
     }, 300);
     return;
   }
   _mpIsHost = false;
-  _mpStatus('Connecting to ' + code + '...');
+  _mpStatus('⏳ ' + (getT().mpConnecting||'Connecting...'));
   if (_mpPeer) _mpPeer.destroy();
-  const peerConfig = {
-    debug: 0,
-    config: {
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        { urls: 'stun:stun1.l.google.com:19302' },
-        { urls: 'stun:global.stun.twilio.com:3478' },
-      ]
-    }
-  };
-  _mpPeer = new Peer(undefined, peerConfig);
-
-  const joinTimeout = setTimeout(() => {
-    if (_mpPeer) {
-      _mpPeer.destroy();
-      _mpStatus('❌ Could not connect. Check the code and try again.');
-    }
+  _mpPeer = new Peer(undefined, _mpPeerConfig);
+  const timeout = setTimeout(() => {
+    _mpPeer?.destroy();
+    _mpStatus('❌ ' + (getT().mpTimeout||'Timeout. Try again.'));
   }, 12000);
 
   _mpPeer.on('open', () => {
-    clearTimeout(joinTimeout);
-    _mpStatus('🔗 Connecting to room...');
+    clearTimeout(timeout);
+    _mpMyId = _mpPeer.id;
+    _mpStatus('🔗 ' + (getT().mpJoining||'Joining room...'));
     _mpConn = _mpPeer.connect('vq_' + code, { reliable: true });
-    _mpSetupConn();
+    _mpSetupClientConn(_mpConn);
   });
   _mpPeer.on('error', e => {
-    clearTimeout(joinTimeout);
-    console.error('[MP] Join error:', e.type, e);
-    if (e.type === 'peer-unavailable') {
-      _mpStatus('❌ Room "' + code + '" not found. Check the code.');
-    } else {
-      _mpStatus('❌ Error: ' + e.type);
-    }
+    clearTimeout(timeout);
+    if (e.type === 'peer-unavailable') _mpStatus('❌ ' + (getT().mpRoomNotFound||'Room not found: ') + code);
+    else _mpStatus('❌ ' + e.type);
   });
 }
 
-function _mpSetupConn() {
-  _mpConn.on('open', () => {
-    console.log('[MP] Connection open, isHost:', _mpIsHost);
-    if (!_mpIsHost) {
-      _mpShowLobby();
-      _mpSend({type:'hello'});
+function _mpSetupClientConn(conn) {
+  conn.on('open', () => {
+    _mpStatus('');
+    _mpShowLobby();
+  });
+  conn.on('data', data => {
+    if (data.type === 'welcome') {
+      _mpPlayers = data.players;
+      _mpMaxPlayers = data.maxPlayers;
+      _mpRenderScoreboard();
+    } else if (data.type === 'start') {
+      _mpReceiveStart(data);
+    } else if (data.type === 'scores') {
+      _mpPlayers = data.players;
+      _mpRenderScoreboard();
+    } else if (data.type === 'gameover') {
+      _mpPlayers = data.players;
+      _mpShowResults();
     }
   });
-  _mpConn.on('data', data => {
-    console.log('[MP] Received:', data.type);
-    if (data.type === 'hello') { _mpShowLobby(); }
-    else if (data.type === 'start') { _mpReceiveStart(data); }
-    else if (data.type === 'score') { _mpUpdateOppScore(data.score); }
-    else if (data.type === 'done') { _mpOppFinished = true; _mpUpdateOppScore(data.score); _mpCheckBothDone(); }
-  });
-  _mpConn.on('close', () => {
-    console.log('[MP] Connection closed');
-    const t = getT();
-    _mpStatus(t.mpDisconnected || '😢 Opponent disconnected');
-  });
-  _mpConn.on('error', e => {
-    console.error('[MP] Connection error:', e);
-    _mpStatus('❌ Connection error. Try again.');
-  });
-}
-
-function _mpSend(data) {
-  if (_mpConn?.open) _mpConn.send(data);
+  conn.on('close', () => _mpStatus('😢 ' + (getT().mpDisconnected||'Disconnected')));
+  conn.on('error', e => _mpStatus('❌ ' + e));
 }
 
 function _mpShowLobby() {
-  const t = getT();
   document.getElementById('mp-connect-area').style.display = 'none';
   document.getElementById('mp-lobby').style.display = 'block';
-  document.getElementById('mp-my-score').textContent = '0';
-  document.getElementById('mp-opp-score').textContent = '0';
-  document.getElementById('mp-ready-status').textContent = t.mpConnected || '✅ Connected! Ready to battle?';
+  _mpRenderScoreboard();
+  const startBtn = document.getElementById('mp-start-game-btn');
+  // Only host can start
+  if (startBtn) startBtn.style.display = _mpIsHost ? '' : 'none';
+  const waitMsg = document.getElementById('mp-ready-status');
+  if (waitMsg) waitMsg.textContent = _mpIsHost
+    ? (getT().mpWaitingStart||'Waiting for players... then press Start!')
+    : (getT().mpWaitingHost||'Waiting for host to start the game...');
+}
+
+function _mpRenderScoreboard() {
+  const board = document.getElementById('mp-scoreboard');
+  if (!board) return;
+  board.innerHTML = '';
+  const sorted = Object.entries(_mpPlayers).sort((a,b) => b[1].score - a[1].score);
+  sorted.forEach(([id, p]) => {
+    const isMe = id === _mpMyId;
+    const pct = p.total > 0 ? Math.round(p.progress / p.total * 100) : 0;
+    const row = document.createElement('div');
+    row.style.cssText = `display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:${isMe?'rgba(233,69,96,0.1)':'var(--surface2)'};border:1px solid ${isMe?'var(--accent)':'var(--border)'};margin-bottom:6px;`;
+    row.innerHTML = `
+      <div style="font-size:18px">${isMe ? '👤' : '🎮'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:${isMe?700:500};color:${isMe?'var(--accent)':'var(--text)'}">${isMe ? (getT().mpYou||'You') : p.name}</div>
+        <div style="height:4px;background:var(--surface3);border-radius:2px;margin-top:4px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:${isMe?'var(--accent)':'var(--text-muted)'};border-radius:2px;transition:width 0.3s"></div>
+        </div>
+      </div>
+      <div style="font-size:20px;font-weight:900;color:${isMe?'var(--accent)':'var(--text-muted)'};">${p.score}</div>
+    `;
+    board.appendChild(row);
+  });
 }
 
 function _mpStartBattle() {
   const validWords = words.filter(w=>w.a.trim()&&w.b.trim());
-  if (validWords.length < 3) {
-    const t = getT();
-    alert(t.mpNeedWords || 'Add at least 3 words to play!'); return;
-  }
-  // Shuffle words
+  if (validWords.length < 3) { alert(getT().mpNeedWords||'Add at least 3 words!'); return; }
   const shuffled = [...validWords].sort(()=>Math.random()-0.5);
   _mpWords = shuffled;
-  _mpSend({type:'start', words: shuffled});
+  _mpBroadcast({ type: 'start', words: shuffled });
   _mpBeginGame(shuffled);
 }
 
@@ -4686,77 +4735,155 @@ function _mpReceiveStart(data) {
   _mpBeginGame(data.words);
 }
 
-function _mpBeginGame(words) {
-  _mpIdx = 0; _mpMyScore = 0; _mpOppScore = 0;
-  _mpOppFinished = false; _mpMyFinished = false;
+function _mpBeginGame(wds) {
+  _mpIdx = 0; _mpMyScore = 0; _mpFinishedCount = 0;
   document.getElementById('mp-lobby').style.display = 'none';
   document.getElementById('mp-game').style.display = 'block';
+  // Update player total
+  if (_mpPlayers[_mpMyId]) {
+    _mpPlayers[_mpMyId].score = 0;
+    _mpPlayers[_mpMyId].total = wds.length;
+    _mpPlayers[_mpMyId].progress = 0;
+  }
   _mpShowWord();
 }
 
 function _mpShowWord() {
   const t = getT();
   if (_mpIdx >= _mpWords.length) {
+    // Done! Send final score
     _mpMyFinished = true;
-    _mpSend({type:'done', score: _mpMyScore});
-    _mpCheckBothDone();
+    if (_mpIsHost) {
+      _mpFinishedCount++;
+      if (_mpFinishedCount >= Object.keys(_mpPlayers).length) {
+        _mpBroadcast({ type: 'gameover', players: _mpPlayers });
+        _mpShowResults();
+        return;
+      }
+    } else {
+      _mpConn.send({ type: 'done', score: _mpMyScore, total: _mpWords.length });
+    }
+    // Show waiting message
+    document.getElementById('mp-word').textContent = '⏳';
+    document.getElementById('mp-prompt-label').textContent = t.mpWaitingOthers||'Waiting for others...';
+    document.getElementById('mp-answer').style.display = 'none';
+    document.getElementById('mp-check-btn').style.display = 'none';
     return;
   }
   const w = _mpWords[_mpIdx];
   document.getElementById('mp-word').textContent = w.a;
   document.getElementById('mp-answer').value = '';
+  document.getElementById('mp-answer').style.display = '';
+  document.getElementById('mp-check-btn').style.display = '';
   document.getElementById('mp-feedback').textContent = '';
+  document.getElementById('mp-prompt-label').textContent = t.mpTranslate||'Translate:';
   document.getElementById('mp-progress-label').textContent = (_mpIdx+1) + ' / ' + _mpWords.length;
-  document.getElementById('mp-my-score2').textContent = _mpMyScore;
+
+  // Update my scoreboard entry
+  if (_mpPlayers[_mpMyId]) {
+    _mpPlayers[_mpMyId].progress = _mpIdx;
+    _mpPlayers[_mpMyId].total = _mpWords.length;
+  }
+  _mpRenderLiveScores();
   document.getElementById('mp-answer').focus();
+}
+
+function _mpRenderLiveScores() {
+  // Update the in-game scoreboard
+  const board = document.getElementById('mp-live-board');
+  if (!board) return;
+  board.innerHTML = '';
+  const sorted = Object.entries(_mpPlayers).sort((a,b) => b[1].score - a[1].score);
+  sorted.forEach(([id, p]) => {
+    const isMe = id === _mpMyId;
+    const pct = p.total > 0 ? Math.round(p.progress / p.total * 100) : 0;
+    const row = document.createElement('div');
+    row.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:4px;';
+    row.innerHTML = `
+      <div style="font-size:12px;color:${isMe?'var(--accent)':'var(--text-muted)'};min-width:60px;font-weight:${isMe?700:400};overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${isMe ? (getT().mpYou||'You') : p.name}</div>
+      <div style="flex:1;height:6px;background:var(--surface3);border-radius:3px;overflow:hidden">
+        <div style="height:100%;width:${pct}%;background:${isMe?'var(--accent)':'var(--text-muted)'};border-radius:3px;transition:width 0.3s"></div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:${isMe?'var(--accent)':'var(--text-muted)'};min-width:24px;text-align:right">${p.score}</div>
+    `;
+    board.appendChild(row);
+  });
 }
 
 function _mpCheckAnswer() {
   if (_mpIdx >= _mpWords.length) return;
   const ans = document.getElementById('mp-answer').value.trim();
+  if (!ans) return;
   const correct = normalize(ans) === normalize(_mpWords[_mpIdx].b);
   const fb = document.getElementById('mp-feedback');
+  const t = getT();
+
   if (correct) {
     _mpMyScore++;
-    fb.textContent = '✓ ' + (getT().correct||'Correct!');
+    _mpIdx++;
+    if (_mpPlayers[_mpMyId]) {
+      _mpPlayers[_mpMyId].score = _mpMyScore;
+      _mpPlayers[_mpMyId].progress = _mpIdx;
+    }
+    fb.textContent = '✓ ' + (t.correct||'Correct!');
     fb.style.color = 'var(--success)';
     playCorrectSound();
-    _mpSend({type:'score', score: _mpMyScore});
-    document.getElementById('mp-my-score2').textContent = _mpMyScore;
-    _mpIdx++;
-    setTimeout(_mpShowWord, 500);
+    // Sync score to others
+    if (_mpIsHost) {
+      _mpBroadcast({ type: 'scores', players: _mpPlayers });
+    } else {
+      _mpConn?.send({ type: 'score', score: _mpMyScore, progress: _mpIdx });
+    }
+    setTimeout(_mpShowWord, 400);
   } else {
-    fb.textContent = '✗ ' + (getT().wrongPrefix||'Answer: ') + _mpWords[_mpIdx].b;
+    // WRONG: reset score and restart from beginning (random shuffle)
+    _mpMyScore = 0;
+    _mpIdx = 0;
+    _mpWords = [..._mpWords].sort(() => Math.random() - 0.5); // re-shuffle
+    if (_mpPlayers[_mpMyId]) {
+      _mpPlayers[_mpMyId].score = 0;
+      _mpPlayers[_mpMyId].progress = 0;
+    }
+    fb.textContent = '✗ ' + (t.wrongPrefix||'') + _mpWords[_mpIdx<_mpWords.length?_mpIdx:0]?.b + ' — ' + (t.mpReset||'Score reset! Starting over...');
     fb.style.color = 'var(--danger)';
     playWrongSound();
-    _mpIdx++;
-    setTimeout(_mpShowWord, 800);
+    if (_mpIsHost) {
+      _mpBroadcast({ type: 'scores', players: _mpPlayers });
+    } else {
+      _mpConn?.send({ type: 'score', score: 0, progress: 0 });
+    }
+    setTimeout(_mpShowWord, 1500);
   }
 }
 
-function _mpUpdateOppScore(score) {
-  _mpOppScore = score;
-  document.getElementById('mp-opp-score').textContent = score;
-  document.getElementById('mp-opp-score2').textContent = score;
-}
-
-function _mpCheckBothDone() {
-  if (!_mpMyFinished || !_mpOppFinished) return;
-  // Show results
+function _mpShowResults() {
   const t = getT();
   document.getElementById('mp-game').style.display = 'none';
   document.getElementById('mp-results').style.display = 'block';
-  const iWin = _mpMyScore > _mpOppScore;
-  const isTie = _mpMyScore === _mpOppScore;
+  // Find winner
+  const sorted = Object.entries(_mpPlayers).sort((a,b) => b[1].score - a[1].score);
+  const winner = sorted[0];
+  const iWin = winner && winner[0] === _mpMyId;
+  const isTie = sorted.length > 1 && sorted[0][1].score === sorted[1][1].score;
   document.getElementById('mp-result-emoji').textContent = isTie ? '🤝' : iWin ? '🏆' : '😢';
-  document.getElementById('mp-result-title').textContent = isTie ? (t.mpTie||"It's a Tie!") : iWin ? (t.mpWin||'You Win! 🎉') : (t.mpLose||'You Lose...');
-  document.getElementById('mp-result-scores').textContent = `${_mpMyScore} : ${_mpOppScore}`;
+  document.getElementById('mp-result-title').textContent = isTie ? (t.mpTie||"It\'s a Tie!") : iWin ? (t.mpWin||'You Win! 🎉') : (t.mpLose||'You Lose...');
+  // Show all scores
+  const scoresDiv = document.getElementById('mp-result-scores');
+  if (scoresDiv) {
+    scoresDiv.innerHTML = sorted.map(([id, p], i) =>
+      `<div style="margin:4px 0;font-size:13px;color:${id===_mpMyId?'var(--accent)':'var(--text-muted)'};font-weight:${id===_mpMyId?700:400}">
+        ${i===0?'🥇':i===1?'🥈':i===2?'🥉':'  '} ${id===_mpMyId?(t.mpYou||'You'):p.name}: ${p.score} ${t.mpPoints||'pts'}
+      </div>`
+    ).join('');
+  }
   if (iWin) { playCompleteSound(); haptic('complete'); }
 }
 
 function _mpDisconnect() {
-  if (_mpConn) { _mpConn.close(); _mpConn = null; }
-  if (_mpPeer) { _mpPeer.destroy(); _mpPeer = null; }
+  Object.values(_mpConns).forEach(conn => { try { conn.close(); } catch(e){} });
+  if (_mpConn) { try { _mpConn.close(); } catch(e){} _mpConn = null; }
+  if (_mpPeer) { try { _mpPeer.destroy(); } catch(e){} _mpPeer = null; }
+  _mpConns = {}; _mpPlayers = {};
 }
 
 document.addEventListener('DOMContentLoaded', () => {
