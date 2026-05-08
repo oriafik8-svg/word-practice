@@ -4566,7 +4566,13 @@ function _mpCreate() {
     _mpConns[conn.peer] = conn;
     _mpPlayers[conn.peer] = { name: 'Player ' + (Object.keys(_mpConns).length + 1), score: 0, progress: 0, total: 0 };
     _mpSetupHostConn(conn);
-    _mpUpdatePlayerCount();
+    // Host moves to lobby when first player joins
+    if (Object.keys(_mpConns).length === 1) {
+      _mpShowLobby();
+    } else {
+      _mpUpdatePlayerCount();
+      _mpRenderScoreboard();
+    }
   });
 
   _mpPeer.on('error', e => {
@@ -4577,13 +4583,17 @@ function _mpCreate() {
 }
 
 function _mpUpdatePlayerCount() {
-  const connected = Object.keys(_mpConns).length + 1; // +1 for host
+  const connected = Object.keys(_mpPlayers).length; // includes host
   const status = document.getElementById('mp-player-count');
   const t = getT();
-  if (status) status.textContent = `${connected}/${_mpMaxPlayers} ${t.mpPlayersJoined||'players joined'}`;
-  // Enable start button if at least 2 players
+  if (status) status.textContent = connected + '/' + _mpMaxPlayers + ' ' + (t.mpPlayersJoined||'players joined');
+  // Enable start button only for host, and only with 2+ players
   const startBtn = document.getElementById('mp-start-game-btn');
-  if (startBtn) startBtn.disabled = connected < 2;
+  if (startBtn && _mpIsHost) {
+    startBtn.disabled = connected < 2;
+    startBtn.style.opacity = connected < 2 ? '0.5' : '1';
+  }
+  _mpRenderScoreboard();
 }
 
 function _mpSetupHostConn(conn) {
@@ -4687,10 +4697,14 @@ function _mpSetupClientConn(conn) {
 function _mpShowLobby() {
   document.getElementById('mp-connect-area').style.display = 'none';
   document.getElementById('mp-lobby').style.display = 'block';
+  _mpUpdatePlayerCount();
   _mpRenderScoreboard();
   const startBtn = document.getElementById('mp-start-game-btn');
   // Only host can start
-  if (startBtn) startBtn.style.display = _mpIsHost ? '' : 'none';
+  if (startBtn) {
+    startBtn.style.display = _mpIsHost ? '' : 'none';
+    startBtn.disabled = Object.keys(_mpPlayers).length < 2;
+  }
   const waitMsg = document.getElementById('mp-ready-status');
   if (waitMsg) waitMsg.textContent = _mpIsHost
     ? (getT().mpWaitingStart||'Waiting for players... then press Start!')
