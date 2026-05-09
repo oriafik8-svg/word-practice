@@ -4531,6 +4531,7 @@ let _mpPlayers = {}; // peerId -> {name, score, progress, total}
 let _mpMyId = null;
 let _mpWords = [], _mpIdx = 0, _mpMyScore = 0;
 let _mpLastOpponentIds = []; // peer IDs of last opponents
+let _mpDeviceIds = {}; // peerId -> deviceId (for Firestore)
 let _mpMaxPlayers = 6; // default
 let _mpFinishedCount = 0;
 let _mpTotalPlayers = 0;
@@ -4750,6 +4751,11 @@ function _mpSetupClientConn(conn) {
     if (data.type === 'welcome') {
       _mpPlayers = data.players;
       _mpMaxPlayers = data.maxPlayers;
+      // Store host's device ID
+      if (data.hostDeviceId) {
+        const hostPeerId = Object.keys(_mpPlayers).find(id => id !== _mpMyId);
+        if (hostPeerId) _mpDeviceIds[hostPeerId] = data.hostDeviceId;
+      }
       _mpRenderScoreboard();
     } else if (data.type === 'start') {
       _mpReceiveStart(data);
@@ -4829,12 +4835,18 @@ function _mpStartBattle() {
   if (validWords.length < 3) { showSaveToast('⚠️ ' + (getT().mpNeedWords||'Add at least 3 words!')); return; }
   const shuffled = [...validWords].sort(()=>Math.random()-0.5);
   _mpWords = shuffled;
-  _mpBroadcast({ type: 'start', words: shuffled });
+  // Include deviceId map so clients know Firestore IDs
+  getMyId().then(myDevId => {
+    _mpDeviceIds[_mpMyId] = myDevId;
+    _mpBroadcast({ type: 'start', words: shuffled, deviceIds: _mpDeviceIds });
+  });
   _mpBeginGame(shuffled);
 }
 
 function _mpReceiveStart(data) {
   _mpWords = data.words;
+  // Merge device IDs
+  if (data.deviceIds) Object.assign(_mpDeviceIds, data.deviceIds);
   _mpBeginGame(data.words);
 }
 
@@ -4842,6 +4854,8 @@ function _mpBeginGame(wds) {
   _mpIdx = 0; _mpMyScore = 0; _mpFinishedCount = 0;
   // Save opponent IDs for "play again"
   _mpLastOpponentIds = Object.keys(_mpPlayers).filter(id => id !== _mpMyId);
+  // Register my own device ID
+  getMyId().then(devId => { _mpDeviceIds[_mpMyId] = devId; });
   document.getElementById('mp-lobby').style.display = 'none';
   document.getElementById('mp-game').style.display = 'block';
   // Update player total
@@ -4984,11 +4998,12 @@ function _mpShowResults(winnerId) {
   if (iWin) { playCompleteSound(); haptic('complete'); }
   // Show add friend option for opponents
   if (FIREBASE_ENABLED && sorted.length > 0) {
-    // Find first opponent
     const oppEntry = sorted.find(([id]) => id !== _mpMyId);
     if (oppEntry) {
-      const [oppId, oppData] = oppEntry;
-      setTimeout(() => _showAddFriendDialog(oppId, oppData.name), 500);
+      const [oppPeerId, oppData] = oppEntry;
+      // Use Firestore device ID if available, fallback to peer ID
+      const oppDeviceId = _mpDeviceIds[oppPeerId] || oppPeerId;
+      setTimeout(() => _showAddFriendDialog(oppDeviceId, oppData.name), 500);
     }
   }
 }
