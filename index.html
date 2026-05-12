@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -334,6 +335,35 @@
   .accent-swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all 0.18s;}
   .accent-swatch:hover{transform:scale(1.12);}
   .accent-swatch.active{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,0.5);}
+
+  /* === Settings + Flip cards === */
+  .settings-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:16px;padding:6px 9px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:'Heebo',sans-serif;transition:all .2s;}
+  .settings-btn:hover{border-color:var(--accent);transform:rotate(30deg);}
+  #settings-overlay{display:none;position:fixed;inset:0;z-index:1500;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:16px;}
+  #settings-overlay.open{display:flex;animation:fadeInUp .2s ease;}
+  .settings-modal{background:var(--surface);border:1px solid var(--border);border-radius:18px;width:100%;max-width:420px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,0.5);}
+  .settings-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--border);}
+  .settings-title{font-size:17px;font-weight:800;color:var(--text);}
+  .settings-body{padding:14px 14px 18px;display:flex;flex-direction:column;gap:10px;}
+  .settings-row{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;cursor:pointer;font-family:'Heebo',sans-serif;color:var(--text);text-align:right;transition:all .15s;}
+  .settings-row:hover{border-color:var(--accent);transform:translateY(-1px);}
+  .settings-row .ico{font-size:22px;}
+  .settings-row .lbl{flex:1;font-size:14px;font-weight:700;}
+  .settings-row .val{font-size:12px;color:var(--text-muted);}
+  .settings-row .arr{font-size:18px;color:var(--text-muted);}
+
+  .flip-wrap{position:relative;perspective:1400px;margin-bottom:8px;}
+  .flip-inner{position:relative;width:100%;transition:transform .55s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d;}
+  .flip-wrap.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-front,.flip-back{backface-visibility:hidden;-webkit-backface-visibility:hidden;}
+  .flip-front{position:relative;}
+  .flip-back{position:absolute;inset:0;transform:rotateY(180deg);background:linear-gradient(135deg,var(--surface2),var(--surface));border:1.5px solid var(--accent);border-radius:14px;padding:16px 18px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--text);font-size:18px;font-weight:600;line-height:1.45;font-family:'Heebo',sans-serif;box-shadow:0 6px 18px rgba(0,0,0,0.25);}
+  .flip-wrap.flipped .flip-back{cursor:pointer;}
+  .flip-help{position:absolute;top:50%;left:8px;transform:translateY(-50%);width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,0.18);border:1px solid rgba(255,255,255,0.35);color:#fff;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:5;font-family:'Heebo',sans-serif;transition:all .15s;}
+  .flip-help:hover{background:rgba(255,255,255,0.32);transform:translateY(-50%) scale(1.12);}
+  .flip-help.dark{background:var(--surface);border-color:var(--border);color:var(--text-muted);}
+  .flip-help.dark:hover{background:var(--surface2);color:var(--text);}
+
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -387,10 +417,11 @@
         <button id="accent-picker-btn" title="Accent color"></button>
         <div id="accent-picker-panel"></div>
       </div>
-      <button class="ui-lang-btn" id="ui-lang-btn">
+      <button class="settings-btn" id="settings-btn" title="Settings" aria-label="Settings">⚙️</button>
+      <button class="ui-lang-btn" id="ui-lang-btn" style="display:none">
         <span id="ui-lang-flag">🌐</span><span id="ui-lang-name">EN</span>
       </button>
-      <button id="feedback-fab" title="Feedback" style="width:auto;height:auto;border-radius:8px;padding:6px 10px;position:static;display:flex;align-items:center;gap:5px;font-size:13px;font-weight:600;box-shadow:none;background:var(--accent);">
+      <button id="feedback-fab" title="Feedback" style="display:none">
         ✉️ <span id="feedback-fab-label">Feedback</span>
       </button>
       <div style="display:flex;flex-direction:column;align-items:center;gap:2px">
@@ -444,6 +475,35 @@
         <input class="modal-search" id="ui-modal-search" placeholder="🔍 Search...">
       </div>
       <div class="modal-list" id="ui-modal-list"></div>
+    </div>
+  </div>
+
+  
+  <!-- SETTINGS MODAL -->
+  <div id="settings-overlay" role="dialog" aria-modal="true">
+    <div class="settings-modal" id="settings-modal">
+      <div class="settings-head">
+        <span class="settings-title" id="settings-title">⚙️ Settings</span>
+        <button class="modal-close" id="settings-close" aria-label="Close">✕</button>
+      </div>
+      <div class="settings-body">
+        <button class="settings-row" id="settings-lang-row" type="button">
+          <span class="ico">🌐</span>
+          <div class="lbl">
+            <div id="settings-lang-label">Interface Language</div>
+            <div class="val" id="settings-lang-val">English</div>
+          </div>
+          <span class="arr">›</span>
+        </button>
+        <button class="settings-row" id="settings-feedback-row" type="button">
+          <span class="ico">✉️</span>
+          <div class="lbl">
+            <div id="settings-feedback-label">Feedback</div>
+            <div class="val" id="settings-feedback-val">Send suggestions or report bugs</div>
+          </div>
+          <span class="arr">›</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -5079,5 +5139,163 @@ document.addEventListener('DOMContentLoaded', () => {
       <button id="wip-back-btn" style="margin-top:28px;padding:12px 28px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-family:Heebo,sans-serif;font-size:15px;font-weight:700;cursor:pointer">← Back</button>
     </div>
   </div>
+
+<script>
+(function(){
+  // Explanations per home card (he + en)
+  var EXPL = {
+    'create-quiz-card': {
+      he: 'כאן יוצרים בוחן חדש: בוחרים שתי שפות, מוסיפים מילים ותרגומים, ומגדירים את סוג הבוחן (כתיבה / אמריקאי / נכון או לא).',
+      en: 'Create a new quiz: pick two languages, add words and translations, and choose the quiz type (writing, multiple-choice, or true/false).'
+    },
+    'saved-quizzes-btn': {
+      he: 'כל הבחנים שיצרת נשמרים כאן אוטומטית. אפשר לפתוח, לערוך, למיין, לסנן לפי שפה ולהתחיל בוחן בכל רגע.',
+      en: 'All quizzes you create are auto-saved here. Open, edit, sort, filter by language, and start any quiz again.'
+    },
+    'community-btn': {
+      he: 'בוחן שיתופי: עיין בבחנים שמשתמשים אחרים פרסמו, או פרסם בוחן משלך כדי שאחרים יוכלו ללמוד ממנו.',
+      en: 'Collaborative Quiz: browse quizzes published by other users, or publish your own quiz so others can learn from it.'
+    },
+    'claori-btn': {
+      he: 'claori — העוזר החכם שלך. אפשר לבקש ממנו ליצור בחנים אוטומטית, להסביר מילים, או לעזור בכל שאלה על האפליקציה.',
+      en: 'claori — your AI assistant. Ask it to generate quizzes for you, explain words, or help with anything in the app.'
+    },
+    'multiplayer-btn': {
+      he: 'מרובה משתתפים: הזמן חבר לאתגר בזמן אמת — כל אחד עונה על אותן מילים והמהיר/מדויק יותר מנצח.',
+      en: 'Multiplayer: challenge a friend in real-time — both answer the same words; the faster and more accurate one wins.'
+    }
+  };
+
+  function isHebrew(){
+    var html = document.documentElement;
+    return (html.dir === 'rtl') || (html.lang || '').toLowerCase().startsWith('he');
+  }
+
+  function wrapCard(id, darkHelp){
+    var btn = document.getElementById(id);
+    if(!btn || btn.dataset.flipped === '1') return;
+    btn.dataset.flipped = '1';
+
+    var wrap = document.createElement('div');
+    wrap.className = 'flip-wrap';
+    var inner = document.createElement('div');
+    inner.className = 'flip-inner';
+    var front = document.createElement('div');
+    front.className = 'flip-front';
+    var back = document.createElement('div');
+    back.className = 'flip-back';
+    back.id = id + '-back';
+
+    btn.parentNode.insertBefore(wrap, btn);
+    wrap.appendChild(inner);
+    inner.appendChild(front);
+    inner.appendChild(back);
+    front.appendChild(btn);
+
+    // ? help button
+    var help = document.createElement('button');
+    help.type = 'button';
+    help.className = 'flip-help' + (darkHelp ? ' dark' : '');
+    help.setAttribute('aria-label', 'Help');
+    help.textContent = '?';
+    help.addEventListener('click', function(e){
+      e.stopPropagation(); e.preventDefault();
+      wrap.classList.add('flipped');
+      // sync size for absolute back
+      back.style.minHeight = front.offsetHeight + 'px';
+      // refresh text in current language
+      var t = EXPL[id]; if(t) back.textContent = isHebrew() ? t.he : t.en;
+    });
+    front.appendChild(help);
+
+    // click on back flips it back
+    back.addEventListener('click', function(){ wrap.classList.remove('flipped'); });
+
+    // initial text
+    var t = EXPL[id]; if(t) back.textContent = isHebrew() ? t.he : t.en;
+  }
+
+  function setupCards(){
+    wrapCard('create-quiz-card', false); // gradient bg, white help
+    wrapCard('saved-quizzes-btn', true);
+    wrapCard('community-btn', true);
+    wrapCard('claori-btn', true);
+    wrapCard('multiplayer-btn', false);
+  }
+
+  // Settings modal logic
+  function setupSettings(){
+    var btn = document.getElementById('settings-btn');
+    var overlay = document.getElementById('settings-overlay');
+    var modal = document.getElementById('settings-modal');
+    var closeBtn = document.getElementById('settings-close');
+    var langRow = document.getElementById('settings-lang-row');
+    var fbRow = document.getElementById('settings-feedback-row');
+    if(!btn || !overlay) return;
+
+    function applyTexts(){
+      var he = isHebrew();
+      document.getElementById('settings-title').textContent = he ? '⚙️ הגדרות' : '⚙️ Settings';
+      document.getElementById('settings-lang-label').textContent = he ? 'שפת הממשק' : 'Interface Language';
+      document.getElementById('settings-feedback-label').textContent = he ? 'ביקורת' : 'Feedback';
+      document.getElementById('settings-feedback-val').textContent = he ? 'שלח הצעות, באגים או רעיונות' : 'Send suggestions, bugs or ideas';
+      // current lang display
+      var nameEl = document.getElementById('ui-lang-name');
+      var flagEl = document.getElementById('ui-lang-flag');
+      var name = nameEl ? nameEl.textContent.trim() : 'EN';
+      var flag = flagEl ? flagEl.textContent.trim() : '🌐';
+      document.getElementById('settings-lang-val').textContent = flag + ' ' + name;
+    }
+
+    function open(){ applyTexts(); overlay.classList.add('open'); }
+    function close(){ overlay.classList.remove('open'); }
+
+    btn.addEventListener('click', open);
+    closeBtn.addEventListener('click', close);
+    overlay.addEventListener('click', function(e){
+      if(!modal.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && overlay.classList.contains('open')) close();
+    });
+
+    langRow.addEventListener('click', function(){
+      close();
+      var u = document.getElementById('ui-lang-btn');
+      if(u) u.click();
+    });
+    fbRow.addEventListener('click', function(){
+      close();
+      var f = document.getElementById('feedback-fab');
+      if(f) f.click();
+    });
+
+    // Re-apply texts when language changes (observe ui-lang-name)
+    var nameEl = document.getElementById('ui-lang-name');
+    if(nameEl && window.MutationObserver){
+      new MutationObserver(function(){
+        applyTexts();
+        // also refresh card backs
+        document.querySelectorAll('.flip-back').forEach(function(b){
+          var id = b.id.replace(/-back$/,'');
+          var t = EXPL[id]; if(t) b.textContent = isHebrew() ? t.he : t.en;
+        });
+      }).observe(nameEl, {childList:true, characterData:true, subtree:true});
+    }
+  }
+
+  function init(){
+    try { setupCards(); } catch(e){ console.error(e); }
+    try { setupSettings(); } catch(e){ console.error(e); }
+  }
+
+  if(document.readyState === 'loading'){
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
 </body>
 </html>
