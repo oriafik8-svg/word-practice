@@ -1555,7 +1555,6 @@ function renderModalList(f) {
         document.getElementById('shared-header-lang'+n).textContent=getLangDisplayName(lang);
         renderSharedWords(); updatePublishBtn();
       } else if(window._wizPickSide !== undefined) {
-        // באשף — עדכון שפת האשף
         _wizOnLangSelected(lang);
         return;
       } else {
@@ -1710,48 +1709,17 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
-  // Try Anthropic API first (works in Claude.ai)
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001', max_tokens:120,
-        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
-      })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const raw = data?.content?.[0]?.text?.trim();
-      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
-    }
-  } catch(e) {}
-
-  // Fallback: MyMemory free translation API (works everywhere, no key needed)
-  try {
-    // Map lang native names to ISO codes for MyMemory
-    const langMap = {
-      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
-      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
-      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
-      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
-      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
-      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
-      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
-    };
-    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
-    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       const translation = data?.responseData?.translatedText;
-      if (translation && translation !== text) {
-        return { keyboardFix: null, translation };
+      if (translation && translation.trim().length > 0) {
+        return { keyboardFix: null, translation: translation.trim() };
       }
     }
   } catch(e) {}
-
   return null;
 }
 
@@ -1772,8 +1740,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.native:lang2.native;
-  const tgtLang=side==='a'?lang2.native:lang1.native;
+  const srcLang=side==='a'?lang1.id:lang2.id;
+  const tgtLang=side==='a'?lang2.id:lang1.id;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -4902,13 +4870,39 @@ function _wizRenderWords(){
   const container=document.getElementById('wiz-words-list');if(!container)return;
   if(!_wizWords.length)_wizWords=[{a:'',b:''}];
   container.innerHTML='';
+  const t=getT();
   _wizWords.forEach((w,i)=>{
     const row=document.createElement('div');row.className='word-row';
-    row.innerHTML=`<div class="word-cell"><input class="word-input" data-idx="${i}" data-side="a" value="${escHtml(w.a)}" placeholder="${_wizLang1?.native||'Word'}" style="text-align:right"></div><span style="color:var(--text-muted);font-size:16px;align-self:center">→</span><div class="word-cell"><input class="word-input" data-idx="${i}" data-side="b" value="${escHtml(w.b)}" placeholder="${_wizLang2?.native||'Translation'}" style="text-align:right"></div><button class="delete-btn" data-del="${i}">✕</button>`;
+    row.innerHTML=`<div class="word-cell"><input class="word-input" data-idx="${i}" data-side="a" value="${escHtml(w.a)}" placeholder="${_wizLang1?.native||'Word'}" style="text-align:right">
+      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel||'הצעת תרגום'}</span><button class="gt-accept-btn" type="button">${t.accept||'אשר'}</button></div>
+    </div><span style="color:var(--text-muted);font-size:16px;align-self:center">→</span><div class="word-cell"><input class="word-input" data-idx="${i}" data-side="b" value="${escHtml(w.b)}" placeholder="${_wizLang2?.native||'Translation'}" style="text-align:right">
+      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel||'הצעת תרגום'}</span><button class="gt-accept-btn" type="button">${t.accept||'אשר'}</button></div>
+    </div><button class="delete-btn" data-del="${i}">✕</button>`;
     container.appendChild(row);
   });
-  container.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{_wizWords[+inp.dataset.idx][inp.dataset.side]=inp.value;_wizCount();}));
-  container.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click',()=>{if(_wizWords.length>1){_wizWords.splice(+btn.dataset.del,1);_wizRenderWords();}}));
+  container.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{
+    _wizWords[+inp.dataset.idx][inp.dataset.side]=inp.value;
+    _wizCount();
+    if(gtConnected && _wizLang1 && _wizLang2){
+      const row=inp.closest('.word-row');
+      const targetSide=inp.dataset.side==='a'?'b':'a';
+      triggerAnalysis(row, inp, targetSide, _wizWords, _wizLang1, _wizLang2, false);
+    }
+  }));
+  container.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click',()=>{
+    if(_wizWords.length>1){_wizWords.splice(+btn.dataset.del,1);_wizRenderWords();}
+  }));
+  container.addEventListener('click',e=>{
+    const acc=e.target.closest('.gt-accept-btn');
+    if(acc){
+      const sg=acc.closest('.gt-suggestion');
+      const sug=sg.dataset.suggestion;
+      if(!sug)return;
+      const cell=sg.closest('.word-cell');
+      const inp=cell.querySelector('.word-input');
+      if(inp){inp.value=sug;_wizWords[+inp.dataset.idx][inp.dataset.side]=sug;cell.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));_wizCount();}
+    }
+  });
   _wizCount();
 }
 function _wizCount(){const v=_wizWords.filter(w=>w.a.trim()&&w.b.trim()).length;const el=document.getElementById('wiz-words-count');if(el)el.textContent=v>=3?`✅ ${v} words ready`:`${v}/3 (min 3)`;const btn=document.getElementById('wiz-next-2');if(btn){btn.disabled=v<3;btn.style.opacity=v>=3?'1':'0.4';}}
