@@ -134,7 +134,8 @@
   .gt-suggestion-label{font-size:10px;color:#5588cc;white-space:nowrap;}
   .gt-spinner{width:10px;height:10px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin 0.6s linear infinite;}
   @keyframes spin{to{transform:rotate(360deg);}}
-  .gt-accept-btn{background:rgba(66,133,244,0.2);border:none;color:#4285f4;font-size:10px;padding:2px 6px;border-radius:4px;cursor:pointer;white-space:nowrap;font-family:'Heebo',sans-serif;}
+  .gt-accept-btn{background:rgba(74,222,128,0.2);border:none;color:#4ade80;font-size:13px;padding:2px 5px;border-radius:4px;cursor:pointer;white-space:nowrap;font-family:'Heebo',sans-serif;line-height:1;}
+  .gt-reject-btn{background:rgba(248,113,113,0.2);border:none;color:#f87171;font-size:13px;padding:2px 5px;border-radius:4px;cursor:pointer;white-space:nowrap;font-family:'Heebo',sans-serif;line-height:1;}
   .arrow{display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:12px;}
   .delete-btn{background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:12px;padding:0 4px;display:flex;align-items:center;justify-content:center;}
   .delete-btn:hover{color:var(--danger);}
@@ -1554,9 +1555,6 @@ function renderModalList(f) {
         document.getElementById('shared-langname'+n).textContent=getLangDisplayName(lang);
         document.getElementById('shared-header-lang'+n).textContent=getLangDisplayName(lang);
         renderSharedWords(); updatePublishBtn();
-      } else if(window._wizPickSide !== undefined) {
-        _wizOnLangSelected(lang);
-        return;
       } else {
         selectedLang[activePicker]=lang;
         document.getElementById('flag'+(activePicker+1)).textContent=lang.flag;
@@ -1612,13 +1610,13 @@ function renderWords() {
   visibleWords.forEach((w,i)=>{
     const row=document.createElement('div'); row.className='word-row';
     row.innerHTML=`<div class="word-cell"><input class="word-input" placeholder="${escHtml(p1)}" value="${escHtml(w.a)}" data-idx="${i}" data-side="a" dir="auto">
-      <div class="gt-suggestion kb-suggestion-a" data-suggestion="" style="background:rgba(245,166,35,0.1)"><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text" style="color:#f5a623"></span><span class="gt-suggestion-label" style="color:#c8882a;font-size:10px">${t.kbSuggestionLabel}</span><button class="gt-accept-btn" type="button" style="background:rgba(245,166,35,0.25);color:#f5a623">${t.kbAccept}</button></div>
-      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel}</span><button class="gt-accept-btn" type="button">${t.accept}</button></div>
+      <div class="gt-suggestion kb-suggestion-a" data-suggestion="" style="background:rgba(245,166,35,0.1)"><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text" style="color:#f5a623"></span><button class="gt-accept-btn" type="button" style="background:rgba(245,166,35,0.25);color:#f5a623" title="${t.kbAccept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
+      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="${t.accept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div>
     <div class="arrow">→</div>
     <div class="word-cell"><input class="word-input" placeholder="${escHtml(p2)}" value="${escHtml(w.b)}" data-idx="${i}" data-side="b" dir="auto">
-      <div class="gt-suggestion kb-suggestion-b" data-suggestion="" style="background:rgba(245,166,35,0.1)"><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text" style="color:#f5a623"></span><span class="gt-suggestion-label" style="color:#c8882a;font-size:10px">${t.kbSuggestionLabel}</span><button class="gt-accept-btn" type="button" style="background:rgba(245,166,35,0.25);color:#f5a623">${t.kbAccept}</button></div>
-      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel}</span><button class="gt-accept-btn" type="button">${t.accept}</button></div>
+      <div class="gt-suggestion kb-suggestion-b" data-suggestion="" style="background:rgba(245,166,35,0.1)"><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text" style="color:#f5a623"></span><button class="gt-accept-btn" type="button" style="background:rgba(245,166,35,0.25);color:#f5a623" title="${t.kbAccept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
+      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="${t.accept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div>
     <button class="delete-btn" data-idx="${i}" title="${t.deleteTitle}">✕</button>`;
     wordsList.appendChild(row);
@@ -1660,11 +1658,11 @@ function renderSharedWords() {
   sharedWords.forEach((w,i)=>{
     const row=document.createElement('div'); row.className='word-row';
     row.innerHTML=`<div class="word-cell"><input class="word-input" placeholder="${escHtml(p1)}" value="${escHtml(w.a)}" data-idx="${i}" data-side="a" dir="auto">
-      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel}</span><button class="gt-accept-btn" type="button">${t.accept}</button></div>
+      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="${t.accept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div>
     <div class="arrow">→</div>
     <div class="word-cell"><input class="word-input" placeholder="${escHtml(p2)}" value="${escHtml(w.b)}" data-idx="${i}" data-side="b" dir="auto">
-      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel}</span><button class="gt-accept-btn" type="button">${t.accept}</button></div>
+      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="${t.accept}">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div>
     <button class="delete-btn" data-idx="${i}" title="${t.deleteTitle}">✕</button>`;
     list.appendChild(row);
@@ -1709,17 +1707,48 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
+  // Try Anthropic API first (works in Claude.ai)
   try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001', max_tokens:120,
+        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const raw = data?.content?.[0]?.text?.trim();
+      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
+    }
+  } catch(e) {}
+
+  // Fallback: MyMemory free translation API (works everywhere, no key needed)
+  try {
+    // Map lang native names to ISO codes for MyMemory
+    const langMap = {
+      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
+      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
+      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
+      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
+      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
+      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
+      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
+    };
+    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
+    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       const translation = data?.responseData?.translatedText;
-      if (translation && translation.trim().length > 0) {
-        return { keyboardFix: null, translation: translation.trim() };
+      if (translation && translation !== text) {
+        return { keyboardFix: null, translation };
       }
     }
   } catch(e) {}
+
   return null;
 }
 
@@ -1740,8 +1769,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.id:lang2.id;
-  const tgtLang=side==='a'?lang2.id:lang1.id;
+  const srcLang=side==='a'?lang1.native:lang2.native;
+  const tgtLang=side==='a'?lang2.native:lang1.native;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -4874,9 +4903,9 @@ function _wizRenderWords(){
   _wizWords.forEach((w,i)=>{
     const row=document.createElement('div');row.className='word-row';
     row.innerHTML=`<div class="word-cell"><input class="word-input" data-idx="${i}" data-side="a" value="${escHtml(w.a)}" placeholder="${_wizLang1?.native||'Word'}" style="text-align:right">
-      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel||'הצעת תרגום'}</span><button class="gt-accept-btn" type="button">${t.accept||'אשר'}</button></div>
+      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div><span style="color:var(--text-muted);font-size:16px;align-self:center">→</span><div class="word-cell"><input class="word-input" data-idx="${i}" data-side="b" value="${escHtml(w.b)}" placeholder="${_wizLang2?.native||'Translation'}" style="text-align:right">
-      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><span class="gt-suggestion-label" style="font-size:10px">${t.gtSuggestionLabel||'הצעת תרגום'}</span><button class="gt-accept-btn" type="button">${t.accept||'אשר'}</button></div>
+      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
     </div><button class="delete-btn" data-del="${i}">✕</button>`;
     container.appendChild(row);
   });
@@ -4893,6 +4922,8 @@ function _wizRenderWords(){
     if(_wizWords.length>1){_wizWords.splice(+btn.dataset.del,1);_wizRenderWords();}
   }));
   container.addEventListener('click',e=>{
+    const rej=e.target.closest('.gt-reject-btn');
+    if(rej){const sg=rej.closest('.gt-suggestion');sg.classList.remove('visible');sg.dataset.suggestion='';return;}
     const acc=e.target.closest('.gt-accept-btn');
     if(acc){
       const sg=acc.closest('.gt-suggestion');
@@ -4984,8 +5015,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   wordsList.addEventListener('click', e => {
     const del=e.target.closest('.delete-btn'); if(del){_pushHistory();words.splice(+del.dataset.idx,1);renderWords();saveWordsToStorage();return;}
+    const rej=e.target.closest('.gt-reject-btn');
+    if(rej){const sg=rej.closest('.gt-suggestion');sg.classList.remove('visible');sg.dataset.suggestion='';return;}
     const acc=e.target.closest('.gt-accept-btn');
-    if(acc){const sg=acc.closest('.gt-suggestion');const sug=sg.dataset.suggestion;if(!sug)return;const cell=sg.closest('.word-cell');const inp=cell.querySelector('.word-input');if(!inp.value.trim()){inp.value=sug;words[+inp.dataset.idx][inp.dataset.side]=sug;cell.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));updateStartBtn();}}
+    if(acc){const sg=acc.closest('.gt-suggestion');const sug=sg.dataset.suggestion;if(!sug)return;const cell=sg.closest('.word-cell');const inp=cell.querySelector('.word-input');inp.value=sug;words[+inp.dataset.idx][inp.dataset.side]=sug;cell.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));updateStartBtn();}
   });
   document.getElementById('add-word-btn')?.addEventListener('click', () => { _pushHistory(); words.push({a:'',b:''}); renderWords(); saveWordsToStorage(); setTimeout(()=>{const ins=wordsList.querySelectorAll('.word-input');if(ins.length)ins[ins.length-2].focus();},50); });
 
