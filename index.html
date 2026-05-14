@@ -696,12 +696,24 @@
 
   <!-- RESULTS SCREEN -->
   <div class="screen" id="screen-results">
-    <div class="scroll-area">
-    <!-- Create Quiz Card -->
-    
+    <div class="scroll-area" style="padding:16px;padding-bottom:32px;">
+      <div class="score-circle-wrap">
+        <div class="score-circle">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom" id="score-denom">/ 0</div>
+          <div class="score-pct" id="score-pct">0%</div>
+        </div>
       </div>
-      <div id="daily-missions-full-list" style="display:flex;flex-direction:column;gap:10px"></div>
-      <div id="daily-streak" style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)"></div>
+      <div class="results-title" id="results-title">—</div>
+      <div class="results-subtitle" id="results-subtitle"></div>
+      <div class="results-list" id="results-list"></div>
+      <div class="result-btns">
+        <button class="start-btn" id="btn-retry-wrong" style="display:none"></button>
+        <button class="res-btn" id="btn-new-quiz"></button>
+        <button class="res-btn" id="btn-share-result"></button>
+        <button class="res-btn secondary" id="btn-back-saved" style="display:none"></button>
+        <button class="res-btn secondary" id="btn-home"></button>
+      </div>
     </div>
   </div>
 
@@ -1709,48 +1721,17 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
-  // Try Anthropic API first (works in Claude.ai)
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001', max_tokens:120,
-        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
-      })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const raw = data?.content?.[0]?.text?.trim();
-      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
-    }
-  } catch(e) {}
-
-  // Fallback: MyMemory free translation API (works everywhere, no key needed)
-  try {
-    // Map lang native names to ISO codes for MyMemory
-    const langMap = {
-      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
-      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
-      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
-      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
-      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
-      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
-      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
-    };
-    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
-    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       const translation = data?.responseData?.translatedText;
-      if (translation && translation !== text) {
-        return { keyboardFix: null, translation };
+      if (translation && translation.trim().length > 0 && !translation.toLowerCase().startsWith('invalid')) {
+        return { keyboardFix: null, translation: translation.trim() };
       }
     }
   } catch(e) {}
-
   return null;
 }
 
@@ -1771,8 +1752,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.native:lang2.native;
-  const tgtLang=side==='a'?lang2.native:lang1.native;
+  const srcLang=side==='a'?lang1.id:lang2.id;
+  const tgtLang=side==='a'?lang2.id:lang1.id;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -2231,7 +2212,7 @@ async function checkAnswer() {
     quizFeedback.className='quiz-feedback correct';
     playCorrectSound();
     const isLast=currentIdx>=quizItems.length-1;
-    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';}
+    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';checkBtn.onclick=()=>{checkBtn.onclick=null;showResults();};}
     else{checkBtn.style.display='none';skipBtn.style.display='none';setTimeout(()=>{checkBtn.style.display='';nextQuestion();},600);}
   } else {
     quizAnswer.classList.add('wrong');
