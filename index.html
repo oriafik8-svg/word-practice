@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -1555,6 +1554,10 @@ function renderModalList(f) {
         document.getElementById('shared-langname'+n).textContent=getLangDisplayName(lang);
         document.getElementById('shared-header-lang'+n).textContent=getLangDisplayName(lang);
         renderSharedWords(); updatePublishBtn();
+      } else if(window._wizPickSide !== undefined) {
+        // באשף — עדכון שפת האשף
+        _wizOnLangSelected(lang);
+        return;
       } else {
         selectedLang[activePicker]=lang;
         document.getElementById('flag'+(activePicker+1)).textContent=lang.flag;
