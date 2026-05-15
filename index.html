@@ -1260,7 +1260,27 @@
       <aside class="cl-sidebar" id="cl-sidebar">
         <div class="cl-section">
           <div class="cl-label">System Prompt</div>
-          <textarea class="cl-textarea" id="cl-system-prompt">You are claori, a friendly AI assistant built into a vocabulary quiz app. Help users learn words and create quizzes. Reply in the user's language. When creating a quiz respond ONLY with JSON: {"action":"create_quiz","topic":"...","lang1":"en","lang1flag":"🇺🇸","lang2":"he","lang2flag":"🇮🇱","words":[{"a":"hello","b":"שלום"}]}</textarea>
+          <textarea class="cl-textarea" id="cl-system-prompt">You are claori, the AI assistant built into the Word Practice vocabulary app. You can control EVERYTHING in the app using action tags.
+
+When performing actions, include them like: <action>{"action": "ACTION_NAME", ...}</action>
+
+AVAILABLE ACTIONS:
+- navigate: {"action":"navigate","screen":"input|wizard|quiz|saved|community|multiplayer|memory|airplane"}
+- set_words: {"action":"set_words","words":[{"a":"word","b":"translation"}]}
+- add_word: {"action":"add_word","a":"word","b":"translation"}
+- clear_words: {"action":"clear_words"}
+- set_lang: {"action":"set_lang","side":1,"lang_id":"en"}
+- set_ui_lang: {"action":"set_ui_lang","lang":"he"}
+- create_quiz: {"action":"create_quiz","topic":"...","lang1":"en","lang1flag":"🇺🇸","lang2":"he","lang2flag":"🇮🇱","words":[{"a":"...","b":"..."}]}
+- start_quiz: {"action":"start_quiz","type":"classic|mcq|memory|airplane"}
+- open_wizard: {"action":"open_wizard"}
+- set_theme: {"action":"set_theme","theme":"dark|light"}
+- get_state: {"action":"get_state"}
+- show_saved: {"action":"show_saved"}
+- open_multiplayer: {"action":"open_multiplayer"}
+- toggle_translation: {"action":"toggle_translation","enabled":true}
+
+Reply in the user's language. Be friendly and concise. Explain what you're doing before doing it.</textarea>
         </div>
         <div class="cl-section">
           <div class="cl-label">פרמטרים</div>
@@ -5451,6 +5471,161 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+
+// ════════════════════════════════════════════════════════════
+// CLAORI ACTIONS — ביצוע פקודות מה-AI
+// ════════════════════════════════════════════════════════════
+
+function clExecuteAction(action) {
+  try {
+    switch(action.action) {
+
+      // ── ניווט ──────────────────────────────────────────
+      case 'navigate':
+        showScreen(action.screen);
+        return `✅ עברתי למסך ${action.screen}`;
+
+      // ── מילים ──────────────────────────────────────────
+      case 'set_words':
+        if (!action.words?.length) return '❌ אין מילים';
+        words = action.words.map(w=>({a:w.a||'',b:w.b||''}));
+        renderWords(); saveWordsToStorage();
+        return `✅ נטענו ${words.length} מילים`;
+
+      case 'add_word':
+        words.push({a:action.a||'',b:action.b||''});
+        renderWords(); saveWordsToStorage();
+        return `✅ נוספה מילה: ${action.a} = ${action.b}`;
+
+      case 'clear_words':
+        words = [{a:'',b:''}];
+        renderWords(); saveWordsToStorage();
+        return '✅ המילים נוקו';
+
+      // ── שפות ───────────────────────────────────────────
+      case 'set_lang':
+        const langObj = ALL_LANGS.find(l=>l.id===action.lang_id);
+        if (!langObj) return `❌ שפה לא נמצאה: ${action.lang_id}`;
+        activePicker = (action.side||1) - 1;
+        selectLang(langObj);
+        return `✅ שפה ${action.side} הוגדרה ל-${langObj.native}`;
+
+      case 'set_ui_lang':
+        applyUILang(action.lang);
+        return `✅ שפת ממשק שונתה ל-${action.lang}`;
+
+      // ── בוחן ───────────────────────────────────────────
+      case 'create_quiz':
+        _loadClaoriQuizIntoApp(action);
+        clHandleQuizCreated(action);
+        return null; // clHandleQuizCreated כבר מציג כרטיס
+
+      case 'start_quiz':
+        const types = {classic:'_doLaunchClassicQuiz', mcq:'startQuiz', memory:'startMemoryGame', airplane:'startAirplaneGame'};
+        if (action.type === 'classic') { _doStartQuiz && _doStartQuiz(); }
+        else if (action.type === 'memory') { startMemoryGame && startMemoryGame(); }
+        else if (action.type === 'airplane') { startAirplaneGame && startAirplaneGame(); }
+        else { startQuiz && startQuiz(); }
+        return `✅ בוחן ${action.type} הופעל`;
+
+      case 'open_wizard':
+        openCreateWizard();
+        return '✅ אשף יצירת בוחן נפתח';
+
+      case 'wizard_step':
+        _wizStep(action.step);
+        return `✅ אשף בשלב ${action.step}`;
+
+      // ── עיצוב ──────────────────────────────────────────
+      case 'set_theme':
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        if ((action.theme==='dark' && currentTheme!=='dark') ||
+            (action.theme==='light' && currentTheme==='dark')) {
+          toggleTheme();
+        }
+        return `✅ ערכת נושא: ${action.theme}`;
+
+      case 'set_accent':
+        applyAccent && applyAccent(action.color);
+        return `✅ צבע הדגשה שונה ל-${action.color}`;
+
+      // ── בחנים שמורים ───────────────────────────────────
+      case 'show_saved':
+        showScreen('saved');
+        return '✅ מסך הבחנים השמורים נפתח';
+
+      // ── מרובה שחקנים ───────────────────────────────────
+      case 'open_multiplayer':
+        showScreen('multiplayer');
+        return '✅ מסך מרובה שחקנים נפתח';
+
+      // ── תרגום ──────────────────────────────────────────
+      case 'toggle_translation':
+        if (action.enabled !== undefined) {
+          const gtBtn = document.getElementById('gt-connect-btn');
+          const isConnected = window.gtConnected;
+          if (action.enabled && !isConnected) toggleGT && toggleGT();
+          if (!action.enabled && isConnected) toggleGT && toggleGT();
+        }
+        return `✅ תרגום ${action.enabled?'מופעל':'כבוי'}`;
+
+      // ── מצב נוכחי ──────────────────────────────────────
+      case 'get_state':
+        const state = {
+          screen: document.querySelector('.screen.active')?.id?.replace('screen-','') || 'unknown',
+          words: words?.filter(w=>w.a&&w.b).length || 0,
+          lang1: selectedLang?.[0]?.native || 'לא נבחר',
+          lang2: selectedLang?.[1]?.native || 'לא נבחר',
+          theme: document.documentElement.getAttribute('data-theme') || 'dark',
+          uiLang: currentUILang || 'he',
+        };
+        return `📊 מצב האפליקציה:\n` +
+          `• מסך: ${state.screen}\n` +
+          `• מילים: ${state.words}\n` +
+          `• שפה 1: ${state.lang1}\n` +
+          `• שפה 2: ${state.lang2}\n` +
+          `• ערכת נושא: ${state.theme}\n` +
+          `• שפת ממשק: ${state.uiLang}`;
+
+      default:
+        return `❌ פעולה לא מוכרת: ${action.action}`;
+    }
+  } catch(err) {
+    return `❌ שגיאה: ${err.message}`;
+  }
+}
+
+function clProcessResponse(text) {
+  // מצא את כל ה-action blocks בתשובה
+  const actionRegex = /<action>(.*?)<\/action>/gs;
+  let match;
+  let displayText = text;
+  const results = [];
+
+  while((match = actionRegex.exec(text)) !== null) {
+    try {
+      const actionData = JSON.parse(match[1].trim());
+      const result = clExecuteAction(actionData);
+      if (result) results.push(result);
+      // הסר את ה-action מהטקסט המוצג
+      displayText = displayText.replace(match[0], '');
+    } catch(e) {
+      results.push('❌ שגיאה בפענוח פעולה');
+    }
+  }
+
+  // הצג טקסט נקי
+  displayText = displayText.trim();
+  if (displayText) clRenderMsg('assistant', displayText);
+
+  // הצג תוצאות פעולות
+  if (results.length) {
+    const resultsText = results.join('\n');
+    clRenderMsg('assistant', resultsText);
+  }
+}
+
+
 // ════════════════════════════════════════════════════════════
 // CLAORI — Gemini-powered AI chat
 // ════════════════════════════════════════════════════════════
@@ -5564,7 +5739,7 @@ async function clSend() {
     } catch(e) {}
 
     _clMessages.push({ role: 'assistant', content: reply });
-    clRenderMsg('assistant', reply);
+    clProcessResponse(reply);
     clUpdateCount();
 
   } catch(err) {
