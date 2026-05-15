@@ -366,328 +366,6 @@
   .flip-help.dark{background:var(--surface);border-color:var(--border);color:var(--text-muted);}
   .flip-help.dark:hover{background:var(--surface2);color:var(--text);}
 
-
-  /* ══════════════════════════════════════════════════════════
-     CLAORI — Dark UI (Lovable-style)
-     ══════════════════════════════════════════════════════════ */
-  :root {
-    --cl-bg0: #0d0f14;
-    --cl-bg1: #13161e;
-    --cl-bg2: #1a1e28;
-    --cl-bg3: #222736;
-    --cl-bg4: #2a3045;
-    --cl-border: #2e3450;
-    --cl-border-b: #3d4a6a;
-    --cl-text: #e8ecf4;
-    --cl-text2: #8a93b0;
-    --cl-muted: #4e5878;
-    --cl-accent: #7c6aff;
-    --cl-accent-dim: #4e3fad;
-    --cl-accent-glow: rgba(124,106,255,0.15);
-    --cl-accent2: #00d4aa;
-    --cl-user-bg: #1e2540;
-    --cl-ai-bg: #161a26;
-    --cl-red: #ff5e6a;
-    --cl-green: #3fd68a;
-    --cl-header-h: 52px;
-  }
-
-  /* Root */
-  #screen-claori { background: var(--cl-bg0); padding: 0 !important; overflow: hidden; }
-  .cl-root { display: flex; flex-direction: column; height: 100%; background: var(--cl-bg0); overflow: hidden; }
-
-  /* Header */
-  .cl-header {
-    height: var(--cl-header-h); background: var(--cl-bg1);
-    border-bottom: 1px solid var(--cl-border);
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 14px; flex-shrink: 0;
-  }
-  .cl-logo {
-    font-weight: 800; font-size: 17px; flex: 1;
-    background: linear-gradient(135deg, #7c6aff, #00d4aa);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-    white-space: nowrap;
-  }
-  .cl-badge {
-    font-size: 11px; padding: 3px 8px;
-    background: var(--cl-bg3); border: 1px solid var(--cl-border);
-    border-radius: 4px; color: var(--cl-text2); font-family: monospace;
-    max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .cl-hbtn {
-    width: 34px; height: 34px; background: var(--cl-bg3);
-    border: 1px solid var(--cl-border); border-radius: 8px;
-    color: var(--cl-text2); cursor: pointer; font-size: 15px;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; transition: all .15s;
-  }
-  .cl-hbtn:hover { background: var(--cl-bg4); color: var(--cl-text); }
-  .cl-mobile-only { display: none; }
-  .cl-desktop-only { display: flex; }
-
-  /* Body */
-  .cl-body { display: flex; flex: 1; overflow: hidden; position: relative; }
-
-  /* Sidebar */
-  .cl-backdrop { display: none; }
-  .cl-sidebar {
-    width: 280px; background: var(--cl-bg1);
-    border-left: 1px solid var(--cl-border);
-    display: flex; flex-direction: column;
-    flex-shrink: 0; overflow-y: auto;
-  }
-  [dir="rtl"] .cl-sidebar { border-left: none; border-right: 1px solid var(--cl-border); }
-  .cl-section { padding: 14px 16px; border-bottom: 1px solid var(--cl-border); }
-  .cl-label {
-    font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px;
-    color: var(--cl-muted); margin-bottom: 10px; font-family: monospace;
-  }
-  .cl-textarea {
-    width: 100%; padding: 9px 10px; background: var(--cl-bg0);
-    border: 1px solid var(--cl-border); border-radius: 6px;
-    color: var(--cl-text); font-size: 12.5px; outline: none;
-    resize: vertical; min-height: 90px; line-height: 1.5; font-family: inherit;
-    transition: border-color .15s;
-  }
-  .cl-textarea:focus { border-color: var(--cl-accent); }
-  .cl-param {
-    display: flex; justify-content: space-between;
-    font-size: 12px; color: var(--cl-text2); margin-bottom: 6px;
-  }
-  .cl-val { font-family: monospace; font-size: 11px; color: var(--cl-accent); }
-  .cl-slider { width: 100%; accent-color: var(--cl-accent); cursor: pointer; }
-  .cl-sidebar-footer { padding: 14px 16px; margin-top: auto; border-top: 1px solid var(--cl-border); }
-  .cl-clear-btn {
-    width: 100%; padding: 9px; background: transparent;
-    border: 1px solid var(--cl-border); border-radius: 6px;
-    color: var(--cl-text2); font-size: 13px; cursor: pointer; font-family: inherit;
-    transition: all .15s;
-  }
-  .cl-clear-btn:hover { background: rgba(255,94,106,.08); border-color: var(--cl-red); color: var(--cl-red); }
-
-  /* Chat */
-  .cl-chat { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
-  .cl-messages {
-    flex: 1; overflow-y: auto; padding: 20px 16px;
-    display: flex; flex-direction: column; gap: 8px;
-    scroll-behavior: smooth;
-  }
-  .cl-messages::-webkit-scrollbar { width: 4px; }
-  .cl-messages::-webkit-scrollbar-thumb { background: var(--cl-border); border-radius: 2px; }
-
-  /* Welcome */
-  .cl-welcome {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; flex: 1; gap: 14px;
-    text-align: center; padding: 40px 20px;
-  }
-  .cl-welcome-icon {
-    font-size: 42px; font-weight: 800; line-height: 1;
-    background: linear-gradient(135deg, #7c6aff 0%, #00d4aa 100%);
-    -webkit-background-clip: text; background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 20px rgba(124,106,255,0.4));
-    animation: cl-pulse 3s ease-in-out infinite;
-  }
-  @keyframes cl-pulse {
-    0%,100% { filter: drop-shadow(0 0 16px rgba(124,106,255,0.3)); }
-    50% { filter: drop-shadow(0 0 32px rgba(124,106,255,0.7)); }
-  }
-  .cl-welcome-title { font-size: 24px; font-weight: 800; color: var(--cl-text); margin: 0; }
-  .cl-welcome-sub { font-size: 14px; color: var(--cl-text2); margin: 0; max-width: 300px; line-height: 1.6; }
-  .cl-chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 6px; }
-  .cl-chip {
-    padding: 8px 14px; background: var(--cl-bg2);
-    border: 1px solid var(--cl-border); border-radius: 20px;
-    font-size: 12.5px; cursor: pointer; color: var(--cl-text2);
-    font-family: inherit; transition: all .15s; text-align: start;
-  }
-  .cl-chip:hover { border-color: var(--cl-accent); color: var(--cl-accent); background: var(--cl-accent-glow); }
-
-  /* Messages */
-  .cl-msg { display: flex; gap: 10px; padding: 3px 0; animation: cl-up .2s ease; }
-  .cl-msg.user { flex-direction: row-reverse; }
-  @keyframes cl-up { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-  .cl-avatar {
-    width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 700;
-  }
-  .cl-avatar.user { background: var(--cl-accent-dim); color: #cfc7ff; }
-  .cl-avatar.ai { background: var(--cl-bg3); border: 1px solid var(--cl-border); }
-  .cl-bubble {
-    max-width: 80%; padding: 11px 14px; border-radius: 12px;
-    line-height: 1.65; font-size: 14px; word-wrap: break-word; overflow-wrap: anywhere;
-  }
-  .cl-bubble.user {
-    background: var(--cl-user-bg); border: 1px solid var(--cl-border-b);
-    border-top-right-radius: 4px; white-space: pre-wrap; color: var(--cl-text);
-  }
-  .cl-bubble.ai {
-    background: var(--cl-ai-bg); border: 1px solid var(--cl-border);
-    border-top-left-radius: 4px; color: var(--cl-text);
-  }
-  [dir="rtl"] .cl-bubble.user { border-top-right-radius: 12px; border-top-left-radius: 4px; }
-  [dir="rtl"] .cl-bubble.ai { border-top-left-radius: 12px; border-top-right-radius: 4px; }
-  .cl-bubble p { margin: 0 0 8px; }
-  .cl-bubble p:last-child { margin: 0; }
-  .cl-bubble strong { color: #b8aaff; }
-  .cl-bubble code {
-    font-family: monospace; font-size: 12.5px;
-    background: rgba(255,255,255,.06); padding: 1px 5px; border-radius: 4px;
-  }
-  .cl-bubble pre {
-    background: var(--cl-bg0); border: 1px solid var(--cl-border);
-    border-radius: 6px; padding: 12px; margin: 8px 0;
-    overflow-x: auto; font-size: 12px; line-height: 1.6; font-family: monospace;
-  }
-  .cl-bubble pre code { background: none; padding: 0; }
-
-  /* Typing */
-  .cl-typing { display: flex; gap: 4px; align-items: center; padding: 4px 0; }
-  .cl-typing span {
-    width: 6px; height: 6px; background: var(--cl-muted);
-    border-radius: 50%; animation: cl-bounce .8s infinite;
-  }
-  .cl-typing span:nth-child(2) { animation-delay: .15s; }
-  .cl-typing span:nth-child(3) { animation-delay: .3s; }
-  @keyframes cl-bounce {
-    0%,100% { transform:translateY(0); opacity:.4; }
-    50% { transform:translateY(-5px); opacity:1; }
-  }
-
-  /* Input */
-  .cl-input-area {
-    padding: 12px 14px calc(14px + env(safe-area-inset-bottom));
-    border-top: 1px solid var(--cl-border); background: var(--cl-bg1); flex-shrink: 0;
-  }
-  .cl-input-box {
-    display: flex; align-items: flex-end; gap: 8px;
-    background: var(--cl-bg0); border: 1px solid var(--cl-border);
-    border-radius: 14px; padding: 8px 8px 8px 12px;
-    transition: border-color .2s, box-shadow .2s;
-  }
-  .cl-input-box:focus-within { border-color: var(--cl-accent); box-shadow: 0 0 0 3px var(--cl-accent-glow); }
-  .cl-input {
-    flex: 1; background: none; border: none; outline: none;
-    color: var(--cl-text); font-family: inherit; font-size: 15px;
-    resize: none; line-height: 1.5; max-height: 160px; min-height: 24px; padding: 4px 0;
-  }
-  .cl-input::placeholder { color: var(--cl-muted); }
-  .cl-input-actions { display: flex; gap: 4px; align-items: flex-end; }
-  .cl-send-btn {
-    width: 38px; height: 38px; border: none; border-radius: 10px;
-    background: var(--cl-accent); color: white; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0; transition: all .15s;
-  }
-  .cl-send-btn:hover { background: #9180ff; }
-  .cl-send-btn:disabled { background: var(--cl-bg4); cursor: not-allowed; opacity: .6; }
-  .cl-stop-btn {
-    width: 38px; height: 38px; border-radius: 10px; cursor: pointer;
-    background: rgba(255,94,106,.15); border: 1px solid var(--cl-red);
-    color: var(--cl-red); font-size: 16px;
-    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  }
-  .cl-stop-btn:hover { background: rgba(255,94,106,.28); }
-  .cl-status {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 6px 4px 0; font-size: 11px; font-family: monospace; color: var(--cl-muted); gap: 8px;
-  }
-  .cl-status-badge {
-    padding: 2px 8px; background: var(--cl-bg3); border: 1px solid var(--cl-border);
-    border-radius: 4px; color: var(--cl-text2);
-    max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-
-  /* Toast */
-  .cl-toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    padding: 10px 20px; border-radius: 8px; font-size: 13px; font-family: monospace;
-    z-index: 9999; pointer-events: none; max-width: 90vw; text-align: center;
-    animation: cl-toast-in .25s ease;
-  }
-  .cl-toast.error { background: rgba(255,94,106,.12); border: 1px solid var(--cl-red); color: #ff8a93; }
-  .cl-toast.ok { background: rgba(63,214,138,.12); border: 1px solid var(--cl-green); color: var(--cl-green); }
-  @keyframes cl-toast-in { from { opacity:0; transform:translate(-50%,10px); } to { opacity:1; transform:translate(-50%,0); } }
-
-  /* Quiz card from AI */
-  .cl-quiz-card {
-    background: var(--cl-bg2); border: 1px solid var(--cl-accent-dim);
-    border-radius: 12px; padding: 14px; margin-top: 10px;
-  }
-  .cl-quiz-card-title { font-size: 13px; font-weight: 700; color: var(--cl-accent); margin-bottom: 10px; }
-  .cl-quiz-start-btn {
-    width: 100%; padding: 10px; background: var(--cl-accent); border: none;
-    border-radius: 8px; color: white; font-size: 14px; cursor: pointer;
-    font-family: inherit; font-weight: 700; transition: background .15s; margin-top: 8px;
-  }
-  .cl-quiz-start-btn:hover { background: #9180ff; }
-
-  /* Mobile */
-  @media (max-width: 600px) {
-    .cl-mobile-only { display: flex; }
-    .cl-desktop-only { display: none; }
-    .cl-header { padding: 0 10px; gap: 6px; }
-    .cl-logo { font-size: 16px; }
-    .cl-badge { display: none; }
-    .cl-sidebar {
-      position: fixed;
-      top: var(--cl-header-h); right: 0;
-      height: calc(100dvh - var(--cl-header-h));
-      width: min(300px, 88vw); z-index: 200;
-      transform: translateX(100%); transition: transform .25s ease;
-      border-left: none; border-right: 1px solid var(--cl-border);
-    }
-    [dir="rtl"] .cl-sidebar {
-      right: auto; left: 0;
-      transform: translateX(-100%);
-      border-right: none; border-left: 1px solid var(--cl-border);
-    }
-    .cl-sidebar.open { transform: translateX(0) !important; box-shadow: -8px 0 24px rgba(0,0,0,.5); }
-    .cl-backdrop {
-      display: block; position: fixed;
-      inset: var(--cl-header-h) 0 0 0;
-      background: rgba(0,0,0,.5); z-index: 199;
-    }
-    .cl-backdrop.hidden { display: none; }
-    .cl-messages { padding: 14px 12px; }
-    .cl-bubble { max-width: 88%; font-size: 14px; }
-    .cl-input-area { padding: 10px 10px calc(10px + env(safe-area-inset-bottom)); }
-    .cl-input { font-size: 16px; }
-  }
-
-
-  /* ── API KEY SCREEN ──────────────────────────────────────── */
-  .cl-apikey-overlay {
-    position: absolute; inset: 0; z-index: 100;
-    background: var(--cl-bg0);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    padding: 30px 24px; text-align: center; gap: 16px;
-  }
-  .cl-apikey-icon { font-size: 48px; }
-  .cl-apikey-title { font-size: 20px; font-weight: 800; color: var(--cl-text); margin: 0; }
-  .cl-apikey-sub { font-size: 13px; color: var(--cl-text2); margin: 0; line-height: 1.6; max-width: 280px; }
-  .cl-apikey-link { color: var(--cl-accent); text-decoration: none; font-weight: 600; }
-  .cl-apikey-input {
-    width: 100%; max-width: 320px; padding: 12px 14px;
-    background: var(--cl-bg2); border: 1px solid var(--cl-border);
-    border-radius: 10px; color: var(--cl-text); font-size: 14px;
-    outline: none; font-family: monospace; transition: border-color .2s;
-  }
-  .cl-apikey-input:focus { border-color: var(--cl-accent); }
-  .cl-apikey-btn {
-    width: 100%; max-width: 320px; padding: 12px;
-    background: var(--cl-accent); border: none; border-radius: 10px;
-    color: white; font-size: 15px; font-weight: 700;
-    cursor: pointer; font-family: inherit; transition: background .15s;
-  }
-  .cl-apikey-btn:hover { background: #9180ff; }
-  .cl-apikey-note { font-size: 11px; color: var(--cl-muted); max-width: 280px; }
-
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -1018,12 +696,24 @@
 
   <!-- RESULTS SCREEN -->
   <div class="screen" id="screen-results">
-    <div class="scroll-area">
-    <!-- Create Quiz Card -->
-    
+    <div class="scroll-area" style="padding:16px;padding-bottom:32px;">
+      <div class="score-circle-wrap">
+        <div class="score-circle">
+          <div class="score-num" id="score-num">0</div>
+          <div class="score-denom" id="score-denom">/ 0</div>
+          <div class="score-pct" id="score-pct">0%</div>
+        </div>
       </div>
-      <div id="daily-missions-full-list" style="display:flex;flex-direction:column;gap:10px"></div>
-      <div id="daily-streak" style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)"></div>
+      <div class="results-title" id="results-title">—</div>
+      <div class="results-subtitle" id="results-subtitle"></div>
+      <div class="results-list" id="results-list"></div>
+      <div class="result-btns">
+        <button class="start-btn" id="btn-retry-wrong" style="display:none"></button>
+        <button class="res-btn" id="btn-new-quiz"></button>
+        <button class="res-btn" id="btn-share-result"></button>
+        <button class="res-btn secondary" id="btn-back-saved" style="display:none"></button>
+        <button class="res-btn secondary" id="btn-home"></button>
+      </div>
     </div>
   </div>
 
@@ -1247,89 +937,88 @@
 
   <!-- CLAORI SCREEN -->
   <div class="screen" id="screen-claori">
-  <div class="cl-root">
-    <header class="cl-header">
-      <button class="cl-hbtn cl-mobile-only" onclick="clToggleSidebar()">☰</button>
-      <div class="cl-logo">✦ claori</div>
-      <div class="cl-badge">Gemini Flash</div>
-      <button class="cl-hbtn cl-desktop-only" onclick="clToggleSidebar()">⚙</button>
-      <button class="cl-hbtn" onclick="showScreen('input')">✕</button>
-    </header>
-    <div class="cl-body">
-      <div class="cl-backdrop" id="cl-backdrop" onclick="clCloseSidebar()"></div>
-      <aside class="cl-sidebar" id="cl-sidebar">
-        <div class="cl-section">
-          <div class="cl-label">System Prompt</div>
-          <textarea class="cl-textarea" id="cl-system-prompt">You are claori, the AI assistant built into the Word Practice vocabulary app. You can control EVERYTHING in the app using action tags.
-
-When performing actions, include them like: <action>{"action": "ACTION_NAME", ...}</action>
-
-AVAILABLE ACTIONS:
-- navigate: {"action":"navigate","screen":"input|wizard|quiz|saved|community|multiplayer|memory|airplane"}
-- set_words: {"action":"set_words","words":[{"a":"word","b":"translation"}]}
-- add_word: {"action":"add_word","a":"word","b":"translation"}
-- clear_words: {"action":"clear_words"}
-- set_lang: {"action":"set_lang","side":1,"lang_id":"en"}
-- set_ui_lang: {"action":"set_ui_lang","lang":"he"}
-- create_quiz: {"action":"create_quiz","topic":"...","lang1":"en","lang1flag":"🇺🇸","lang2":"he","lang2flag":"🇮🇱","words":[{"a":"...","b":"..."}]}
-- start_quiz: {"action":"start_quiz","type":"classic|mcq|memory|airplane"}
-- open_wizard: {"action":"open_wizard"}
-- set_theme: {"action":"set_theme","theme":"dark|light"}
-- get_state: {"action":"get_state"}
-- show_saved: {"action":"show_saved"}
-- open_multiplayer: {"action":"open_multiplayer"}
-- toggle_translation: {"action":"toggle_translation","enabled":true}
-
-Reply in the user's language. Be friendly and concise. Explain what you're doing before doing it.</textarea>
-        </div>
-        <div class="cl-section">
-          <div class="cl-label">פרמטרים</div>
-          <div class="cl-param"><span>Temperature</span><span class="cl-val" id="cl-temp-val">0.70</span></div>
-          <input type="range" class="cl-slider" id="cl-temp" min="0" max="1" step="0.05" value="0.7" oninput="document.getElementById('cl-temp-val').textContent=parseFloat(this.value).toFixed(2)">
-          <div class="cl-param" style="margin-top:12px"><span>Max Tokens</span><span class="cl-val" id="cl-tokens-val">1024</span></div>
-          <input type="range" class="cl-slider" id="cl-tokens" min="128" max="4096" step="64" value="1024" oninput="document.getElementById('cl-tokens-val').textContent=this.value">
-        </div>
-        <div class="cl-section">
-          <div class="cl-label">מילים נוכחיות</div>
-          <div style="font-size:12px;color:var(--text-muted,#888)" id="cl-words-info">0 מילים טעונות</div>
-        </div>
-        <div class="cl-sidebar-footer">
-          <button class="cl-clear-btn" onclick="clClearChat()">🗑 נקה שיחה</button>
-        </div>
-      </aside>
-      <main class="cl-chat">
-        <div class="cl-messages" id="cl-messages">
-          <div class="cl-welcome" id="cl-welcome">
-            <div class="cl-welcome-icon">✦</div>
-            <h2 class="cl-welcome-title">claori</h2>
-            <p class="cl-welcome-sub">העוזר החכם שלך ללמידת אוצר מילים</p>
-            <div class="cl-chips" id="cl-chips">
-              <button class="cl-chip" onclick="clQuickSend('📚 צור לי בוחן 10 מילים אנגלית-עברית')">📚 צור בוחן אנגלית-עברית</button>
-              <button class="cl-chip" onclick="clQuickSend('💡 תן לי טיפים לשינון מילים בצורה יעילה')">💡 טיפים לשינון מילים</button>
-              <button class="cl-chip" onclick="clQuickSend('🔄 בחן אותי על המילים הנוכחיות שלי')">🔄 בחן אותי על המילים שלי</button>
-              <button class="cl-chip" onclick="clQuickSend('🌍 מהם הביטויים הנפוצים ביותר בספרדית?')">🌍 ביטויים נפוצים בספרדית</button>
-            </div>
-          </div>
-        </div>
-        <div class="cl-input-area">
-          <div class="cl-input-box">
-            <textarea class="cl-input" id="cl-input" placeholder="שאל אותי משהו..." rows="1" dir="auto"
-              oninput="clAutoResize(this)"
-              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend()}"></textarea>
-            <div class="cl-input-actions">
-              <button class="cl-send-btn" id="cl-send-btn" onclick="clSend()">➤</button>
-              <button class="cl-stop-btn" id="cl-stop-btn" onclick="clStop()" style="display:none">■</button>
-            </div>
-          </div>
-          <div class="cl-status">
-            <span id="cl-msg-count">0 הודעות</span>
-            <span class="cl-status-badge">Gemini 1.5 Flash</span>
-          </div>
-        </div>
-      </main>
+    <div class="claori-wrap">
+      <div class="claori-bg" id="claori-bg"></div>
+      <!-- BG picker panel -->
+      <div class="claori-bg-panel" id="claori-bg-panel"></div>
+<!-- CLAORI SIDEBAR BACKDROP -->
+<div id="claori-sidebar-backdrop" style="display:none;position:absolute;inset:0;z-index:19;background:rgba(0,0,0,0.4)" onclick="closeClaoriSidebar()"></div>
+<!-- CLAORI CHAT LIST SIDEBAR -->
+<div class="claori-sidebar" id="claori-sidebar">
+  <div class="claori-sidebar-header">
+    <button class="claori-sidebar-close" id="claori-sidebar-close">✕</button>
+    <div style="font-size:15px;font-weight:700;color:#fff">Chats</div>
+    <button class="claori-sidebar-new" id="claori-sidebar-new-btn">+ New</button>
+  </div>
+  <!-- Search -->
+  <div style="padding:8px 12px">
+    <input id="claori-search-input" placeholder="🔍 Search chats..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-family:'Heebo',sans-serif;font-size:13px;padding:7px 10px;outline:none">
+  </div>
+  <!-- Projects section -->
+  <div id="claori-projects-section" style="padding:0 12px 6px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px">Projects</div>
+      <button id="claori-new-project-btn" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;padding:0;line-height:1" title="New project">+</button>
+    </div>
+    <div id="claori-projects-list"></div>
+    <div id="claori-new-proj-form" style="display:none;margin-top:6px;display:none">
+      <input id="claori-proj-name-input" placeholder="Project name..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:7px;color:#fff;font-family:'Heebo',sans-serif;font-size:12px;padding:6px 9px;outline:none;box-sizing:border-box;margin-bottom:5px">
+      <div style="display:flex;gap:5px">
+        <button id="claori-proj-create-btn" style="flex:1;padding:5px;background:rgba(102,126,234,0.4);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer;font-family:'Heebo',sans-serif">Create</button>
+        <button id="claori-proj-cancel-btn" style="padding:5px 8px;background:rgba(255,255,255,0.1);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer">✕</button>
+      </div>
     </div>
   </div>
+  <!-- Chats list -->
+  <div style="padding:0 12px 6px">
+    <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">All Chats</div>
+    <div id="claori-chats-list" style="display:flex;flex-direction:column;gap:2px"></div>
+  </div>
 </div>
+<!-- Drop zone indicator (shows when dragging over project) -->
+<div id="claori-drop-hint" style="display:none;position:fixed;inset:0;background:rgba(102,126,234,0.15);z-index:9999;pointer-events:none;border:3px dashed rgba(102,126,234,0.6);border-radius:16px"></div>
+
+      <!-- Header -->
+      <div class="claori-header">
+        <div class="claori-header-left">
+          <button class="back-btn" id="claori-back" style="color:#fff;border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.08)">←</button>
+          <div class="claori-avatar">🤖</div>
+          <div>
+            <div class="claori-name">claori</div>
+            <div class="claori-sub" id="claori-sub-text">Your vocabulary assistant</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="claori-chats-btn" id="claori-chats-toggle" title="Chat history">☰</button>
+          <button class="claori-bg-btn" id="claori-share-chat" title="Share chat">↑</button>
+          <button class="claori-bg-btn" id="claori-bg-toggle" title="Change background">🎨</button>
+        </div>
+      </div>
+      <!-- Messages -->
+      <div class="claori-messages-wrap" id="claori-messages"></div>
+      <!-- Input bar -->
+      <div class="claori-input-bar">
+        <div id="claori-image-preview" style="display:none;margin-bottom:8px;position:relative">
+          <img id="claori-preview-img" style="max-height:70px;border-radius:10px;border:1px solid rgba(255,255,255,0.2)">
+          <button onclick="if(typeof clearClaoriImage!=='undefined')clearClaoriImage()" style="position:absolute;top:-6px;right:-6px;background:#e05555;border:none;border-radius:50%;width:20px;height:20px;color:#fff;font-size:12px;cursor:pointer">✕</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end">
+          <!-- Gallery button -->
+          <label class="claori-img-btn" title="Choose image from gallery" style="position:relative">
+            <input type="file" id="claori-file" accept="image/*" style="display:none" onchange="handleClaoriImage(event)">
+            🖼️
+          </label>
+          <!-- Camera button (mobile) -->
+          <label class="claori-img-btn" title="Take photo" style="position:relative">
+            <input type="file" id="claori-camera" accept="image/*" capture="environment" style="display:none" onchange="handleClaoriImage(event)">
+            📷
+          </label>
+          <textarea id="claori-input" class="claori-input" id="claori-placeholder" placeholder="Ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendClaoriMessage();}"></textarea>
+          <button class="claori-send-btn" onclick="if(typeof sendClaoriMessage!=='undefined')sendClaoriMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- AIRPLANE GAME SCREEN -->
   <div class="screen" id="screen-airplane">
@@ -2032,48 +1721,17 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
-  // Try Anthropic API first (works in Claude.ai)
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001', max_tokens:120,
-        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
-      })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const raw = data?.content?.[0]?.text?.trim();
-      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
-    }
-  } catch(e) {}
-
-  // Fallback: MyMemory free translation API (works everywhere, no key needed)
-  try {
-    // Map lang native names to ISO codes for MyMemory
-    const langMap = {
-      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
-      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
-      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
-      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
-      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
-      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
-      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
-    };
-    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
-    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       const translation = data?.responseData?.translatedText;
-      if (translation && translation !== text) {
-        return { keyboardFix: null, translation };
+      if (translation && translation.trim().length > 0 && !translation.toLowerCase().startsWith('invalid')) {
+        return { keyboardFix: null, translation: translation.trim() };
       }
     }
   } catch(e) {}
-
   return null;
 }
 
@@ -2094,8 +1752,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.native:lang2.native;
-  const tgtLang=side==='a'?lang2.native:lang1.native;
+  const srcLang=side==='a'?lang1.id:lang2.id;
+  const tgtLang=side==='a'?lang2.id:lang1.id;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -2437,7 +2095,7 @@ function _checkMCQ(chosen, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -2484,7 +2142,7 @@ function _checkTF(userSaidTrue, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -2554,7 +2212,7 @@ async function checkAnswer() {
     quizFeedback.className='quiz-feedback correct';
     playCorrectSound();
     const isLast=currentIdx>=quizItems.length-1;
-    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';}
+    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';checkBtn.onclick=()=>{checkBtn.onclick=null;showResults();};}
     else{checkBtn.style.display='none';skipBtn.style.display='none';setTimeout(()=>{checkBtn.style.display='';nextQuestion();},600);}
   } else {
     quizAnswer.classList.add('wrong');
@@ -3136,7 +2794,6 @@ async function _autoTitleChat() {
   } catch(e) {}
 }
 
-// sendClaoriMessage replaced by clSend()
 async function sendClaoriMessage() {
   const inp = document.getElementById('claori-input');
   const text = inp.value.trim();
@@ -5462,438 +5119,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkShareLink();
   initDailyMissions();
 });
-
-
-
-
-
-
-
-
-
-
-// ════════════════════════════════════════════════════════════
-// CLAORI ACTIONS — ביצוע פקודות מה-AI
-// ════════════════════════════════════════════════════════════
-
-function clExecuteAction(action) {
-  try {
-    switch(action.action) {
-
-      // ── ניווט ──────────────────────────────────────────
-      case 'navigate':
-        showScreen(action.screen);
-        return `✅ עברתי למסך ${action.screen}`;
-
-      // ── מילים ──────────────────────────────────────────
-      case 'set_words':
-        if (!action.words?.length) return '❌ אין מילים';
-        words = action.words.map(w=>({a:w.a||'',b:w.b||''}));
-        renderWords(); saveWordsToStorage();
-        return `✅ נטענו ${words.length} מילים`;
-
-      case 'add_word':
-        words.push({a:action.a||'',b:action.b||''});
-        renderWords(); saveWordsToStorage();
-        return `✅ נוספה מילה: ${action.a} = ${action.b}`;
-
-      case 'clear_words':
-        words = [{a:'',b:''}];
-        renderWords(); saveWordsToStorage();
-        return '✅ המילים נוקו';
-
-      // ── שפות ───────────────────────────────────────────
-      case 'set_lang':
-        const langObj = ALL_LANGS.find(l=>l.id===action.lang_id);
-        if (!langObj) return `❌ שפה לא נמצאה: ${action.lang_id}`;
-        activePicker = (action.side||1) - 1;
-        selectLang(langObj);
-        return `✅ שפה ${action.side} הוגדרה ל-${langObj.native}`;
-
-      case 'set_ui_lang':
-        applyUILang(action.lang);
-        return `✅ שפת ממשק שונתה ל-${action.lang}`;
-
-      // ── בוחן ───────────────────────────────────────────
-      case 'create_quiz':
-        _loadClaoriQuizIntoApp(action);
-        clHandleQuizCreated(action);
-        return null; // clHandleQuizCreated כבר מציג כרטיס
-
-      case 'start_quiz':
-        const types = {classic:'_doLaunchClassicQuiz', mcq:'startQuiz', memory:'startMemoryGame', airplane:'startAirplaneGame'};
-        if (action.type === 'classic') { _doStartQuiz && _doStartQuiz(); }
-        else if (action.type === 'memory') { startMemoryGame && startMemoryGame(); }
-        else if (action.type === 'airplane') { startAirplaneGame && startAirplaneGame(); }
-        else { startQuiz && startQuiz(); }
-        return `✅ בוחן ${action.type} הופעל`;
-
-      case 'open_wizard':
-        openCreateWizard();
-        return '✅ אשף יצירת בוחן נפתח';
-
-      case 'wizard_step':
-        _wizStep(action.step);
-        return `✅ אשף בשלב ${action.step}`;
-
-      // ── עיצוב ──────────────────────────────────────────
-      case 'set_theme':
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if ((action.theme==='dark' && currentTheme!=='dark') ||
-            (action.theme==='light' && currentTheme==='dark')) {
-          toggleTheme();
-        }
-        return `✅ ערכת נושא: ${action.theme}`;
-
-      case 'set_accent':
-        applyAccent && applyAccent(action.color);
-        return `✅ צבע הדגשה שונה ל-${action.color}`;
-
-      // ── בחנים שמורים ───────────────────────────────────
-      case 'show_saved':
-        showScreen('saved');
-        return '✅ מסך הבחנים השמורים נפתח';
-
-      // ── מרובה שחקנים ───────────────────────────────────
-      case 'open_multiplayer':
-        showScreen('multiplayer');
-        return '✅ מסך מרובה שחקנים נפתח';
-
-      // ── תרגום ──────────────────────────────────────────
-      case 'toggle_translation':
-        if (action.enabled !== undefined) {
-          const gtBtn = document.getElementById('gt-connect-btn');
-          const isConnected = window.gtConnected;
-          if (action.enabled && !isConnected) toggleGT && toggleGT();
-          if (!action.enabled && isConnected) toggleGT && toggleGT();
-        }
-        return `✅ תרגום ${action.enabled?'מופעל':'כבוי'}`;
-
-      // ── מצב נוכחי ──────────────────────────────────────
-      case 'get_state':
-        const state = {
-          screen: document.querySelector('.screen.active')?.id?.replace('screen-','') || 'unknown',
-          words: words?.filter(w=>w.a&&w.b).length || 0,
-          lang1: selectedLang?.[0]?.native || 'לא נבחר',
-          lang2: selectedLang?.[1]?.native || 'לא נבחר',
-          theme: document.documentElement.getAttribute('data-theme') || 'dark',
-          uiLang: currentUILang || 'he',
-        };
-        return `📊 מצב האפליקציה:\n` +
-          `• מסך: ${state.screen}\n` +
-          `• מילים: ${state.words}\n` +
-          `• שפה 1: ${state.lang1}\n` +
-          `• שפה 2: ${state.lang2}\n` +
-          `• ערכת נושא: ${state.theme}\n` +
-          `• שפת ממשק: ${state.uiLang}`;
-
-      default:
-        return `❌ פעולה לא מוכרת: ${action.action}`;
-    }
-  } catch(err) {
-    return `❌ שגיאה: ${err.message}`;
-  }
-}
-
-function clProcessResponse(text) {
-  // מצא את כל ה-action blocks בתשובה
-  const actionRegex = /<action>(.*?)<\/action>/gs;
-  let match;
-  let displayText = text;
-  const results = [];
-
-  while((match = actionRegex.exec(text)) !== null) {
-    try {
-      const actionData = JSON.parse(match[1].trim());
-      const result = clExecuteAction(actionData);
-      if (result) results.push(result);
-      // הסר את ה-action מהטקסט המוצג
-      displayText = displayText.replace(match[0], '');
-    } catch(e) {
-      results.push('❌ שגיאה בפענוח פעולה');
-    }
-  }
-
-  // הצג טקסט נקי
-  displayText = displayText.trim();
-  if (displayText) clRenderMsg('assistant', displayText);
-
-  // הצג תוצאות פעולות
-  if (results.length) {
-    const resultsText = results.join('\n');
-    clRenderMsg('assistant', resultsText);
-  }
-}
-
-
-// ════════════════════════════════════════════════════════════
-// CLAORI — Gemini-powered AI chat
-// ════════════════════════════════════════════════════════════
-const GEMINI_API_KEY = null; // המפתח נשמר ב-localStorage // ← הדבק כאן את המפתח מ-aistudio.google.com
-
-let _clMessages = [];   // היסטוריית שיחה
-let _clStreaming = false;
-let _clAbort = null;
-let _clSidebarOpen = false;
-
-// ── כניסה למסך claori ──────────────────────────────────────
-function initClaoriScreen() {
-  const inp = document.getElementById('cl-input');
-  if (inp) { inp.value = ''; clAutoResize(inp); }
-  // עדכון מידע על מילים
-  const info = document.getElementById('cl-words-info');
-  if (info) {
-    const n = (words||[]).filter(w=>w.a&&w.b).length;
-    info.textContent = n ? n + ' מילים טעונות' : 'אין מילים טעונות';
-  }
-  // הצג welcome אם אין הודעות
-  const welcome = document.getElementById('cl-welcome');
-  if (welcome) welcome.style.display = _clMessages.length ? 'none' : 'flex';
-}
-
-// ── שליחה מהירה (chips) ───────────────────────────────────
-function clQuickSend(text) {
-  const inp = document.getElementById('cl-input');
-  if (inp) { inp.value = text; clSend(); }
-}
-
-// ── שליחה ────────────────────────────────────────────────
-async function clSend() {
-  if (_clStreaming) return;
-  const inp = document.getElementById('cl-input');
-  const text = (inp?.value || '').trim();
-  if (!text) return;
-  inp.value = ''; clAutoResize(inp);
-
-  // הסתר welcome
-  const welcome = document.getElementById('cl-welcome');
-  if (welcome) welcome.style.display = 'none';
-
-  // הוסף הודעת user
-  _clMessages.push({ role: 'user', content: text });
-  clRenderMsg('user', text);
-
-  // typing indicator
-  const typingId = 'cl-typing-' + Date.now();
-  clRenderTyping(typingId);
-
-  _clStreaming = true;
-  clSetStreamingUI(true);
-
-  try {
-    // בנה system prompt
-    const sysTa = document.getElementById('cl-system-prompt');
-    const systemPrompt = sysTa ? sysTa.value : '';
-    const temp = parseFloat(document.getElementById('cl-temp')?.value || '0.7');
-    const maxTok = parseInt(document.getElementById('cl-tokens')?.value || '1024');
-
-    // הוסף הקשר מילים נוכחי
-    const curWords = (words||[]).filter(w=>w.a&&w.b);
-    const wordsCtx = curWords.length
-      ? '\nCurrent words in app (' + curWords.length + '): ' + curWords.slice(0,20).map(w=>w.a+'='+w.b).join(', ') + (curWords.length>20?'...':'')
-      : '\nNo words currently loaded in the app.';
-
-    const fullSystem = systemPrompt + wordsCtx;
-
-
-
-    // בנה הודעות לGemini
-    const geminiMsgs = _clMessages.map(m => ({
-      role: m.role === 'assistant' ? 'model' : 'user',
-      parts: [{ text: m.content }]
-    }));
-
-    const res = await fetch(
-      'https://gemini-proxy.oriafik8.workers.dev',
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          systemInstruction: { parts: [{ text: fullSystem }] },
-          contents: geminiMsgs,
-          generationConfig: { maxOutputTokens: maxTok, temperature: temp }
-        })
-      }
-    );
-
-    const data = await res.json();
-
-    // הסר typing
-    document.getElementById(typingId)?.remove();
-
-    if (data.error) throw new Error(data.error.message || 'API error');
-
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-    if (!reply) throw new Error('No response from AI');
-
-    // בדוק אם זה JSON ליצירת בוחן
-    let displayed = reply;
-    try {
-      const clean = reply.replace(/^```json\n?|```$/g,'').trim();
-      const parsed = JSON.parse(clean);
-      if (parsed.action === 'create_quiz' && parsed.words) {
-        _clMessages.push({ role: 'assistant', content: reply });
-        clHandleQuizCreated(parsed);
-        return;
-      }
-    } catch(e) {}
-
-    _clMessages.push({ role: 'assistant', content: reply });
-    clProcessResponse(reply);
-    clUpdateCount();
-
-  } catch(err) {
-    document.getElementById(typingId)?.remove();
-    clRenderMsg('assistant', '⚠️ ' + (err.message || 'שגיאה לא ידועה'), true);
-  } finally {
-    _clStreaming = false;
-    clSetStreamingUI(false);
-  }
-}
-
-// ── עצירה ────────────────────────────────────────────────
-function clStop() {
-  _clAbort?.abort();
-  _clStreaming = false;
-  clSetStreamingUI(false);
-}
-
-// ── ניקוי שיחה ───────────────────────────────────────────
-function clClearChat() {
-  _clMessages = [];
-  const msgs = document.getElementById('cl-messages');
-  if (msgs) {
-    msgs.innerHTML = '';
-    const welcome = document.createElement('div');
-    welcome.className = 'cl-welcome'; welcome.id = 'cl-welcome';
-    welcome.innerHTML = `<div class="cl-welcome-icon">✦</div>
-      <h2 class="cl-welcome-title">claori</h2>
-      <p class="cl-welcome-sub">העוזר החכם שלך ללמידת אוצר מילים</p>
-      <div class="cl-chips">
-        <button class="cl-chip" onclick="clQuickSend('📚 צור לי בוחן 10 מילים אנגלית-עברית')">📚 צור בוחן</button>
-        <button class="cl-chip" onclick="clQuickSend('💡 תן לי טיפים לשינון מילים')">💡 טיפים לשינון</button>
-        <button class="cl-chip" onclick="clQuickSend('🔄 בחן אותי על המילים הנוכחיות שלי')">🔄 בחן אותי</button>
-        <button class="cl-chip" onclick="clQuickSend('🌍 מהם הביטויים הנפוצים ביותר בספרדית?')">🌍 ביטויים בספרדית</button>
-      </div>`;
-    msgs.appendChild(welcome);
-  }
-  clUpdateCount();
-}
-
-// ── יצירת בוחן מ-AI ──────────────────────────────────────
-function clHandleQuizCreated(data) {
-  const wc = (data.words||[]).length;
-  // טען מילים לאפליקציה
-  if(data.lang1){ activePicker=0; selectLang(ALL_LANGS.find(l=>l.id===data.lang1)||{id:data.lang1,flag:data.lang1flag||'🌐',native:data.lang1,names:{}}); }
-  if(data.lang2){ activePicker=1; selectLang(ALL_LANGS.find(l=>l.id===data.lang2)||{id:data.lang2,flag:data.lang2flag||'🌐',native:data.lang2,names:{}}); }
-  words = (data.words||[]).map(w=>({a:w.a,b:w.b}));
-  renderWords(); saveWordsToStorage();
-
-  // הצג כרטיס בוחן בצ'אט
-  const msgs = document.getElementById('cl-messages');
-  const msgDiv = document.createElement('div');
-  msgDiv.className = 'cl-msg ai';
-  const previewWords = (data.words||[]).slice(0,5).map(w=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px"><span>${w.a}</span><span style="color:var(--cl-text2)">${w.b}</span></div>`).join('');
-  msgDiv.innerHTML = `
-    <div class="cl-avatar ai">✦</div>
-    <div>
-      <div class="cl-bubble ai" style="margin-bottom:0;border-bottom-left-radius:4px">
-        ✅ יצרתי בוחן על "<strong>${data.topic||'מילים'}</strong>" עם <strong>${wc} מילים</strong>!
-      </div>
-      <div class="cl-quiz-card">
-        <div class="cl-quiz-card-title">📚 ${data.lang1flag||''} ${data.lang1||''} ↔ ${data.lang2flag||''} ${data.lang2||''}</div>
-        ${previewWords}
-        ${wc>5?`<div style="font-size:11px;color:var(--cl-muted);margin-top:6px">+${wc-5} מילים נוספות</div>`:''}
-        <button class="cl-quiz-start-btn" onclick="showScreen('input');setTimeout(()=>document.getElementById('start-btn')?.scrollIntoView({behavior:'smooth'}),200)">
-          ▶ התחל לתרגל
-        </button>
-      </div>
-    </div>`;
-  msgs.appendChild(msgDiv);
-  msgs.scrollTop = 999999;
-  clUpdateCount();
-}
-
-// ── render פונקציות ──────────────────────────────────────
-function clRenderMsg(role, text, isError=false) {
-  const msgs = document.getElementById('cl-messages');
-  if (!msgs) return;
-  const div = document.createElement('div');
-  div.className = 'cl-msg ' + role;
-  const avatar = role==='user'
-    ? '<div class="cl-avatar user">א</div>'
-    : '<div class="cl-avatar ai">✦</div>';
-  const bubble = role==='user'
-    ? `<div class="cl-bubble user">${escHtml(text)}</div>`
-    : `<div class="cl-bubble ai">${clRenderMarkdown(text)}</div>`;
-  div.innerHTML = avatar + bubble;
-  msgs.appendChild(div);
-  msgs.scrollTop = 999999;
-  clUpdateCount();
-}
-
-function clRenderTyping(id) {
-  const msgs = document.getElementById('cl-messages');
-  if (!msgs) return;
-  const div = document.createElement('div');
-  div.className = 'cl-msg ai'; div.id = id;
-  div.innerHTML = '<div class="cl-avatar ai">✦</div><div class="cl-bubble ai"><div class="cl-typing"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(div);
-  msgs.scrollTop = 999999;
-}
-
-function clRenderMarkdown(text) {
-  let out = text
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>
-      `<pre><code>${code.trim()}</code></pre>`)
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
-  out = '<p>' + out.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>') + '</p>';
-  return out;
-}
-
-function clUpdateCount() {
-  const el = document.getElementById('cl-msg-count');
-  if (el) el.textContent = _clMessages.length + ' הודעות';
-}
-
-function clSetStreamingUI(streaming) {
-  const send = document.getElementById('cl-send-btn');
-  const stop = document.getElementById('cl-stop-btn');
-  if (send) send.style.display = streaming ? 'none' : 'flex';
-  if (stop) stop.style.display = streaming ? 'flex' : 'none';
-}
-
-function clAutoResize(ta) {
-  if (!ta) return;
-  ta.style.height = 'auto';
-  ta.style.height = Math.min(ta.scrollHeight, 160) + 'px';
-}
-
-function clToggleSidebar() {
-  _clSidebarOpen = !_clSidebarOpen;
-  const sb = document.getElementById('cl-sidebar');
-  const bd = document.getElementById('cl-backdrop');
-  if (sb) sb.classList.toggle('open', _clSidebarOpen);
-  if (bd) bd.classList.toggle('hidden', !_clSidebarOpen);
-}
-function clCloseSidebar() {
-  _clSidebarOpen = false;
-  document.getElementById('cl-sidebar')?.classList.remove('open');
-  document.getElementById('cl-backdrop')?.classList.add('hidden');
-}
-
-function clShowToast(msg, isError=false) {
-  const existing = document.querySelector('.cl-toast');
-  if (existing) existing.remove();
-  const t = document.createElement('div');
-  t.className = 'cl-toast ' + (isError?'error':'ok');
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(()=>t.remove(), 3500);
-}
 
 
 // ============================================================
