@@ -1013,8 +1013,8 @@
             <input type="file" id="claori-camera" accept="image/*" capture="environment" style="display:none" onchange="handleClaoriImage(event)">
             📷
           </label>
-          <textarea id="claori-input" class="claori-input" id="claori-placeholder" placeholder="Ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendClaoriMessage();}"></textarea>
-          <button class="claori-send-btn" onclick="if(typeof sendClaoriMessage!=='undefined')sendClaoriMessage()">➤</button>
+          <textarea id="claori-input" class="claori-input" id="claori-placeholder" placeholder="Ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend();}"></textarea>
+          <button class="claori-send-btn" onclick="clSend()">➤</button>
         </div>
       </div>
     </div>
