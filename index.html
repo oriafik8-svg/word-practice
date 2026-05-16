@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -365,6 +366,99 @@
   .flip-help:hover{background:rgba(255,255,255,0.32);transform:translateY(-50%) scale(1.12);}
   .flip-help.dark{background:var(--surface);border-color:var(--border);color:var(--text-muted);}
   .flip-help.dark:hover{background:var(--surface2);color:var(--text);}
+
+
+  /* ══ CLAORI DARK UI ══════════════════════════════════════ */
+  :root {
+    --cl-bg0:#0d0f14; --cl-bg1:#13161e; --cl-bg2:#1a1e28; --cl-bg3:#222736;
+    --cl-border:#2e3450; --cl-border-b:#3d4a6a;
+    --cl-text:#e8ecf4; --cl-text2:#8a93b0; --cl-muted:#4e5878;
+    --cl-accent:#7c6aff; --cl-accent-dim:#4e3fad; --cl-accent-glow:rgba(124,106,255,0.15);
+    --cl-accent2:#00d4aa; --cl-user-bg:#1e2540; --cl-ai-bg:#161a26;
+    --cl-red:#ff5e6a; --cl-green:#3fd68a; --cl-header-h:52px;
+  }
+  #screen-claori { background:var(--cl-bg0); padding:0!important; overflow:hidden; }
+  .cl-root { display:flex; flex-direction:column; height:100%; background:var(--cl-bg0); overflow:hidden; }
+  .cl-header { height:var(--cl-header-h); background:var(--cl-bg1); border-bottom:1px solid var(--cl-border); display:flex; align-items:center; gap:8px; padding:0 14px; flex-shrink:0; }
+  .cl-logo { font-weight:800; font-size:17px; flex:1; background:linear-gradient(135deg,#7c6aff,#00d4aa); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+  .cl-badge { font-size:11px; padding:3px 8px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:4px; color:var(--cl-text2); font-family:monospace; }
+  .cl-hbtn { width:34px; height:34px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:8px; color:var(--cl-text2); cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
+  .cl-hbtn:hover { background:var(--cl-bg3); color:var(--cl-text); }
+  .cl-mobile-only { display:none; } .cl-desktop-only { display:flex; }
+  .cl-body { display:flex; flex:1; overflow:hidden; position:relative; }
+  .cl-backdrop { display:none; }
+  .cl-backdrop:not(.hidden) { display:block; position:fixed; inset:var(--cl-header-h) 0 0 0; background:rgba(0,0,0,.5); z-index:199; }
+  .cl-sidebar { width:280px; background:var(--cl-bg1); border-left:1px solid var(--cl-border); display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto; }
+  [dir="rtl"] .cl-sidebar { border-left:none; border-right:1px solid var(--cl-border); }
+  .cl-section { padding:14px 16px; border-bottom:1px solid var(--cl-border); }
+  .cl-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--cl-muted); margin-bottom:10px; font-family:monospace; }
+  .cl-textarea { width:100%; padding:9px 10px; background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:6px; color:var(--cl-text); font-size:12.5px; outline:none; resize:vertical; min-height:90px; line-height:1.5; font-family:inherit; transition:border-color .15s; }
+  .cl-textarea:focus { border-color:var(--cl-accent); }
+  .cl-param { display:flex; justify-content:space-between; font-size:12px; color:var(--cl-text2); margin-bottom:6px; }
+  .cl-val { font-family:monospace; font-size:11px; color:var(--cl-accent); }
+  .cl-slider { width:100%; accent-color:var(--cl-accent); cursor:pointer; }
+  .cl-sidebar-footer { padding:14px 16px; margin-top:auto; border-top:1px solid var(--cl-border); }
+  .cl-clear-btn { width:100%; padding:9px; background:transparent; border:1px solid var(--cl-border); border-radius:6px; color:var(--cl-text2); font-size:13px; cursor:pointer; font-family:inherit; transition:all .15s; }
+  .cl-clear-btn:hover { background:rgba(255,94,106,.08); border-color:var(--cl-red); color:var(--cl-red); }
+  .cl-chat { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+  .cl-messages { flex:1; overflow-y:auto; padding:20px 16px; display:flex; flex-direction:column; gap:8px; scroll-behavior:smooth; }
+  .cl-messages::-webkit-scrollbar { width:4px; } .cl-messages::-webkit-scrollbar-thumb { background:var(--cl-border); border-radius:2px; }
+  .cl-welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; gap:14px; text-align:center; padding:40px 20px; }
+  .cl-welcome-icon { font-size:42px; font-weight:800; background:linear-gradient(135deg,#7c6aff,#00d4aa); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:cl-pulse 3s ease-in-out infinite; }
+  @keyframes cl-pulse { 0%,100%{filter:drop-shadow(0 0 16px rgba(124,106,255,0.3))} 50%{filter:drop-shadow(0 0 32px rgba(124,106,255,0.7))} }
+  .cl-welcome-title { font-size:24px; font-weight:800; color:var(--cl-text); margin:0; }
+  .cl-welcome-sub { font-size:14px; color:var(--cl-text2); margin:0; max-width:300px; line-height:1.6; }
+  .cl-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:6px; }
+  .cl-chip { padding:8px 14px; background:var(--cl-bg2); border:1px solid var(--cl-border); border-radius:20px; font-size:12.5px; cursor:pointer; color:var(--cl-text2); font-family:inherit; transition:all .15s; }
+  .cl-chip:hover { border-color:var(--cl-accent); color:var(--cl-accent); background:var(--cl-accent-glow); }
+  .cl-msg { display:flex; gap:10px; padding:3px 0; animation:cl-up .2s ease; }
+  .cl-msg.user { flex-direction:row-reverse; }
+  @keyframes cl-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
+  .cl-avatar { width:30px; height:30px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
+  .cl-avatar.user { background:var(--cl-accent-dim); color:#cfc7ff; }
+  .cl-avatar.ai { background:var(--cl-bg3); border:1px solid var(--cl-border); }
+  .cl-bubble { max-width:80%; padding:11px 14px; border-radius:12px; line-height:1.65; font-size:14px; word-wrap:break-word; overflow-wrap:anywhere; }
+  .cl-bubble.user { background:var(--cl-user-bg); border:1px solid var(--cl-border-b); border-top-right-radius:4px; white-space:pre-wrap; color:var(--cl-text); }
+  .cl-bubble.ai { background:var(--cl-ai-bg); border:1px solid var(--cl-border); border-top-left-radius:4px; color:var(--cl-text); }
+  [dir="rtl"] .cl-bubble.user { border-top-right-radius:12px; border-top-left-radius:4px; }
+  [dir="rtl"] .cl-bubble.ai { border-top-left-radius:12px; border-top-right-radius:4px; }
+  .cl-bubble p { margin:0 0 8px; } .cl-bubble p:last-child { margin:0; }
+  .cl-bubble strong { color:#b8aaff; }
+  .cl-bubble code { font-family:monospace; font-size:12.5px; background:rgba(255,255,255,.06); padding:1px 5px; border-radius:4px; }
+  .cl-bubble pre { background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:6px; padding:12px; margin:8px 0; overflow-x:auto; font-size:12px; line-height:1.6; font-family:monospace; }
+  .cl-typing { display:flex; gap:4px; align-items:center; padding:4px 0; }
+  .cl-typing span { width:6px; height:6px; background:var(--cl-muted); border-radius:50%; animation:cl-bounce .8s infinite; }
+  .cl-typing span:nth-child(2){animation-delay:.15s} .cl-typing span:nth-child(3){animation-delay:.3s}
+  @keyframes cl-bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-5px);opacity:1} }
+  .cl-input-area { padding:12px 14px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--cl-border); background:var(--cl-bg1); flex-shrink:0; }
+  .cl-input-box { display:flex; align-items:flex-end; gap:8px; background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:14px; padding:8px 8px 8px 12px; transition:border-color .2s,box-shadow .2s; }
+  .cl-input-box:focus-within { border-color:var(--cl-accent); box-shadow:0 0 0 3px var(--cl-accent-glow); }
+  .cl-input { flex:1; background:none; border:none; outline:none; color:var(--cl-text); font-family:inherit; font-size:15px; resize:none; line-height:1.5; max-height:160px; min-height:24px; padding:4px 0; }
+  .cl-input::placeholder { color:var(--cl-muted); }
+  .cl-input-actions { display:flex; gap:4px; align-items:flex-end; }
+  .cl-send-btn { width:38px; height:38px; border:none; border-radius:10px; background:var(--cl-accent); color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; transition:all .15s; }
+  .cl-send-btn:hover { background:#9180ff; }
+  .cl-stop-btn { width:38px; height:38px; border-radius:10px; cursor:pointer; background:rgba(255,94,106,.15); border:1px solid var(--cl-red); color:var(--cl-red); font-size:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .cl-status { display:flex; justify-content:space-between; align-items:center; padding:6px 4px 0; font-size:11px; font-family:monospace; color:var(--cl-muted); gap:8px; }
+  .cl-status-badge { padding:2px 8px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:4px; color:var(--cl-text2); }
+  .cl-quiz-card { background:var(--cl-bg2); border:1px solid var(--cl-accent-dim); border-radius:12px; padding:14px; margin-top:10px; }
+  .cl-quiz-card-title { font-size:13px; font-weight:700; color:var(--cl-accent); margin-bottom:10px; }
+  .cl-quiz-start-btn { width:100%; padding:10px; background:var(--cl-accent); border:none; border-radius:8px; color:white; font-size:14px; cursor:pointer; font-family:inherit; font-weight:700; transition:background .15s; margin-top:8px; }
+  .cl-quiz-start-btn:hover { background:#9180ff; }
+  .cl-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; font-size:13px; font-family:monospace; z-index:9999; pointer-events:none; max-width:90vw; text-align:center; animation:cl-toast-in .25s ease; }
+  .cl-toast.error { background:rgba(255,94,106,.12); border:1px solid var(--cl-red); color:#ff8a93; }
+  .cl-toast.ok { background:rgba(63,214,138,.12); border:1px solid var(--cl-green); color:var(--cl-green); }
+  @keyframes cl-toast-in { from{opacity:0;transform:translate(-50%,10px)} to{opacity:1;transform:translate(-50%,0)} }
+  @media (max-width:600px) {
+    .cl-mobile-only { display:flex; } .cl-desktop-only { display:none; }
+    .cl-badge { display:none; }
+    .cl-sidebar { position:fixed; top:var(--cl-header-h); right:0; height:calc(100dvh - var(--cl-header-h)); width:min(300px,88vw); z-index:200; transform:translateX(100%); transition:transform .25s ease; border-left:none; border-right:1px solid var(--cl-border); }
+    [dir="rtl"] .cl-sidebar { right:auto; left:0; transform:translateX(-100%); border-right:none; border-left:1px solid var(--cl-border); }
+    .cl-sidebar.open { transform:translateX(0)!important; box-shadow:-8px 0 24px rgba(0,0,0,.5); }
+    .cl-backdrop:not(.hidden) { display:block; }
+    .cl-bubble { max-width:88%; font-size:14px; }
+    .cl-input { font-size:16px; }
+  }
 
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
@@ -937,88 +1031,69 @@
 
   <!-- CLAORI SCREEN -->
   <div class="screen" id="screen-claori">
-    <div class="claori-wrap">
-      <div class="claori-bg" id="claori-bg"></div>
-      <!-- BG picker panel -->
-      <div class="claori-bg-panel" id="claori-bg-panel"></div>
-<!-- CLAORI SIDEBAR BACKDROP -->
-<div id="claori-sidebar-backdrop" style="display:none;position:absolute;inset:0;z-index:19;background:rgba(0,0,0,0.4)" onclick="closeClaoriSidebar()"></div>
-<!-- CLAORI CHAT LIST SIDEBAR -->
-<div class="claori-sidebar" id="claori-sidebar">
-  <div class="claori-sidebar-header">
-    <button class="claori-sidebar-close" id="claori-sidebar-close">✕</button>
-    <div style="font-size:15px;font-weight:700;color:#fff">Chats</div>
-    <button class="claori-sidebar-new" id="claori-sidebar-new-btn">+ New</button>
-  </div>
-  <!-- Search -->
-  <div style="padding:8px 12px">
-    <input id="claori-search-input" placeholder="🔍 Search chats..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-family:'Heebo',sans-serif;font-size:13px;padding:7px 10px;outline:none">
-  </div>
-  <!-- Projects section -->
-  <div id="claori-projects-section" style="padding:0 12px 6px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-      <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px">Projects</div>
-      <button id="claori-new-project-btn" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;padding:0;line-height:1" title="New project">+</button>
-    </div>
-    <div id="claori-projects-list"></div>
-    <div id="claori-new-proj-form" style="display:none;margin-top:6px;display:none">
-      <input id="claori-proj-name-input" placeholder="Project name..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:7px;color:#fff;font-family:'Heebo',sans-serif;font-size:12px;padding:6px 9px;outline:none;box-sizing:border-box;margin-bottom:5px">
-      <div style="display:flex;gap:5px">
-        <button id="claori-proj-create-btn" style="flex:1;padding:5px;background:rgba(102,126,234,0.4);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer;font-family:'Heebo',sans-serif">Create</button>
-        <button id="claori-proj-cancel-btn" style="padding:5px 8px;background:rgba(255,255,255,0.1);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer">✕</button>
-      </div>
-    </div>
-  </div>
-  <!-- Chats list -->
-  <div style="padding:0 12px 6px">
-    <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">All Chats</div>
-    <div id="claori-chats-list" style="display:flex;flex-direction:column;gap:2px"></div>
-  </div>
-</div>
-<!-- Drop zone indicator (shows when dragging over project) -->
-<div id="claori-drop-hint" style="display:none;position:fixed;inset:0;background:rgba(102,126,234,0.15);z-index:9999;pointer-events:none;border:3px dashed rgba(102,126,234,0.6);border-radius:16px"></div>
-
-      <!-- Header -->
-      <div class="claori-header">
-        <div class="claori-header-left">
-          <button class="back-btn" id="claori-back" style="color:#fff;border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.08)">←</button>
-          <div class="claori-avatar">🤖</div>
-          <div>
-            <div class="claori-name">claori</div>
-            <div class="claori-sub" id="claori-sub-text">Your vocabulary assistant</div>
+  <div class="cl-root">
+    <header class="cl-header">
+      <button class="cl-hbtn cl-mobile-only" onclick="clToggleSidebar()">☰</button>
+      <div class="cl-logo">✦ claori</div>
+      <div class="cl-badge">Gemini Flash</div>
+      <button class="cl-hbtn cl-desktop-only" onclick="clToggleSidebar()">⚙</button>
+      <button class="cl-hbtn" onclick="showScreen('input')">✕</button>
+    </header>
+    <div class="cl-body">
+      <div class="cl-backdrop hidden" id="cl-backdrop" onclick="clCloseSidebar()"></div>
+      <aside class="cl-sidebar" id="cl-sidebar">
+        <div class="cl-section">
+          <div class="cl-label">System Prompt</div>
+          <textarea class="cl-textarea" id="cl-system-prompt">You are claori, a friendly AI assistant built into a vocabulary quiz app. Help users learn words and create quizzes. Reply in the user's language. When creating a quiz respond with: <action>{"action":"create_quiz","topic":"...","lang1":"en","lang1flag":"🇺🇸","lang2":"he","lang2flag":"🇮🇱","words":[{"a":"hello","b":"שלום"}]}</action></textarea>
+        </div>
+        <div class="cl-section">
+          <div class="cl-label">פרמטרים</div>
+          <div class="cl-param"><span>Temperature</span><span class="cl-val" id="cl-temp-val">0.70</span></div>
+          <input type="range" class="cl-slider" id="cl-temp" min="0" max="1" step="0.05" value="0.7" oninput="document.getElementById('cl-temp-val').textContent=parseFloat(this.value).toFixed(2)">
+          <div class="cl-param" style="margin-top:12px"><span>Max Tokens</span><span class="cl-val" id="cl-tokens-val">1024</span></div>
+          <input type="range" class="cl-slider" id="cl-tokens" min="128" max="4096" step="64" value="1024" oninput="document.getElementById('cl-tokens-val').textContent=this.value">
+        </div>
+        <div class="cl-section">
+          <div class="cl-label">מילים נוכחיות</div>
+          <div style="font-size:12px;color:var(--cl-muted,#888)" id="cl-words-info">0 מילים</div>
+        </div>
+        <div class="cl-sidebar-footer">
+          <button class="cl-clear-btn" onclick="clClearChat()">🗑 נקה שיחה</button>
+        </div>
+      </aside>
+      <main class="cl-chat">
+        <div class="cl-messages" id="cl-messages">
+          <div class="cl-welcome" id="cl-welcome">
+            <div class="cl-welcome-icon">✦</div>
+            <h2 class="cl-welcome-title">claori</h2>
+            <p class="cl-welcome-sub">העוזר החכם שלך ללמידת אוצר מילים</p>
+            <div class="cl-chips">
+              <button class="cl-chip" onclick="clQuickSend('צור לי בוחן 10 מילים אנגלית-עברית')">📚 צור בוחן</button>
+              <button class="cl-chip" onclick="clQuickSend('תן לי טיפים לשינון מילים')">💡 טיפים לשינון</button>
+              <button class="cl-chip" onclick="clQuickSend('בחן אותי על המילים הנוכחיות שלי')">🔄 בחן אותי</button>
+              <button class="cl-chip" onclick="clQuickSend('מהם הביטויים הנפוצים ביותר בספרדית?')">🌍 ביטויים בספרדית</button>
+            </div>
           </div>
         </div>
-        <div style="display:flex;align-items:center;gap:6px">
-          <button class="claori-chats-btn" id="claori-chats-toggle" title="Chat history">☰</button>
-          <button class="claori-bg-btn" id="claori-share-chat" title="Share chat">↑</button>
-          <button class="claori-bg-btn" id="claori-bg-toggle" title="Change background">🎨</button>
+        <div class="cl-input-area">
+          <div class="cl-input-box">
+            <textarea class="cl-input" id="cl-input" placeholder="שאל אותי משהו..." rows="1" dir="auto"
+              oninput="clAutoResize(this)"
+              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend()}"></textarea>
+            <div class="cl-input-actions">
+              <button class="cl-send-btn" id="cl-send-btn" onclick="clSend()">➤</button>
+              <button class="cl-stop-btn" id="cl-stop-btn" onclick="clStop()" style="display:none">■</button>
+            </div>
+          </div>
+          <div class="cl-status">
+            <span id="cl-msg-count">0 הודעות</span>
+            <span class="cl-status-badge">Gemini 1.5 Flash</span>
+          </div>
         </div>
-      </div>
-      <!-- Messages -->
-      <div class="claori-messages-wrap" id="claori-messages"></div>
-      <!-- Input bar -->
-      <div class="claori-input-bar">
-        <div id="claori-image-preview" style="display:none;margin-bottom:8px;position:relative">
-          <img id="claori-preview-img" style="max-height:70px;border-radius:10px;border:1px solid rgba(255,255,255,0.2)">
-          <button onclick="if(typeof clearClaoriImage!=='undefined')clearClaoriImage()" style="position:absolute;top:-6px;right:-6px;background:#e05555;border:none;border-radius:50%;width:20px;height:20px;color:#fff;font-size:12px;cursor:pointer">✕</button>
-        </div>
-        <div style="display:flex;gap:8px;align-items:flex-end">
-          <!-- Gallery button -->
-          <label class="claori-img-btn" title="Choose image from gallery" style="position:relative">
-            <input type="file" id="claori-file" accept="image/*" style="display:none" onchange="handleClaoriImage(event)">
-            🖼️
-          </label>
-          <!-- Camera button (mobile) -->
-          <label class="claori-img-btn" title="Take photo" style="position:relative">
-            <input type="file" id="claori-camera" accept="image/*" capture="environment" style="display:none" onchange="handleClaoriImage(event)">
-            📷
-          </label>
-          <textarea id="claori-input" class="claori-input" id="claori-placeholder" placeholder="Ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend();}"></textarea>
-          <button class="claori-send-btn" onclick="clSend()">➤</button>
-        </div>
-      </div>
+      </main>
     </div>
   </div>
+</div>
 
   <!-- AIRPLANE GAME SCREEN -->
   <div class="screen" id="screen-airplane">
