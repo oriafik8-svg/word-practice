@@ -1912,7 +1912,7 @@ function updateLangHeaders() {
 }
 
 function updateStartBtn() {
-  const valid=words.filter(w=>w.a.trim()&&w.b.trim());
+  const valid=words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if(startBtn) startBtn.disabled=valid.length<1||!selectedLang[0]||!selectedLang[1];
 }
 
@@ -1964,7 +1964,7 @@ function renderWords() {
 function updatePublishBtn() {
   const btn=document.getElementById('publish-btn');
   if(!btn) return;
-  const ok=sharedWords.filter(w=>w.a.trim()&&w.b.trim()).length>=1&&sharedLang[0]&&sharedLang[1]&&document.getElementById('shared-topic').value.trim();
+  const ok=sharedWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim()).length>=1&&sharedLang[0]&&sharedLang[1]&&document.getElementById('shared-topic').value.trim();
   btn.disabled=!ok;
 }
 
@@ -2137,7 +2137,7 @@ async function smartCheck(userAns,correctAns) {
 // ============================================================
 // SAVED QUIZZES
 // ============================================================
-function quizFingerprint(l1,l2,ws) { return [l1,l2,[...ws].map(w=>w.a.trim()+'|'+w.b.trim()).sort().join(';;')].join('__'); }
+function quizFingerprint(l1,l2,ws) { return [l1,l2,[...ws].map(w=>w.a.trim()+'|'+(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim()).sort().join(';;')].join('__'); }
 
 function showSaveToast() {
   let t=document.getElementById('save-toast');
@@ -2146,7 +2146,7 @@ function showSaveToast() {
 }
 
 async function autoSaveQuiz() {
-  const validWords=words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords=words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if(!validWords.length||!selectedLang[0]||!selectedLang[1]) return;
   const fp=quizFingerprint(selectedLang[0].id,selectedLang[1].id,validWords);
   try {
@@ -2347,7 +2347,7 @@ function copySharedQuizToPersonal(q) {
 
 async function publishQuiz() {
   const topic=document.getElementById('shared-topic').value.trim();
-  const validWords=sharedWords.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords=sharedWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if(!topic||validWords.length<1||!sharedLang[0]||!sharedLang[1]) return;
   const publishBtn=document.getElementById('publish-btn');const t=getT();
   publishBtn.textContent=t.publishingBtn;publishBtn.disabled=true;
@@ -2370,7 +2370,7 @@ function _doStartQuiz(mode, wrongOnly) {
     _runCustomGame(_wizCustomGameId, words.filter(w=>w.a&&w.b)); return;
   }
   quizMode=mode;
-  const validWords=words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords=words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   const pool=wrongOnly||validWords;
   quizItems=pool.map(w=>{
   let prompt,answer,answers;
@@ -2399,7 +2399,7 @@ function _doStartQuiz(mode, wrongOnly) {
 function _launchClassicQuiz(wrongOnly, skipSave) {
   const _skip = skipSave || window._skipNextSave;
   window._skipNextSave = false;
-  const validWords = wrongOnly || words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords = wrongOnly || words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (!validWords.length) return;
   if (!_skip) autoSaveQuiz();
   if (!wrongOnly && !smartModeSaved) {
@@ -3144,7 +3144,7 @@ function _loadClaoriQuizIntoApp(action) {
 
 async function claoriPublishQuiz() {
   // Publish whatever is currently loaded in the app (from claori or otherwise)
-  const validWords = words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords = words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (!validWords.length || !selectedLang[0] || !selectedLang[1]) {
     appendClaoriMsg('assistant', "There's no quiz loaded to publish. Ask me to create one first!");
     return;
@@ -3178,7 +3178,7 @@ async function claoriPublishQuiz() {
 // (later-decl) let _airplanePool = [];
 
 function startAirplaneGame(wrongOnly=null) {
-  const pool = wrongOnly || words.filter(w=>w.a.trim()&&w.b.trim());
+  const pool = wrongOnly || words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (!pool.length) { appendClaoriMsg && alert('Add some words first!'); return; }
   _airplanePool = pool;
   showScreen('airplane');
@@ -3409,7 +3409,7 @@ function endAirplane(state, won) {
 let _memoryPreviewSecs = 8;
 
 function startMemoryGame(wrongOnly=null) {
-  const pool = wrongOnly || words.filter(w=>w.a.trim()&&w.b.trim());
+  const pool = wrongOnly || words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (!pool.length) return;
   memoryPool = pool;
 
@@ -4257,7 +4257,7 @@ function openShareSettings(type, data) {
 
 // ── Expose share for quiz ─────────────────────────────────────
 function shareCurrentQuiz() {
-  const validWords = words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords = words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (!validWords.length) return;
   openShareSettings('quiz', {
     words: validWords,
@@ -4790,7 +4790,7 @@ function _mpShowLobby() {
 }
 
 function _mpStartBattle() {
-  const validWords = words.filter(w=>w.a.trim()&&w.b.trim());
+  const validWords = words.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim());
   if (validWords.length < 3) {
     const t = getT();
     alert(t.mpNeedWords || 'Add at least 3 words to play!'); return;
@@ -4898,7 +4898,7 @@ function _wizSetupHandlers() {
   document.getElementById('wiz-pick-lang2').onclick=()=>{openLangPickerFor(1, (lang)=>{ activePicker=1; selectLang(lang); _wizLang2=lang; _wizUpdateLangDisplay(); });};
   document.getElementById('wiz-next-1').onclick=()=>{if(_wizLang1){activePicker=0;selectLangDirect(_wizLang1);}if(_wizLang2){activePicker=1;selectLangDirect(_wizLang2);}_wizStep(2);_wizRenderWords();};
   document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:['']});_wizRenderWords();};
-  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&w.b.trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x&&x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
+  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x&&x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
   document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
   document.getElementById('wiz-back-2').onclick=()=>{_wizStep(2); setTimeout(_wizRenderWords, 50);};
   document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
@@ -5056,7 +5056,7 @@ function _wizRenderWords(){
   });
   _wizCount();
 }
-function _wizCount(){const v=_wizWords.filter(w=>w.a&&w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&w.b.trim())).length;const el=document.getElementById('wiz-words-count');if(el)el.textContent=v>=3?`✅ ${v} words ready`:`${v}/3 (min 3)`;const btn=document.getElementById('wiz-next-2');if(btn){btn.disabled=v<3;btn.style.opacity=v>=3?'1':'0.4';}}
+function _wizCount(){const v=_wizWords.filter(w=>w.a&&w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim())).length;const el=document.getElementById('wiz-words-count');if(el)el.textContent=v>=3?`✅ ${v} words ready`:`${v}/3 (min 3)`;const btn=document.getElementById('wiz-next-2');if(btn){btn.disabled=v<3;btn.style.opacity=v>=3?'1':'0.4';}}
 
 document.addEventListener('DOMContentLoaded', () => {
   wordsList = document.getElementById('words-list') || document.createElement('div');
