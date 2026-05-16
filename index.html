@@ -4989,6 +4989,12 @@ function _wizRenderWords(){
         }
         cellB.appendChild(tRow);
       });
+      // gt-suggestion לצד ב (מוצגת מתחת לשדות)
+      const gtSuggB=document.createElement('div');
+      gtSuggB.className='gt-suggestion gt-suggestion-b'; gtSuggB.dataset.suggestion='';
+      gtSuggB.innerHTML='<div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button>';
+      cellB.appendChild(gtSuggB);
+
       // כפתור הוספת תרגום
       const addBtn=document.createElement('button');
       addBtn.className='add-translation-btn';
