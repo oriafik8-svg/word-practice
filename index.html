@@ -1985,27 +1985,40 @@ function renderSavedQuizzesList(quizzes) {
 }
 
 function loadSavedForPlay(q) {
-  if(q.lang1){activePicker=0;selectLang(ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1,flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1,names:{}});}
-  if(q.lang2){activePicker=1;selectLang(ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2,flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2,names:{}});}
+  // טען שפות
+  const l1=ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1||'en',flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1||'Lang 1',names:{}};
+  const l2=ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2||'he',flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2||'Lang 2',names:{}};
+  // טען מילים לאשף
+  _wizWords=(q.words||[]).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b:[w.b||'']}));
+  if(!_wizWords.length) _wizWords=[{a:'',b:['']}];
+  _wizLang1=l1; _wizLang2=l2;
+  activePicker=0; selectLang(l1);
+  activePicker=1; selectLang(l2);
   words=(q.words||[]).map(w=>({a:w.a,b:w.b}));
-  renderWords();
+  renderWords(); saveWordsToStorage();
   quizSource='saved';
-  // Go to input screen so user can pick quiz mode/type before starting
-  showScreen('input');
-  // Scroll to start button and highlight it
-  setTimeout(()=>{
-    const btn = document.getElementById('start-btn');
-    if(btn){
-      btn.scrollIntoView({behavior:'smooth',block:'center'});
-      btn.style.animation='pulse-btn 0.6s ease 2';
-      setTimeout(()=>btn.style.animation='',1200);
-    }
-  }, 150);
+  // עבור לאשף שלב 3
+  showScreen('wizard');
+  _wizUpdateLangDisplay();
+  _wizSetupHandlers();
+  _wizStep(3);
+  _wizRenderWords();
 }
 function loadSavedForEdit(q) {
-  if(q.lang1){activePicker=0;selectLang(ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1,flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1,names:{}});}
-  if(q.lang2){activePicker=1;selectLang(ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2,flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2,names:{}});}
-  words=(q.words||[]).map(w=>({a:w.a,b:w.b}));renderWords();quizSource='input';showScreen('input');
+  const l1=ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1||'en',flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1||'Lang 1',names:{}};
+  const l2=ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2||'he',flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2||'Lang 2',names:{}};
+  _wizWords=(q.words||[]).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b:[w.b||'']}));
+  if(!_wizWords.length) _wizWords=[{a:'',b:['']}];
+  _wizLang1=l1; _wizLang2=l2;
+  activePicker=0; selectLang(l1);
+  activePicker=1; selectLang(l2);
+  words=(q.words||[]).map(w=>({a:w.a,b:w.b}));
+  renderWords(); quizSource='input';
+  showScreen('wizard');
+  _wizUpdateLangDisplay();
+  _wizSetupHandlers();
+  _wizStep(2);
+  _wizRenderWords();
 }
 
 function selectLang(lang) {
@@ -4655,24 +4668,28 @@ function _wizStep(n) {
   });
 }
 
+function _wizSetupHandlers() {
+  document.getElementById('wiz-pick-lang1').onclick=()=>{openLangPickerFor(0, (lang)=>{ activePicker=0; selectLang(lang); _wizLang1=lang; _wizUpdateLangDisplay(); });};
+  document.getElementById('wiz-pick-lang2').onclick=()=>{openLangPickerFor(1, (lang)=>{ activePicker=1; selectLang(lang); _wizLang2=lang; _wizUpdateLangDisplay(); });};
+  document.getElementById('wiz-next-1').onclick=()=>{if(_wizLang1){activePicker=0;selectLangDirect(_wizLang1);}if(_wizLang2){activePicker=1;selectLangDirect(_wizLang2);}_wizStep(2);_wizRenderWords();};
+  document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:['']});_wizRenderWords();};
+  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&w.b.trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x&&x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
+  document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
+  document.getElementById('wiz-back-2').onclick=()=>{_wizStep(2);_wizRenderWords();};
+  document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
+  document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);};
+  document.getElementById('wiz-back-3').onclick=()=>_wizStep(3);
+  document.getElementById('wiz-smart-yes').onclick=()=>{saveSmartModePreference(true);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
+  document.getElementById('wiz-smart-no').onclick=()=>{saveSmartModePreference(false);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
+  _wizCheckStep1();
+}
+
 function openCreateWizard() {
   _wizWords=[{a:'',b:['']}];
   _wizLang1=selectedLang[0]||null; _wizLang2=selectedLang[1]||null;
   _wizMode='classic'; _wizSubTypes=['writing'];
   showScreen('wizard'); _wizStep(1); _wizUpdateLangDisplay();
-  document.getElementById('wiz-pick-lang1').onclick=()=>{openLangPickerFor(0, (lang)=>{ activePicker=0; selectLang(lang); _wizLang1=lang; _wizUpdateLangDisplay(); });};
-  document.getElementById('wiz-pick-lang2').onclick=()=>{openLangPickerFor(1, (lang)=>{ activePicker=1; selectLang(lang); _wizLang2=lang; _wizUpdateLangDisplay(); });};
-  document.getElementById('wiz-next-1').onclick=()=>{if(_wizLang1){activePicker=0;selectLangDirect(_wizLang1);}if(_wizLang2){activePicker=1;selectLangDirect(_wizLang2);}_wizStep(2);_wizRenderWords();};
-  document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:''});_wizRenderWords();};
-  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x.trim()):w.b.trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
-  document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
-  document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
-  document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);};
-  document.getElementById('wiz-back-2').onclick=()=>_wizStep(2);
-  document.getElementById('wiz-smart-yes').onclick=()=>{saveSmartModePreference(true);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
-  document.getElementById('wiz-smart-no').onclick=()=>{saveSmartModePreference(false);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
-  document.getElementById('wiz-back-3').onclick=()=>_wizStep(3);
-  _wizCheckStep1();
+  _wizSetupHandlers();
 }
 
 // Called from lang picker when in wizard mode
