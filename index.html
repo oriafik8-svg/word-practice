@@ -490,6 +490,130 @@
   #claori-fab:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(124,106,255,0.6); }
   #claori-fab:active { transform: scale(0.95); }
 
+
+  #split-container { display:none; flex-direction:column; flex:1; height:100%; overflow:hidden; }
+  #split-container.active { display:flex; }
+  .split-pane { display:flex; flex-direction:column; }
+  .split-pane.fullscreen { position:absolute; inset:0; z-index:10; }
+
+  /* ── CLAORI FEATURES ─────────────────────────────────────── */
+  #cl-features-overlay {
+    display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7);
+    z-index:600; align-items:flex-end; justify-content:center;
+  }
+  #cl-features-overlay.open { display:flex; }
+  .cl-features-sheet {
+    background:var(--cl-bg1); border-radius:20px 20px 0 0;
+    width:100%; max-width:700px; padding:20px;
+    border-top:1px solid var(--cl-border);
+    animation:cl-slide-up .25s ease;
+    max-height:85vh; overflow-y:auto;
+  }
+  @keyframes cl-slide-up { from{transform:translateY(30px);opacity:0} to{transform:none;opacity:1} }
+  .cl-features-title {
+    font-size:16px; font-weight:800; color:var(--cl-text);
+    margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .cl-feature-card {
+    background:var(--cl-bg2); border:1px solid var(--cl-border);
+    border-radius:14px; padding:16px; margin-bottom:10px;
+    cursor:pointer; transition:border-color .15s, background .15s;
+    display:flex; align-items:center; gap:14px;
+  }
+  .cl-feature-card:hover { border-color:var(--cl-accent); background:var(--cl-bg3); }
+  .cl-feature-icon { font-size:28px; flex-shrink:0; }
+  .cl-feature-info { flex:1; }
+  .cl-feature-name { font-size:14px; font-weight:700; color:var(--cl-text); display:flex; align-items:center; gap:6px; }
+  .cl-feature-desc { font-size:12px; color:var(--cl-text2); margin-top:3px; line-height:1.4; }
+  .cl-beta-badge {
+    font-size:9px; font-weight:800; padding:2px 6px;
+    background:rgba(255,165,0,0.15); border:1px solid rgba(255,165,0,0.4);
+    color:#ffaa00; border-radius:4px; letter-spacing:0.5px;
+  }
+  /* מסך יצירת משחק */
+  #cl-game-creator {
+    display:none; position:fixed; inset:0; background:var(--cl-bg0);
+    z-index:700; flex-direction:column;
+  }
+  #cl-game-creator.open { display:flex; }
+  .cl-gc-header {
+    display:flex; align-items:center; gap:10px; padding:14px 16px;
+    background:var(--cl-bg1); border-bottom:1px solid var(--cl-border); flex-shrink:0;
+  }
+  .cl-gc-title { font-size:16px; font-weight:800; color:var(--cl-text); flex:1; }
+  .cl-gc-body { flex:1; overflow-y:auto; padding:20px 16px; }
+  .cl-gc-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:var(--cl-muted); font-family:monospace; margin-bottom:8px; }
+  .cl-gc-input {
+    width:100%; padding:12px 14px; background:var(--cl-bg2); border:1px solid var(--cl-border);
+    border-radius:12px; color:var(--cl-text); font-size:14px; font-family:inherit;
+    outline:none; resize:vertical; min-height:80px; line-height:1.6;
+    box-sizing:border-box;
+  }
+  .cl-gc-input:focus { border-color:var(--cl-accent); box-shadow:0 0 0 3px var(--cl-accent-glow); }
+  .cl-gc-generate-btn {
+    width:100%; padding:14px; background:linear-gradient(135deg,var(--cl-accent),var(--cl-accent2));
+    border:none; border-radius:12px; color:white; font-size:15px; font-weight:700;
+    cursor:pointer; font-family:inherit; margin-top:12px; transition:opacity .15s;
+  }
+  .cl-gc-generate-btn:disabled { opacity:0.5; cursor:not-allowed; }
+  .cl-gc-preview {
+    margin-top:20px; background:var(--cl-bg2); border:1px solid var(--cl-border);
+    border-radius:14px; overflow:hidden;
+  }
+  .cl-gc-preview-header {
+    padding:14px 16px; border-bottom:1px solid var(--cl-border);
+    display:flex; align-items:center; gap:10px;
+  }
+  .cl-gc-preview-title { font-size:15px; font-weight:700; color:var(--cl-text); flex:1; }
+  .cl-gc-preview-body { padding:14px 16px; }
+  .cl-gc-preview-desc { font-size:13px; color:var(--cl-text2); line-height:1.6; margin-bottom:12px; }
+  .cl-gc-words-preview {
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:14px;
+  }
+  .cl-gc-word-chip {
+    padding:4px 10px; background:var(--cl-bg3); border:1px solid var(--cl-border);
+    border-radius:20px; font-size:12px; color:var(--cl-text2);
+  }
+  .cl-gc-actions { display:flex; gap:8px; }
+  .cl-gc-add-btn {
+    flex:1; padding:12px; background:var(--cl-accent); border:none; border-radius:10px;
+    color:white; font-size:14px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  .cl-gc-cancel-btn {
+    padding:12px 16px; background:transparent; border:1px solid var(--cl-border);
+    border-radius:10px; color:var(--cl-text2); font-size:14px; cursor:pointer; font-family:inherit;
+  }
+  .cl-gc-status {
+    display:flex; align-items:center; gap:8px; padding:12px 0;
+    font-size:13px; color:var(--cl-text2); font-style:italic;
+  }
+  .cl-gc-spinner {
+    width:16px; height:16px; border:2px solid var(--cl-border);
+    border-top-color:var(--cl-accent); border-radius:50%;
+    animation:cl-spin .7s linear infinite; flex-shrink:0;
+  }
+  @keyframes cl-spin { to{transform:rotate(360deg)} }
+  /* כפתור + ב-input */
+  .cl-plus-btn {
+    width:38px; height:38px; border-radius:10px; background:var(--cl-bg3);
+    border:1px solid var(--cl-border); color:var(--cl-text2); font-size:20px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+    flex-shrink:0; transition:all .15s; line-height:1;
+  }
+  .cl-plus-btn:hover { border-color:var(--cl-accent); color:var(--cl-accent); }
+  /* משחקים שנוצרו בשלב 3 */
+  .wiz-custom-game {
+    padding:14px 16px; border-radius:14px; border:2px solid var(--border);
+    background:var(--surface); color:var(--text); cursor:pointer;
+    display:flex; align-items:center; gap:12px; transition:all .15s;
+    text-align:right; font-family:Heebo,sans-serif;
+  }
+  .wiz-custom-game.selected { border-color:var(--accent); background:rgba(233,69,96,0.1); }
+  .wiz-custom-game-icon { font-size:24px; flex-shrink:0; }
+  .wiz-custom-game-info { flex:1; }
+  .wiz-custom-game-name { font-size:15px; font-weight:700; }
+  .wiz-custom-game-desc { font-size:12px; opacity:0.7; margin-top:2px; }
+
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -823,6 +947,28 @@
   </div>
 
 
+
+  <!-- SPLIT SCREEN CONTAINER -->
+  <div id="split-container" style="display:none;flex-direction:column;flex:1;height:100%;overflow:hidden;">
+    <div id="split-pane-top" class="split-pane" style="flex:1;display:flex;flex-direction:column;min-height:80px;overflow:hidden;position:relative;">
+      <div style="display:flex;align-items:center;padding:4px 8px;background:var(--surface2);border-bottom:1px solid var(--border);gap:6px;flex-shrink:0;">
+        <span id="split-title-top" style="font-size:12px;font-weight:700;flex:1;color:var(--text-muted)"></span>
+        <button class="split-fullscreen-btn" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;" onclick="toggleSplitFullscreen('top')">⛶</button>
+        <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;" onclick="closeSplitPane('top')">✕</button>
+      </div>
+      <div id="split-inner-top" style="flex:1;overflow:hidden;display:flex;flex-direction:column;"></div>
+    </div>
+    <div id="split-divider" style="height:6px;background:var(--border);cursor:row-resize;flex-shrink:0;transition:background .15s;" onmouseover="this.style.background='var(--accent)'" onmouseout="this.style.background='var(--border)'"></div>
+    <div id="split-pane-bottom" class="split-pane" style="flex:1;display:flex;flex-direction:column;min-height:80px;overflow:hidden;position:relative;">
+      <div style="display:flex;align-items:center;padding:4px 8px;background:var(--surface2);border-bottom:1px solid var(--border);gap:6px;flex-shrink:0;">
+        <span id="split-title-bottom" style="font-size:12px;font-weight:700;flex:1;color:var(--text-muted)"></span>
+        <button class="split-fullscreen-btn" style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;" onclick="toggleSplitFullscreen('bottom')">⛶</button>
+        <button style="background:none;border:none;cursor:pointer;color:var(--text-muted);font-size:14px;" onclick="closeSplitPane('bottom')">✕</button>
+      </div>
+      <div id="split-inner-bottom" style="flex:1;overflow:hidden;display:flex;flex-direction:column;"></div>
+    </div>
+  </div>
+
   <!-- MULTIPLAYER SCREEN -->
   <div class="screen" id="screen-multiplayer">
     <div class="scroll-area" style="padding:16px;">
@@ -1106,6 +1252,7 @@ When user asks to create a quiz, generate relevant words and use create_quiz act
               oninput="clAutoResize(this)"
               onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend()}"></textarea>
             <div class="cl-input-actions">
+              <button class="cl-plus-btn" onclick="clOpenFeaturesSheet()" title="פיצ'רים">+</button>
               <button class="cl-send-btn" id="cl-send-btn" onclick="clSend()">➤</button>
               <button class="cl-stop-btn" id="cl-stop-btn" onclick="clStop()" style="display:none">■</button>
             </div>
@@ -2162,6 +2309,9 @@ function startQuiz(mode, wrongOnly=null, skipSave=false) {
   _doStartQuiz(mode,wrongOnly);
 }
 function _doStartQuiz(mode, wrongOnly) {
+  if(quizMode==='custom'&&typeof _wizCustomGameId!=='undefined'&&_wizCustomGameId){
+    _runCustomGame(_wizCustomGameId, words.filter(w=>w.a&&w.b)); return;
+  }
   quizMode=mode;
   const validWords=words.filter(w=>w.a.trim()&&w.b.trim());
   const pool=wrongOnly||validWords;
@@ -4346,7 +4496,8 @@ async function _saveDailyData(completed) {
 
 function openDailyMissions() {
   renderDailyMissions();
-  document.getElementById('daily-missions-overlay').style.display = 'flex';
+  const ov = document.getElementById('daily-missions-overlay');
+  if(ov) ov.style.display = 'flex';
 }
 
 // Update stats from game events
@@ -4682,6 +4833,7 @@ function _wizStep(n) {
     const el=document.getElementById('wiz-step-'+i); if(el) el.style.display=i===n?'':'none';
     const bar=document.querySelector('[data-step="'+i+'"]'); if(bar) bar.style.background=i<=n?'var(--accent)':'var(--border)';
   });
+  if(n===3) setTimeout(_wizRenderCustomGames, 50);
 }
 
 function _wizSetupHandlers() {
@@ -4691,7 +4843,7 @@ function _wizSetupHandlers() {
   document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:['']});_wizRenderWords();};
   document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&w.b.trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x&&x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
   document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
-  document.getElementById('wiz-back-2').onclick=()=>{_wizStep(2);_wizRenderWords();};
+  document.getElementById('wiz-back-2').onclick=()=>{_wizStep(2); setTimeout(_wizRenderWords, 50);};
   document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
   document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);};
   document.getElementById('wiz-back-3').onclick=()=>_wizStep(3);
@@ -5332,6 +5484,228 @@ function openLangPickerFor(side, onSelect) {
 
 
 
+
+// ════════════════════════════════════════════════════════════
+// GAME CREATOR (Beta)
+// ════════════════════════════════════════════════════════════
+let _gcCurrentGame = null;
+const GC_STORAGE_KEY = 'cl_custom_games';
+
+function clOpenFeaturesSheet() {
+  document.getElementById('cl-features-overlay').classList.add('open');
+}
+function clCloseFeaturesSheet() {
+  document.getElementById('cl-features-overlay').classList.remove('open');
+}
+function clOpenGameCreator() {
+  clCloseFeaturesSheet();
+  document.getElementById('cl-game-creator').classList.add('open');
+  _gcLoadSavedGames();
+}
+function clCloseGameCreator() {
+  document.getElementById('cl-game-creator').classList.remove('open');
+}
+function clClearGamePreview() {
+  document.getElementById('cl-gc-preview').style.display='none';
+  document.getElementById('cl-gc-status').style.display='none';
+  document.getElementById('cl-gc-gen-btn').disabled=false;
+  _gcCurrentGame=null;
+}
+
+async function clGenerateGame() {
+  const desc = document.getElementById('cl-gc-desc')?.value?.trim();
+  if(!desc){ alert('אנא תאר את המשחק שתרצה'); return; }
+  const wordsEx = document.getElementById('cl-gc-words-example')?.value?.trim();
+  
+  document.getElementById('cl-gc-gen-btn').disabled=true;
+  document.getElementById('cl-gc-status').style.display='flex';
+  document.getElementById('cl-gc-status-text').textContent='ה-AI בונה את המשחק...';
+  document.getElementById('cl-gc-preview').style.display='none';
+
+  const currentWords = (words||[]).filter(w=>w.a&&w.b).slice(0,8)
+    .map(w=>w.a+'='+w.b).join(', ');
+
+  // שלב 1: קבל מטא-דאטה של המשחק
+  const metaPrompt = `You are building a vocabulary quiz game. User wants: "${desc}"
+${wordsEx?'Example words: '+wordsEx:''}
+${currentWords?'App words: '+currentWords:''}
+
+Reply ONLY with this JSON (no markdown, no extra text):
+{"name":"Game name","icon":"emoji","description":"1-2 sentence description","exampleWords":[{"a":"word1","b":"trans1"},{"a":"word2","b":"trans2"},{"a":"word3","b":"trans3"}]}`;
+
+  try {
+    // שלב 1: מטא-דאטה
+    const res1 = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:metaPrompt}]}],generationConfig:{maxOutputTokens:512,temperature:0.7}})
+    });
+    const d1 = await res1.json();
+    const t1 = (d1?.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/```json|```/g,'').trim();
+    const meta = JSON.parse(t1);
+
+    document.getElementById('cl-gc-status-text').textContent='כותב את קוד המשחק...';
+
+    // שלב 2: קוד המשחק בנפרד
+    const gameId = 'cg'+Date.now().toString(36);
+    const codePrompt = `Write a JavaScript function for this vocabulary game: "${desc}"
+Game name: ${meta.name}
+Function signature: function startGame_${gameId}(wordsArray)
+- wordsArray is [{a:"word",b:"translation"}]
+- Create a full-screen overlay div with id="cgame_${gameId}"
+- Dark theme: background #0d0f14, text #e8ecf4, accent #7c6aff
+- Include a finish button that does: document.getElementById('cgame_${gameId}')?.remove(); showScreen('input');
+- Append overlay to document.body and start the game
+- Keep code under 1500 chars, use only vanilla JS
+
+Reply with ONLY the JavaScript code, no explanation, no markdown.`;
+
+    const res2 = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:codePrompt}]}],generationConfig:{maxOutputTokens:2048,temperature:0.5}})
+    });
+    const d2 = await res2.json();
+    const gameCode = (d2?.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/```javascript|```js|```/g,'').trim();
+
+    if(!gameCode) throw new Error('לא התקבל קוד משחק');
+
+    _gcCurrentGame = { ...meta, gameCode, gameId };
+
+    // הצג תצוגה מקדימה
+    document.getElementById('cl-gc-preview-icon').textContent = meta.icon||'🎮';
+    document.getElementById('cl-gc-preview-name').textContent = meta.name||'משחק חדש';
+    document.getElementById('cl-gc-preview-desc').textContent = meta.description||'';
+    
+    const wordsPreview = document.getElementById('cl-gc-preview-words');
+    wordsPreview.innerHTML='';
+    (meta.exampleWords||[]).slice(0,6).forEach(w=>{
+      const chip=document.createElement('div');
+      chip.className='cl-gc-word-chip';
+      chip.textContent=w.a+' = '+w.b;
+      wordsPreview.appendChild(chip);
+    });
+    
+    document.getElementById('cl-gc-status').style.display='none';
+    document.getElementById('cl-gc-preview').style.display='block';
+    document.getElementById('cl-gc-gen-btn').disabled=false;
+
+  } catch(err) {
+    document.getElementById('cl-gc-status-text').textContent='שגיאה: '+err.message+' — נסה שוב';
+    document.getElementById('cl-gc-gen-btn').disabled=false;
+  }
+}
+
+function clAddCustomGame() {
+  if(!_gcCurrentGame) return;
+  
+  // שמור ב-localStorage
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(GC_STORAGE_KEY)||'[]'); } catch(e){}
+  
+  const gameId = 'cg_'+Date.now();
+  const gameEntry = {
+    id: gameId,
+    name: _gcCurrentGame.name,
+    icon: _gcCurrentGame.icon||'🎮',
+    description: _gcCurrentGame.description,
+    gameCode: _gcCurrentGame.gameCode,
+    createdAt: Date.now()
+  };
+  
+  saved.push(gameEntry);
+  localStorage.setItem(GC_STORAGE_KEY, JSON.stringify(saved));
+  
+  // הודעה
+  const statusEl = document.getElementById('cl-gc-status');
+  const statusText = document.getElementById('cl-gc-status-text');
+  statusEl.style.display='flex';
+  statusText.textContent='✅ המשחק נוסף! תמצא אותו בשלב 3 של צור בוחן';
+  document.getElementById('cl-gc-preview').style.display='none';
+  _gcCurrentGame=null;
+  
+  setTimeout(()=>{ statusEl.style.display='none'; }, 3000);
+  _gcLoadSavedGames();
+}
+
+function _gcLoadSavedGames() {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(GC_STORAGE_KEY)||'[]'); } catch(e){}
+  
+  const section = document.getElementById('cl-saved-games-section');
+  const list = document.getElementById('cl-saved-games-list');
+  if(!section||!list) return;
+  
+  if(!saved.length){ section.style.display='none'; return; }
+  section.style.display='block';
+  list.innerHTML='';
+  
+  saved.forEach(g=>{
+    const div=document.createElement('div');
+    div.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--cl-bg2);border:1px solid var(--cl-border);border-radius:10px;margin-bottom:8px;';
+    div.innerHTML=`<span style="font-size:20px">${g.icon}</span><div style="flex:1"><div style="font-size:13px;font-weight:700;color:var(--cl-text)">${g.name}</div><div style="font-size:11px;color:var(--cl-text2)">${g.description||''}</div></div><button onclick="clDeleteCustomGame('${g.id}')" style="background:none;border:none;color:var(--cl-muted);cursor:pointer;font-size:16px;padding:4px;" title="מחק">🗑</button>`;
+    list.appendChild(div);
+  });
+}
+
+function clDeleteCustomGame(id) {
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(GC_STORAGE_KEY)||'[]'); } catch(e){}
+  saved = saved.filter(g=>g.id!==id);
+  localStorage.setItem(GC_STORAGE_KEY, JSON.stringify(saved));
+  _gcLoadSavedGames();
+  // הסר מ-wizard אם פתוח
+  _wizRenderCustomGames();
+}
+
+// ── הצג משחקים מותאמים בשלב 3 ──────────────────────────────
+function _wizRenderCustomGames() {
+  const container = document.getElementById('wiz-custom-games-container');
+  if(!container) return;
+  
+  let saved = [];
+  try { saved = JSON.parse(localStorage.getItem(GC_STORAGE_KEY)||'[]'); } catch(e){}
+  
+  container.innerHTML='';
+  if(!saved.length) return;
+  
+  const title=document.createElement('div');
+  title.style.cssText='font-size:12px;color:var(--text-muted);margin:14px 0 8px;font-weight:700;display:flex;align-items:center;gap:6px;';
+  title.innerHTML='🎮 המשחקים שלי <span style="font-size:9px;padding:1px 5px;background:rgba(255,165,0,0.15);border:1px solid rgba(255,165,0,0.4);color:#ffaa00;border-radius:3px;">BETA</span>';
+  container.appendChild(title);
+  
+  saved.forEach(g=>{
+    const btn=document.createElement('button');
+    btn.className='wiz-custom-game';
+    btn.dataset.gameId=g.id;
+    btn.innerHTML=`<span class="wiz-custom-game-icon">${g.icon}</span><div class="wiz-custom-game-info"><div class="wiz-custom-game-name">${g.name}</div><div class="wiz-custom-game-desc">${g.description||''}</div></div>`;
+    btn.onclick=()=>{
+      document.querySelectorAll('.wiz-custom-game').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      _wizMode='custom';
+      _wizCustomGameId=g.id;
+    };
+    container.appendChild(btn);
+  });
+}
+
+// הרץ משחק מותאם
+let _wizCustomGameId=null;
+
+function _runCustomGame(gameId, wordsArr) {
+  let saved=[];
+  try{ saved=JSON.parse(localStorage.getItem(GC_STORAGE_KEY)||'[]'); }catch(e){}
+  const game=saved.find(g=>g.id===gameId);
+  if(!game){ alert('משחק לא נמצא'); return; }
+  try {
+    const fnName = 'startGame_'+(game.gameId||gameId);
+    const fullCode = game.gameCode + '\n' + fnName + '(wordsArr);';
+    new Function('wordsArr','showScreen', fullCode)(wordsArr, showScreen);
+  } catch(err){
+    alert('שגיאה בהפעלת המשחק: '+err.message);
+    console.error(err);
+  }
+}
+
+
 // ============================================================
 // FEEDBACK
 
@@ -5524,6 +5898,74 @@ function openLangPickerFor(side, onSelect) {
 
   <!-- CLAORI FAB -->
   <button id="claori-fab" onclick="initClaori(); showScreen('claori')" title="claori AI">✦</button>
+
+
+  <!-- CLAORI FEATURES OVERLAY -->
+  <div id="cl-features-overlay" onclick="if(event.target===this)clCloseFeaturesSheet()">
+    <div class="cl-features-sheet">
+      <div class="cl-features-title">
+        <span>⚡</span> פיצ'רים
+      </div>
+      <div class="cl-feature-card" onclick="clOpenGameCreator()">
+        <div class="cl-feature-icon">🎮</div>
+        <div class="cl-feature-info">
+          <div class="cl-feature-name">
+            יצירת סוג משחק
+            <span class="cl-beta-badge">BETA</span>
+          </div>
+          <div class="cl-feature-desc">תאר לAI סוג משחק חדש והוא יבנה אותו עבורך</div>
+        </div>
+        <span style="color:var(--cl-muted);font-size:18px">›</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- GAME CREATOR -->
+  <div id="cl-game-creator">
+    <div class="cl-gc-header">
+      <button class="cl-hbtn" onclick="clCloseGameCreator()">←</button>
+      <div class="cl-gc-title">
+        🎮 יצירת סוג משחק
+        <span class="cl-beta-badge" style="margin-right:6px">BETA</span>
+      </div>
+    </div>
+    <div class="cl-gc-body">
+      <div style="background:rgba(255,165,0,0.08);border:1px solid rgba(255,165,0,0.3);border-radius:10px;padding:12px;margin-bottom:20px;font-size:12.5px;color:#ffaa00;line-height:1.6;">
+        ⚠️ <strong>גרסה ניסיונית (Beta)</strong> — ה-AI יוצר קוד משחק חדש. התוצאות עשויות להיות לא מושלמות.
+      </div>
+      <div class="cl-gc-label">תאר את המשחק שאתה רוצה</div>
+      <textarea class="cl-gc-input" id="cl-gc-desc" placeholder="לדוגמה: משחק שבו יש קלפים עם מילים, וצריך להתאים אותם לתמונות המתאימות..."></textarea>
+      <div class="cl-gc-label" style="margin-top:14px">מילים לדוגמה (אופציונלי)</div>
+      <textarea class="cl-gc-input" id="cl-gc-words-example" style="min-height:50px" placeholder="כלב=dog, חתול=cat..."></textarea>
+      <button class="cl-gc-generate-btn" id="cl-gc-gen-btn" onclick="clGenerateGame()">✨ צור משחק</button>
+      <div id="cl-gc-status" style="display:none" class="cl-gc-status">
+        <div class="cl-gc-spinner"></div>
+        <span id="cl-gc-status-text">ה-AI בונה את המשחק...</span>
+      </div>
+      <div id="cl-gc-preview" class="cl-gc-preview" style="display:none">
+        <div class="cl-gc-preview-header">
+          <span id="cl-gc-preview-icon" style="font-size:24px">🎮</span>
+          <div class="cl-gc-preview-title" id="cl-gc-preview-name"></div>
+          <span class="cl-beta-badge">BETA</span>
+        </div>
+        <div class="cl-gc-preview-body">
+          <div class="cl-gc-preview-desc" id="cl-gc-preview-desc"></div>
+          <div class="cl-gc-label">מילים לדוגמה:</div>
+          <div class="cl-gc-words-preview" id="cl-gc-preview-words"></div>
+          <div class="cl-gc-actions">
+            <button class="cl-gc-add-btn" onclick="clAddCustomGame()">+ הוסף לסוגי המשחקים</button>
+            <button class="cl-gc-cancel-btn" onclick="clClearGamePreview()">נסה שוב</button>
+          </div>
+        </div>
+      </div>
+      <!-- משחקים שמורים -->
+      <div id="cl-saved-games-section" style="margin-top:24px;display:none">
+        <div class="cl-gc-label">המשחקים שיצרת</div>
+        <div id="cl-saved-games-list"></div>
+      </div>
+    </div>
+  </div>
+
 
 </body>
 </html>
