@@ -2203,6 +2203,7 @@ function renderSavedQuizzesList(quizzes) {
 }
 
 function loadSavedForPlay(q) {
+  try {
   // טען שפות
   const l1=ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1||'en',flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1||'Lang 1',names:{}};
   const l2=ALL_LANGS.find(l=>l.id===q.lang2)||{id:q.lang2||'he',flag:q.lang2flag||'🌐',native:q.lang2native||q.lang2||'Lang 2',names:{}};
@@ -2221,6 +2222,7 @@ function loadSavedForPlay(q) {
   _wizSetupHandlers();
   _wizStep(3);
   _wizRenderWords();
+  } catch(err) { console.error('[loadSavedForPlay]', err); alert('שגיאה: '+err.message); }
 }
 function loadSavedForEdit(q) {
   const l1=ALL_LANGS.find(l=>l.id===q.lang1)||{id:q.lang1||'en',flag:q.lang1flag||'🌐',native:q.lang1native||q.lang1||'Lang 1',names:{}};
