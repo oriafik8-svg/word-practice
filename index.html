@@ -669,6 +669,84 @@
     #gt-connect-btn { padding: 5px 6px; font-size: 10px; }
   }
 
+
+  /* ── RECORDING FEATURE ──────────────────────────────────── */
+  #cl-recording-panel {
+    background:var(--cl-bg1); border-radius:16px 16px 0 0;
+    position:fixed; bottom:0; left:0; right:0; max-width:700px;
+    margin:0 auto; z-index:610; padding:20px 16px 30px;
+    border-top:1px solid var(--cl-border);
+    transform:translateY(100%); transition:transform .3s ease;
+    max-height:90vh; overflow-y:auto;
+  }
+  #cl-recording-panel.open { transform:translateY(0); }
+  .cl-rec-header { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .cl-rec-title { font-size:16px; font-weight:800; color:var(--cl-text); flex:1; }
+  .cl-rec-textarea {
+    width:100%; padding:12px 14px; background:var(--cl-bg2);
+    border:1px solid var(--cl-border); border-radius:12px;
+    color:var(--cl-text); font-size:14px; font-family:inherit;
+    outline:none; resize:vertical; min-height:80px; line-height:1.6;
+    box-sizing:border-box; margin-bottom:12px;
+  }
+  .cl-rec-textarea:focus { border-color:var(--cl-accent); }
+  .cl-rec-lang-row { display:flex; align-items:center; gap:8px; margin-bottom:14px; }
+  .cl-rec-lang-select {
+    flex:1; padding:8px 12px; background:var(--cl-bg2);
+    border:1px solid var(--cl-border); border-radius:8px;
+    color:var(--cl-text); font-size:13px; font-family:inherit; outline:none;
+  }
+  .cl-rec-btn {
+    width:64px; height:64px; border-radius:50%; border:none;
+    cursor:pointer; font-size:26px; display:flex; align-items:center;
+    justify-content:center; margin:0 auto 14px; transition:all .2s;
+    box-shadow:0 4px 16px rgba(0,0,0,0.3);
+  }
+  .cl-rec-btn.idle { background:var(--cl-accent); }
+  .cl-rec-btn.recording { background:#ff4444; animation:cl-rec-pulse 1s infinite; }
+  .cl-rec-btn.processing { background:var(--cl-bg3); }
+  @keyframes cl-rec-pulse {
+    0%,100%{box-shadow:0 0 0 0 rgba(255,68,68,0.4)}
+    50%{box-shadow:0 0 0 12px rgba(255,68,68,0)}
+  }
+  .cl-rec-timer { text-align:center; font-size:13px; color:var(--cl-muted); margin-bottom:14px; font-family:monospace; }
+  .cl-rec-result {
+    background:var(--cl-bg2); border:1px solid var(--cl-border);
+    border-radius:12px; padding:16px; margin-top:12px; display:none;
+  }
+  .cl-rec-result.visible { display:block; }
+  .cl-rec-score { font-size:42px; font-weight:900; text-align:center; margin-bottom:8px; }
+  .cl-rec-feedback { font-size:13px; color:var(--cl-text2); line-height:1.7; }
+  .cl-rec-words { display:flex; flex-wrap:wrap; gap:6px; margin-top:10px; }
+  .cl-rec-word-bad { padding:4px 10px; background:rgba(255,68,68,0.15); border:1px solid rgba(255,68,68,0.4); border-radius:20px; font-size:12px; color:#ff8888; }
+
+
+  /* ── CLAORI HISTORY ─────────────────────────────────────── */
+  .cl-sidebar-tabs {
+    display:flex; border-bottom:1px solid var(--cl-border); flex-shrink:0;
+  }
+  .cl-sidebar-tab {
+    flex:1; padding:10px 6px; font-size:12px; font-weight:700;
+    color:var(--cl-muted); background:none; border:none; cursor:pointer;
+    border-bottom:2px solid transparent; transition:all .15s; font-family:inherit;
+  }
+  .cl-sidebar-tab.active { color:var(--cl-accent); border-bottom-color:var(--cl-accent); }
+  .cl-sidebar-settings { display:none; flex-direction:column; flex:1; overflow-y:auto; }
+  .cl-sidebar-settings.active { display:flex; }
+  .cl-history-pane { display:none; flex-direction:column; flex:1; overflow-y:auto; padding:10px; }
+  .cl-history-pane.active { display:flex; }
+  .cl-hist-item {
+    padding:10px 12px; border-radius:10px; background:var(--cl-bg2);
+    border:1px solid var(--cl-border); margin-bottom:8px; cursor:pointer;
+    transition:border-color .15s;
+  }
+  .cl-hist-item:hover { border-color:var(--cl-accent); }
+  .cl-hist-title { font-size:13px; font-weight:700; color:var(--cl-text); margin-bottom:3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cl-hist-date { font-size:11px; color:var(--cl-muted); font-family:monospace; }
+  .cl-hist-del { float:left; background:none; border:none; color:var(--cl-muted); cursor:pointer; font-size:14px; padding:0 4px; }
+  .cl-hist-del:hover { color:var(--cl-red); }
+  .cl-hist-empty { text-align:center; color:var(--cl-muted); font-size:13px; padding:30px 10px; }
+
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -887,7 +965,7 @@
     <button id="multiplayer-btn" style="width:100%;margin-bottom:8px;padding:14px 16px;background:linear-gradient(135deg,rgba(233,69,96,0.12),rgba(199,54,82,0.12));border:1px solid rgba(233,69,96,0.35);border-radius:14px;color:var(--text);font-family:Heebo,sans-serif;cursor:pointer;display:flex;align-items:center;gap:12px;text-align:right">
       <span style="font-size:22px">⚔️</span>
       <div style="text-align:right;flex:1">
-        <div style="font-size:14px;font-weight:700" id="multiplayer-btn-label">Multiplayer</div>
+        <div style="font-size:14px;font-weight:700" id="multiplayer-btn-label">Play with Friends</div>
         <div style="font-size:12px;opacity:0.7" id="multiplayer-btn-sub">Challenge a friend in real-time</div>
       </div>
       <span style="margin-right:auto;font-size:18px;opacity:0.5">›</span>
@@ -952,6 +1030,97 @@
         <button id="wiz-back-3" style="width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:Heebo,sans-serif;font-size:13px;cursor:pointer">← Back</button>
         <!-- hidden start-btn for JS compatibility -->
         <button id="start-btn" style="display:none" disabled></button>
+      <!-- WIZ STEP 5 - כמות משתתפים (רק ב-שחק עם חברים) -->
+      <div id="wiz-step-5" style="display:none;padding:16px;">
+        <div style="text-align:center;margin-bottom:22px">
+          <div style="font-size:36px;margin-bottom:8px">👥</div>
+          <div style="font-size:20px;font-weight:800" id="wiz-step5-title">כמות משתתפים</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-top:4px">שלב 5 מתוך 5</div>
+        </div>
+
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:20px">
+          <!-- מספר נוכחי -->
+          <div style="text-align:center;margin-bottom:20px">
+            <div style="font-size:60px;font-weight:900;line-height:1" id="wiz-players-num">2</div>
+            <div style="font-size:14px;color:var(--text-muted);margin-top:4px" id="wiz-players-label">משתתפים</div>
+          </div>
+
+          <!-- הסלייד -->
+          <div style="position:relative;margin:0 8px">
+            <input type="range" id="wiz-players-slider"
+              min="2" max="16" step="1" value="2"
+              style="width:100%;height:6px;outline:none;cursor:pointer;-webkit-appearance:none;appearance:none;background:transparent;position:relative;z-index:2"
+              oninput="_wizUpdatePlayersSlider(this.value)">
+            <!-- רקע צבעוני -->
+            <div style="position:absolute;top:50%;left:0;right:0;height:6px;transform:translateY(-50%);border-radius:3px;overflow:hidden;z-index:1;pointer-events:none">
+              <div id="wiz-players-track-fill" style="height:100%;width:0%;transition:width 0.15s,background 0.3s"></div>
+            </div>
+            <div style="position:absolute;top:50%;left:0;right:0;height:6px;transform:translateY(-50%);border-radius:3px;background:var(--border);z-index:0;pointer-events:none"></div>
+          </div>
+
+          <!-- תוויות -->
+          <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--text-muted)">
+            <span>2</span><span>4</span><span>6</span><span>8</span><span>10</span><span>12</span><span>14</span><span>16</span>
+          </div>
+        </div>
+
+        <!-- CSS לסלייד -->
+        <style>
+          #wiz-players-slider::-webkit-slider-thumb {
+            -webkit-appearance:none; appearance:none;
+            width:24px; height:24px; border-radius:50%;
+            background:white; border:3px solid currentColor;
+            cursor:pointer; position:relative; z-index:3;
+            box-shadow:0 2px 6px rgba(0,0,0,0.3);
+          }
+          #wiz-players-slider::-moz-range-thumb {
+            width:24px; height:24px; border-radius:50%;
+            background:white; border:3px solid var(--accent);
+            cursor:pointer;
+          }
+        </style>
+
+        <button id="wiz-mp-start-btn" onclick="mpFinishWizard()"
+          style="width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:Heebo,sans-serif;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:10px">
+          🚀 צור משחק ← שחק עם חברים
+        </button>
+        <button id="wiz-back-mp" onclick="_wizStep(4)"
+          style="width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:10px;color:var(--text-muted);font-family:Heebo,sans-serif;font-size:13px;cursor:pointer">← חזור</button>
+      </div>
+
+      <!-- WIZ STEP 6 - קוד המשחק -->
+      <div id="wiz-step-6" style="display:none">
+        <div style="text-align:center;padding:30px 20px">
+          <div style="font-size:50px;margin-bottom:12px">🎮</div>
+          <div style="font-size:22px;font-weight:800;margin-bottom:6px">המשחק מוכן!</div>
+          <div style="font-size:13px;color:var(--text-muted);margin-bottom:28px">שתף את הקוד עם החברים שלך</div>
+
+          <!-- קוד גדול -->
+          <div style="background:var(--surface);border:2px solid var(--accent);border-radius:20px;padding:28px 20px;margin-bottom:20px">
+            <div style="font-size:12px;color:var(--text-muted);margin-bottom:10px;letter-spacing:1px;text-transform:uppercase">קוד המשחק</div>
+            <div id="wiz-mp-code" style="font-size:48px;font-weight:900;letter-spacing:10px;color:var(--accent);font-family:monospace;margin-bottom:16px">----</div>
+            <button onclick="_wizCopyMpCode()" style="padding:10px 24px;background:var(--accent);border:none;border-radius:10px;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">
+              📋 העתק קוד
+            </button>
+          </div>
+
+          <!-- מידע על המשחק -->
+          <div style="background:var(--surface2);border-radius:14px;padding:16px;margin-bottom:20px;text-align:right">
+            <div id="wiz-mp-game-info" style="font-size:13px;color:var(--text-muted);line-height:1.8"></div>
+          </div>
+
+          <!-- ממתין לחיבור -->
+          <div id="wiz-mp-waiting" style="font-size:14px;color:var(--text-muted);margin-bottom:20px">
+            <span style="font-size:20px">⏳</span><br>
+            ממתין לחיבור חברים...
+          </div>
+
+          <button onclick="_mpWizardMode=false;showScreen('multiplayer')" style="width:100%;padding:12px;background:transparent;border:1px solid var(--border);border-radius:12px;color:var(--text-muted);font-size:13px;cursor:pointer;font-family:inherit">
+            🏠 חזור לתפריט שחק עם חברים
+          </button>
+        </div>
+      </div>
+
       </div>
     </div>
   </div>
@@ -1030,7 +1199,7 @@
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid var(--border)">
         <button class="back-btn" id="mp-back">←</button>
         <div>
-          <div style="font-size:17px;font-weight:700" id="mp-title">⚔️ Multiplayer</div>
+          <div style="font-size:17px;font-weight:700" id="mp-title">⚔️ Play with Friends</div>
           <div style="font-size:12px;color:var(--text-muted)" id="mp-sub">Challenge a friend!</div>
         </div>
       </div>
@@ -1038,8 +1207,8 @@
       <!-- Not connected -->
       <div id="mp-connect-area">
         <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:24px">
-          <button id="mp-create-btn" style="width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:Heebo,sans-serif;font-size:16px;font-weight:700;cursor:pointer">
-            ⚔️ <span id="mp-create-label">Create Game</span>
+          <button id="mp-create-btn" onclick="mpOpenWizard()" style="width:100%;padding:16px;border-radius:14px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-family:Heebo,sans-serif;font-size:16px;font-weight:700;cursor:pointer">
+            ➕ <span id="mp-create-label">צור משחק</span>
           </button>
           <div style="text-align:center;color:var(--text-muted);font-size:13px" id="mp-or-label">— or —</div>
           <div style="display:flex;gap:8px">
@@ -1082,15 +1251,25 @@
 
       <!-- In-game -->
       <div id="mp-game" style="display:none">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding:10px 14px;background:var(--surface);border-radius:12px;border:1px solid var(--border)">
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)" id="mp-you-label2">You</div>
-            <div style="font-size:28px;font-weight:900;color:var(--accent)" id="mp-my-score2">0</div>
+        <!-- פסי התקדמות -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:14px">
+          <div style="margin-bottom:10px">
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+              <span style="font-weight:700;color:var(--accent)" id="mp-you-label2">אתה</span>
+              <span style="color:var(--text-muted)" id="mp-my-prog-text">0 / 0</span>
+            </div>
+            <div style="background:var(--border);border-radius:6px;height:10px;overflow:hidden">
+              <div id="mp-my-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:6px;transition:width 0.3s ease"></div>
+            </div>
           </div>
-          <div style="font-size:13px;color:var(--text-muted)" id="mp-progress-label">0 / 0</div>
-          <div style="text-align:center">
-            <div style="font-size:11px;color:var(--text-muted)" id="mp-opp-label2">Opponent</div>
-            <div style="font-size:28px;font-weight:900;color:var(--text-muted)" id="mp-opp-score2">0</div>
+          <div>
+            <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px">
+              <span style="font-weight:700;color:var(--text-muted)" id="mp-opp-label2">יריב</span>
+              <span style="color:var(--text-muted)" id="mp-opp-prog-text">0 / 0</span>
+            </div>
+            <div style="background:var(--border);border-radius:6px;height:10px;overflow:hidden">
+              <div id="mp-opp-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,#aaa,#ccc);border-radius:6px;transition:width 0.3s ease"></div>
+            </div>
           </div>
         </div>
         <div style="background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;margin-bottom:16px">
@@ -1254,6 +1433,14 @@
     <div class="cl-body">
       <div class="cl-backdrop hidden" id="cl-backdrop" onclick="clCloseSidebar()"></div>
       <aside class="cl-sidebar" id="cl-sidebar">
+        <!-- Tabs -->
+        <div class="cl-sidebar-tabs">
+          <button class="cl-sidebar-tab active" id="cl-tab-settings" onclick="clSwitchTab('settings')">⚙️ הגדרות</button>
+          <button class="cl-sidebar-tab" id="cl-tab-history" onclick="clSwitchTab('history')">🕐 שיחות</button>
+        </div>
+
+        <!-- Settings pane -->
+        <div class="cl-sidebar-settings active" id="cl-pane-settings">
         <div class="cl-section">
           <div class="cl-label">System Prompt</div>
           <textarea class="cl-textarea" id="cl-system-prompt">You are claori, a smart AI assistant inside a vocabulary quiz app. Always reply in the user's language. You can control the app using <action>JSON</action> tags.
@@ -1284,7 +1471,15 @@ When user asks to create a quiz, generate relevant words and use create_quiz act
           <div style="font-size:12px;color:var(--cl-muted,#888)" id="cl-words-info">0 מילים</div>
         </div>
         <div class="cl-sidebar-footer">
-          <button class="cl-clear-btn" onclick="clClearChat()">🗑 נקה שיחה</button>
+          <button class="cl-clear-btn" onclick="clSaveAndClear()">🗑 נקה שיחה</button>
+        </div>
+        </div><!-- end cl-pane-settings -->
+
+        <!-- History pane -->
+        <div class="cl-history-pane" id="cl-pane-history">
+          <div id="cl-history-list">
+            <div class="cl-hist-empty">אין שיחות שמורות</div>
+          </div>
         </div>
       </aside>
       <main class="cl-chat">
@@ -1562,8 +1757,8 @@ const UI_LANGS = [
 
 // Minimal T object — falls back to EN for unlisted langs
 const T = {
-  en:{settingsTitle:'⚙️ Settings',settingsLang:'Interface Language',settingsFeedback:'Feedback',settingsFeedbackDesc:'Send suggestions or report bugs',appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',sortLangs:'Languages',sortNewest:'Newest',sortOldest:'Oldest',sortCreator:'By Creator',loading:'Loading...',memoryPreviewLabel:'Memorize!',memoryPreviewSec:'sec',memoryPreviewTime:'Preview time:',shareSettingsTitle:'🔗 Share Settings',shareAccessLabel:'Access Level',shareAccessEdit:'Edit Mode',shareAccessEditDesc:'Recipient can edit words and take the quiz',shareAccessView:'View Only',shareAccessViewDesc:'Recipient can only take the quiz\, not edit',shareLinkLabel:'Share Link:',shareCopyBtn:'📋 Copy',shareGenerateBtn:'Generate Link 🔗',sharedQuizLoaded:'Shared quiz loaded!',viewOnlyMode:'View only — editing disabled',viewOnlyHint:'View only',shareQuizBtn:'Share Quiz',claoriNetworkError:'Network error. Check your connection and try again.',dayStreak:'day streak',dailyMissions:'Daily Missions',adMinutes:'Minutes',adHours:'Hours',adDays:'Days',adWeeks:'Weeks',adMonths:'Months',autoDeleteManual:'Manual (default)',autoDeleteEvery:'Every X time',savedSortNewest:'Newest',savedSortOldest:'Oldest',savedSortLang:'Language',savedSortName:'Name',savedSortSize:'Size',mpTitle:'⚔️ Multiplayer',mpSub:'Challenge a friend!',mpCreateLabel:'Create Game',mpJoinLabel:'Join',mpEnterCode:'Enter a valid code',mpConnected:'✅ Connected! Ready to battle?',mpNeedWords:'Add at least 3 words to play!',mpWin:'You Win! 🎉',mpLose:'You Lose...',mpTie:"It\'s a Tie!",multiplayerBtn:'Multiplayer',undone:'Undone!',redone:'Redone!',mpBtnSub:'Challenge a friend in real-time',mpDisconnected:'😢 Opponent disconnected',wipTitle:'We\'re Building This!',wipSub:'This feature is coming soon. Our team is working hard!',createQuizCard:'Create Quiz',createQuizCardSub:'Set languages, words & quiz type',savedBtnTitle:'My Quizzes',savedBtnSub:'View saved quizzes',communityBtnTitle:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',multiplayerBtnLabel:'Multiplayer',multiplayerBtnSub:'Challenge a friend in real-time',smartModeRemember:"Don't ask again"},
-  he:{settingsTitle:'⚙️ הגדרות',settingsLang:'שפת ממשק',settingsFeedback:'משוב',settingsFeedbackDesc:'שלח הצעות או דווח על באגים',appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בוחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בוחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בוחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בוחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בוחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'שגיאה — אנא נסה שוב. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש',showAllWords:'הצג הכל',collapseWords:'הצג פחות',sortLangs:'שפות',sortNewest:'חדש ראשון',sortOldest:'ישן ראשון',sortCreator:'לפי יוצר',loading:'טוען...',memoryPreviewLabel:'שנן!',memoryPreviewSec:'שנ׳',memoryPreviewTime:'זמן תצוגה:',savedManageLabel:'ניהול',savedSortTitle:'מיון וסינון',savedFilterLang:'סינון לפי שפה:',savedDeleteTitle:'מחיקה אוטומטית',savedDeleteAll:'מחק את כל הבחנים',confirmDeleteAll:'למחוק את כל הבחנים השמורים? פעולה זו אינה הפיכה.',autoDeleteManual:'ידני (ברירת מחדל)',autoDeleteEvery:'כל X זמן',savedSortNewest:'חדש ראשון',savedSortOldest:'ישן ראשון',savedSortLang:'שפה',savedSortName:'שם',savedSortSize:'גודל',shareSettingsTitle:'🔗 הגדרות שיתוף',shareAccessLabel:'רמת גישה',shareAccessEdit:'מצב עריכה',shareAccessEditDesc:'המקבל יכול לערוך מילים ולהתחיל בוחן',shareAccessView:'צפייה בלבד',shareAccessViewDesc:'המקבל יכול רק לבצע את הבוחן\, לא לערוך',shareLinkLabel:'קישור לשיתוף:',shareCopyBtn:'📋 העתק',shareGenerateBtn:'צור קישור 🔗',sharedQuizLoaded:'בוחן משותף נטען!',viewOnlyMode:'צפייה בלבד — עריכה מושבתת',viewOnlyHint:'צפייה בלבד',shareQuizBtn:'שתף בוחן',claoriNetworkError:'שגיאת רשת. בדוק את החיבור ונסה שוב.',dayStreak:'ימים ברצף',dailyMissions:'משימות יומיות',adMinutes:'דקות',adHours:'שעות',adDays:'ימים',adWeeks:'שבועות',adMonths:'חודשים',mpTitle:'⚔️ משחק מרובה שחקנים',mpSub:'אתגר חבר!',mpCreateLabel:'צור משחק',mpJoinLabel:'הצטרף',mpEnterCode:'הכנס קוד תקין',mpConnected:'✅ מחובר! מוכן לקרב?',mpNeedWords:'הוסף לפחות 3 מילים למשחק!',mpWin:'ניצחת! 🎉',mpLose:'הפסדת...',mpTie:'תיקו!',multiplayerBtn:'מרובה שחקנים',undone:'בוטל!',redone:'בוצע מחדש!',mpBtnSub:'אתגר חבר בזמן אמת',mpDisconnected:'😢 היריב התנתק',wipTitle:'אנחנו עובדים על זה!',wipSub:'הפיצ׳ר הזה בדרך. הצוות שלנו עובד קשה כדי להביא אותו אליך!',createQuizCard:'צור בוחן',createQuizCardSub:'הגדר שפות, מילים וסוג בוחן',savedBtnTitle:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',communityBtnTitle:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',multiplayerBtnLabel:'מרובה שחקנים',multiplayerBtnSub:'אתגר חבר בזמן אמת',smartModeRemember:'אל תשאל אותי שוב'},
+  en:{settingsTitle:'⚙️ Settings',settingsLang:'Interface Language',settingsFeedback:'Feedback',settingsFeedbackDesc:'Send suggestions or report bugs',appTitle:'Word Practice',appSubtitle:'Add words and quiz yourself',sectionLangs:'Languages',lang1:'Lang 1:',lang2:'Lang 2:',chooseLang:'Choose...',sectionWords:'Words',addWord:'+ Add word',quizDir:'Quiz direction',dir1to2:'Lang 1 → Translation',dir2to1:'Lang 2 → Translation',dirRandom:'Random',startQuiz:'Start Quiz',connectGT:'Connect translate',gtConnected:'Translate connected',gtDisconnect:'Click to disconnect',gtAuto:'Auto translation',whatIsThis:'What is this?',gtInfoTitle:'Auto-translate',gtF1t:'Instant suggestions',gtF1d:'As you type, a translation appears automatically.',gtF2t:'Wrong keyboard',gtF2d:'Typed on wrong keyboard? The app detects and suggests.',gtF3t:'Always your choice',gtF3d:'Suggestions are never applied automatically.',gtInfoConnectBtn:'Connect auto-translate',gtInfoDisconnectBtn:'Disconnect',gtSuggestionLabel:'Translation suggestion',accept:'Accept',kbSuggestionLabel:'Wrong keyboard?',kbAccept:'Fix',quizPrompt:'What is the translation of:',checkBtn:'Check ↵',nextBtn:'Next →',finishBtn:'Finish',skipBtn:'Skip',correct:'✓ Correct!',wrongPrefix:'✗ Correct answer: ',scoreOf:'/',scoreGreat:'🏆 Excellent!',scoreOk:'👍 Not bad!',scorePoor:'💪 Keep going!',resultsSubtitle:(c,t)=>`You got ${c} out of ${t} correct`,retryWrong:'🔁 Quiz on mistakes',newQuiz:'📝 New quiz (same words)',goHome:'🏠 Home',skipped:'(skipped)',youAnswered:'You answered:',uiLangTitle:'App Language',uiLangSearch:'🔍 Search...',wordPlaceholderA:'Word',wordPlaceholderB:'Translation',deleteTitle:'Delete',noResults:'No languages found',communityBtn:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',communityTitle:'Collaborative Quizzes',communitySub:'Find and publish shared quizzes',createSharedTitle:'New Shared Quiz',createBtn:'+ Create',communitySearch:'🔍 Search by topic...',sharedTopic:'Quiz Topic',topicPlaceholder:'e.g. Italian food...',sharedLangs:'Languages',sharedGTLabel:'Use auto-translation while adding words',sharedAddWord:'+ Add word',publishBtn:'🌐 Publish Quiz',publishingBtn:'Publishing...',publishedBtn:'✓ Published!',startQuizCard:'▶ Start Quiz',copyEdit:'📋 Copy & Edit',noQuizzes:'No published quizzes yet.',noQuizzesSearch:(q)=>`No quizzes found for "${q}"`,storageUnavailable:'Storage unavailable.',wordCount:(n)=>`📝 ${n} words`,savedBtn:'My Quizzes',savedBtnSub:'View saved quizzes',savedTitle:'📚 My Quizzes',savedSub:'Auto-saved quizzes',backToSaved:'📚 My Quizzes',smartModeTitle:'Smart Mode',smartModeDesc:'Enable smarter answer checking:',smartModeTypo:'<strong>Typos</strong> — 1-2 wrong characters still counts as correct',smartModeSyn:'<strong>Same meaning</strong> — synonyms accepted',smartModeNo:'No, regular',smartModeYes:'Yes, smart 🧠',claoriError:'Something went wrong. Try again.',claoriOverloaded:'Busy — try again.',claoriRateLimit:'Too many messages, please wait.',shareTitle:'Share',shareWhatsApp:'Send via WhatsApp',shareEmail:'Send by Email',shareCopy:'Copy',shareCopied:'Copied!',shareQuizTitle:'Quiz',shareQuizMsg:'Practice this quiz with me! 📚',shareBtn:'Share',shareResultMsg:'I scored {pct}% on my vocabulary quiz! ({correct}/{total})',feedbackTitle:'💬 Send Feedback',feedbackPlaceholder:'What do you think? Suggestions, bugs, ideas...',feedbackSend:'Send ✉️',feedbackThanks:'🎉 Thank you for your support!',feedbackBtn:'Feedback',feedbackDesc:'Got a suggestion, found a bug, or just want to say hi? We\'d love to hear from you!',feedbackOpenBtn:'Open Feedback Form →',feedbackNote:'Opens in a new tab • Takes 1 minute',showAllWords:'Show all',collapseWords:'Show less',sortLangs:'Languages',sortNewest:'Newest',sortOldest:'Oldest',sortCreator:'By Creator',loading:'Loading...',memoryPreviewLabel:'Memorize!',memoryPreviewSec:'sec',memoryPreviewTime:'Preview time:',shareSettingsTitle:'🔗 Share Settings',shareAccessLabel:'Access Level',shareAccessEdit:'Edit Mode',shareAccessEditDesc:'Recipient can edit words and take the quiz',shareAccessView:'View Only',shareAccessViewDesc:'Recipient can only take the quiz\, not edit',shareLinkLabel:'Share Link:',shareCopyBtn:'📋 Copy',shareGenerateBtn:'Generate Link 🔗',sharedQuizLoaded:'Shared quiz loaded!',viewOnlyMode:'View only — editing disabled',viewOnlyHint:'View only',shareQuizBtn:'Share Quiz',claoriNetworkError:'Network error. Check your connection and try again.',dayStreak:'day streak',dailyMissions:'Daily Missions',adMinutes:'Minutes',adHours:'Hours',adDays:'Days',adWeeks:'Weeks',adMonths:'Months',autoDeleteManual:'Manual (default)',autoDeleteEvery:'Every X time',savedSortNewest:'Newest',savedSortOldest:'Oldest',savedSortLang:'Language',savedSortName:'Name',savedSortSize:'Size',mpTitle:'⚔️ Play with Friends',mpSub:'Challenge a friend!',mpCreateLabel:'Create Game',mpJoinLabel:'Join',mpEnterCode:'Enter a valid code',mpConnected:'✅ Connected! Ready to battle?',mpNeedWords:'Add at least 3 words to play!',mpWin:'You Win! 🎉',mpLose:'You Lose...',mpTie:"It\'s a Tie!",multiplayerBtn:'Play with Friends',undone:'Undone!',redone:'Redone!',mpBtnSub:'Challenge a friend in real-time',mpDisconnected:'😢 Opponent disconnected',wipTitle:'We\'re Building This!',wipSub:'This feature is coming soon. Our team is working hard!',createQuizCard:'Create Quiz',createQuizCardSub:'Set languages, words & quiz type',savedBtnTitle:'My Quizzes',savedBtnSub:'View saved quizzes',communityBtnTitle:'Collaborative Quiz',communityBtnSub:'Browse & publish shared quizzes',multiplayerBtnLabel:'Play with Friends',multiplayerBtnSub:'Challenge a friend in real-time',smartModeRemember:"Don't ask again"},
+  he:{settingsTitle:'⚙️ הגדרות',settingsLang:'שפת ממשק',settingsFeedback:'משוב',settingsFeedbackDesc:'שלח הצעות או דווח על באגים',appTitle:'תרגול מילים',appSubtitle:'הוסף מילים ותרגולן בבחן',sectionLangs:'שפות',lang1:'שפה 1:',lang2:'שפה 2:',chooseLang:'בחר...',sectionWords:'מילים',addWord:'+ הוסף מילה',quizDir:'כיוון הבחן',dir1to2:'שפה 1 → תרגום',dir2to1:'שפה 2 → תרגום',dirRandom:'אקראי',startQuiz:'התחל בוחן',connectGT:'חבר תרגום',gtConnected:'תרגום מחובר',gtDisconnect:'לחץ לנתק',gtAuto:'תרגום אוטומטי',whatIsThis:'מה זה?',gtInfoTitle:'תרגום אוטומטי',gtF1t:'הצעות מיידיות',gtF1d:'בזמן הקלדה, תרגום מוצע אוטומטית.',gtF2t:'מקלדת שגויה',gtF2d:'הקלדת על מקלדת לא נכונה? האפליקציה מזהה ומציעה תיקון.',gtF3t:'תמיד בחירתך',gtF3d:'הצעות לא מוחלות אוטומטית.',gtInfoConnectBtn:'חבר תרגום אוטומטי',gtInfoDisconnectBtn:'נתק',gtSuggestionLabel:'הצעת תרגום',accept:'אשר',kbSuggestionLabel:'מקלדת שגויה?',kbAccept:'תקן',quizPrompt:'מה התרגום של:',checkBtn:'בדוק ↵',nextBtn:'הבא →',finishBtn:'סיים',skipBtn:'דלג',correct:'✓ נכון!',wrongPrefix:'✗ התשובה הנכונה: ',scoreOf:'מתוך',scoreGreat:'🏆 מצוין!',scoreOk:'👍 לא רע!',scorePoor:'💪 אפשר עוד!',resultsSubtitle:(c,t)=>`ענית נכון על ${c} מתוך ${t}`,retryWrong:'🔁 בחן על מה שטעיתי',newQuiz:'📝 בחן נוסף (אותן מילים)',goHome:'🏠 חזור למסך הבית',skipped:'(דולג)',youAnswered:'ענית:',uiLangTitle:'שפת האפליקציה',uiLangSearch:'🔍 חפש...',wordPlaceholderA:'מילה',wordPlaceholderB:'תרגום',deleteTitle:'מחק',noResults:'לא נמצאו שפות',communityBtn:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',communityTitle:'בוחנים שיתופיים',communitySub:'מצא ופרסם בחנים משותפים',createSharedTitle:'בוחן שיתופי חדש',createBtn:'+ צור',communitySearch:'🔍 חפש לפי נושא...',sharedTopic:'נושא הבחן',topicPlaceholder:'לדוגמה: אוכל איטלקי...',sharedLangs:'שפות',sharedGTLabel:'השתמש בתרגום אוטומטי בזמן הוספת מילים',sharedAddWord:'+ הוסף מילה',publishBtn:'🌐 פרסם בוחן',publishingBtn:'מפרסם...',publishedBtn:'✓ פורסם!',startQuizCard:'▶ התחל בוחן',copyEdit:'📋 העתק וערוך',noQuizzes:'אין עדיין בחנים מפורסמים.',noQuizzesSearch:(q)=>`לא נמצאו בחנים עבור "${q}"`,storageUnavailable:'האחסון אינו זמין.',wordCount:(n)=>`📝 ${n} מילים`,savedBtn:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',savedTitle:'📚 הבחנים שלי',savedSub:'בחנים שנשמרו אוטומטית',backToSaved:'📚 הבחנים שלי',smartModeTitle:'מצב חכם',smartModeDesc:'הפעל בדיקת תשובות חכמה יותר:',smartModeTypo:'<strong>שגיאות כתיב</strong> — 1-2 תווים שגויים עדיין נספרים כנכון',smartModeSyn:'<strong>אותה משמעות</strong> — מילים נרדפות מתקבלות',smartModeNo:'לא, רגיל',smartModeYes:'כן, חכם 🧠',tfTrue:'✓ נכון',tfFalse:'✗ לא נכון',claoriError:'שגיאה — אנא נסה שוב. נסה שוב.',claoriOverloaded:'אני עסוק כרגע — נסה שוב עוד רגע.',claoriRateLimit:'יותר מדי הודעות, המתן רגע.',shareTitle:'שיתוף',shareWhatsApp:'שלח בוואטסאפ',shareEmail:'שלח באימייל',shareCopy:'העתק',shareCopied:'הועתק!',shareQuizTitle:'בחן',shareQuizMsg:'בוא נתרגל יחד! 📚',shareBtn:'שתף',prevBtn:'הקודם',subWriting:'כתיבה',subMCQ:'אמריקאי',subTF:'אמת / שקר',claoriSub:'העוזר שלך לתרגול מילים',claoriInputPlaceholder:'שאל אותי משהו...',shareResultMsg:'קיבלתי {pct}% בבחן המילים! ({correct}/{total})',feedbackTitle:'💬 שלח משוב',feedbackPlaceholder:'מה אתה חושב? הצעות, באגים, רעיונות...',feedbackSend:'שלח ✉️',feedbackThanks:'🎉 תודה על התמיכה!',feedbackBtn:'ביקורת',feedbackDesc:'יש לך הצעה, מצאת באג, או פשוט רוצה להגיד שלום? נשמח לשמוע!',feedbackOpenBtn:'פתח טופס משוב →',feedbackNote:'נפתח בטאב חדש',showAllWords:'הצג הכל',collapseWords:'הצג פחות',sortLangs:'שפות',sortNewest:'חדש ראשון',sortOldest:'ישן ראשון',sortCreator:'לפי יוצר',loading:'טוען...',memoryPreviewLabel:'שנן!',memoryPreviewSec:'שנ׳',memoryPreviewTime:'זמן תצוגה:',savedManageLabel:'ניהול',savedSortTitle:'מיון וסינון',savedFilterLang:'סינון לפי שפה:',savedDeleteTitle:'מחיקה אוטומטית',savedDeleteAll:'מחק את כל הבחנים',confirmDeleteAll:'למחוק את כל הבחנים השמורים? פעולה זו אינה הפיכה.',autoDeleteManual:'ידני (ברירת מחדל)',autoDeleteEvery:'כל X זמן',savedSortNewest:'חדש ראשון',savedSortOldest:'ישן ראשון',savedSortLang:'שפה',savedSortName:'שם',savedSortSize:'גודל',shareSettingsTitle:'🔗 הגדרות שיתוף',shareAccessLabel:'רמת גישה',shareAccessEdit:'מצב עריכה',shareAccessEditDesc:'המקבל יכול לערוך מילים ולהתחיל בוחן',shareAccessView:'צפייה בלבד',shareAccessViewDesc:'המקבל יכול רק לבצע את הבוחן\, לא לערוך',shareLinkLabel:'קישור לשיתוף:',shareCopyBtn:'📋 העתק',shareGenerateBtn:'צור קישור 🔗',sharedQuizLoaded:'בוחן משותף נטען!',viewOnlyMode:'צפייה בלבד — עריכה מושבתת',viewOnlyHint:'צפייה בלבד',shareQuizBtn:'שתף בוחן',claoriNetworkError:'שגיאת רשת. בדוק את החיבור ונסה שוב.',dayStreak:'ימים ברצף',dailyMissions:'משימות יומיות',adMinutes:'דקות',adHours:'שעות',adDays:'ימים',adWeeks:'שבועות',adMonths:'חודשים',mpTitle:'⚔️ משחק שחק עם חברים',mpSub:'אתגר חבר!',mpCreateLabel:'צור משחק',mpJoinLabel:'הצטרף',mpEnterCode:'הכנס קוד תקין',mpConnected:'✅ מחובר! מוכן לקרב?',mpNeedWords:'הוסף לפחות 3 מילים למשחק!',mpWin:'ניצחת! 🎉',mpLose:'הפסדת...',mpTie:'תיקו!',multiplayerBtn:'שחק עם חברים',undone:'בוטל!',redone:'בוצע מחדש!',mpBtnSub:'אתגר חבר בזמן אמת',mpDisconnected:'😢 היריב התנתק',wipTitle:'אנחנו עובדים על זה!',wipSub:'הפיצ׳ר הזה בדרך. הצוות שלנו עובד קשה כדי להביא אותו אליך!',createQuizCard:'צור בוחן',createQuizCardSub:'הגדר שפות, מילים וסוג בוחן',savedBtnTitle:'הבחנים שלי',savedBtnSub:'צפה בבחנים שמורים',communityBtnTitle:'בוחן שיתופי',communityBtnSub:'עיין ופרסם בחנים משותפים',multiplayerBtnLabel:'שחק עם חברים',multiplayerBtnSub:'אתגר חבר בזמן אמת',smartModeRemember:'אל תשאל אותי שוב'},
   ar:{settingsTitle:'⚙️ الإعدادات',settingsLang:'لغة الواجهة',settingsFeedback:'ملاحظات',settingsFeedbackDesc:'أرسل اقتراحات أو أبلغ عن الأخطاء',appTitle:'تدريب المفردات',appSubtitle:'أضف كلمات واختبر نفسك',sectionLangs:'اللغات',lang1:'ل 1:',lang2:'ل 2:',chooseLang:'اختر...',sectionWords:'الكلمات',addWord:'+ أضف كلمة',quizDir:'اتجاه الاختبار',dir1to2:'ل1 → ترجمة',dir2to1:'ل2 → ترجمة',dirRandom:'عشوائي',startQuiz:'ابدأ الاختبار',connectGT:'ربط الترجمة',gtConnected:'الترجمة مرتبطة',gtDisconnect:'انقر لقطع الاتصال',gtAuto:'ترجمة تلقائية',whatIsThis:'ما هذا؟',gtInfoTitle:'الترجمة التلقائية',gtF1t:'اقتراحات فورية',gtF1d:'أثناء الكتابة، تظهر الترجمة تلقائياً.',gtF2t:'لوحة مفاتيح خاطئة',gtF2d:'كتبت على لوحة مفاتيح خاطئة؟ التطبيق يكتشف ويقترح.',gtF3t:'دائماً خيارك',gtF3d:'لا تُطبَّق الاقتراحات تلقائياً.',gtInfoConnectBtn:'ربط الترجمة التلقائية',gtInfoDisconnectBtn:'قطع الاتصال',gtSuggestionLabel:'اقتراح ترجمة',accept:'قبول',kbSuggestionLabel:'لوحة مفاتيح خاطئة؟',kbAccept:'تصحيح',quizPrompt:'ما ترجمة:',checkBtn:'تحقق ↵',nextBtn:'التالي →',finishBtn:'إنهاء',skipBtn:'تخطى',correct:'✓ صحيح!',wrongPrefix:'✗ الإجابة الصحيحة: ',scoreOf:'/',scoreGreat:'?? ممتاز!',scoreOk:'?? لا بأس!',scorePoor:'?? استمر!',resultsSubtitle:(c,t)=>`أجبت صحيحاً على ${c} من ${t}`,retryWrong:'?? اختبار الأخطاء',newQuiz:'?? اختبار جديد',goHome:'?? الرئيسية',skipped:'(تخطى)',youAnswered:'أجبت:',uiLangTitle:'لغة التطبيق',uiLangSearch:'?? بحث...',wordPlaceholderA:'كلمة',wordPlaceholderB:'ترجمة',deleteTitle:'حذف',noResults:'لم تُوجد لغات',communityBtn:'اختبار تعاوني',communityBtnSub:'تصفح وانشر اختبارات مشتركة',communityTitle:'الاختبارات التعاونية',communitySub:'ابحث وانشر اختبارات مشتركة',createSharedTitle:'اختبار مشترك جديد',createBtn:'+ إنشاء',communitySearch:'?? بحث بالموضوع...',sharedTopic:'موضوع الاختبار',topicPlaceholder:'مثال: طعام إيطالي...',sharedLangs:'اللغات',sharedGTLabel:'استخدم الترجمة التلقائية عند إضافة الكلمات',sharedAddWord:'+ أضف كلمة',publishBtn:'?? نشر الاختبار',publishingBtn:'جاري النشر...',publishedBtn:'✓ تم النشر!',startQuizCard:'▶ ابدأ الاختبار',copyEdit:'?? نسخ وتعديل',noQuizzes:'لا توجد اختبارات منشورة بعد.',noQuizzesSearch:(q)=>`لم تُوجد اختبارات لـ "${q}"`,storageUnavailable:'التخزين غير متاح.',wordCount:(n)=>`?? ${n} كلمات`,savedBtn:'اختباراتي',savedBtnSub:'عرض الاختبارات المحفوظة',savedTitle:'?? اختباراتي',savedSub:'اختبارات محفوظة تلقائياً',backToSaved:'?? اختباراتي',smartModeTitle:'?? الوضع الذكي',smartModeDesc:'تفعيل فحص إجابات أذكى:',smartModeTypo:'<strong>أخطاء إملائية</strong> — 1-2 حروف خاطئة لا تزال تُعد صحيحة',smartModeSyn:'<strong>نفس المعنى</strong> — المرادفات والترجمات المكافئة مقبولة',smartModeNo:'لا، عادي',smartModeYes:'نعم، ذكي ??',feedbackBtn:'ملاحظات',feedbackDesc:'لديك اقتراح أو وجدت خطأ؟ يسعدنا سماعك!',feedbackOpenBtn:'فتح نموذج الملاحظات →',feedbackNote:'يفتح في تبويب جديد',smartModeRemember:'لا تسألني مرة أخرى'},
   fr:{settingsTitle:'⚙️ Paramètres',settingsLang:'Langue de l\'interface',settingsFeedback:'Commentaires',settingsFeedbackDesc:'Envoyer des suggestions ou signaler des bugs',appTitle:'Entraînement vocabulaire',appSubtitle:'Ajoutez des mots et testez-vous',sectionLangs:'Langues',lang1:'L 1:',lang2:'L 2:',chooseLang:'Choisir...',sectionWords:'Mots',addWord:'+ Ajouter un mot',quizDir:'Direction du quiz',dir1to2:'L1 → Traduction',dir2to1:'L2 → Traduction',dirRandom:'Aléatoire',startQuiz:'Commencer le quiz',connectGT:'Connecter la traduction',gtConnected:'Traduction connectée',gtDisconnect:'Cliquer pour déconnecter',gtAuto:'Traduction automatique',whatIsThis:'C\'est quoi ?',gtInfoTitle:'Traduction automatique',gtF1t:'Suggestions instantanées',gtF1d:'En tapant, une traduction apparaît automatiquement.',gtF2t:'Mauvais clavier',gtF2d:'Tapé sur le mauvais clavier ? L\'app détecte et suggère.',gtF3t:'Toujours votre choix',gtF3d:'Les suggestions ne s\'appliquent jamais automatiquement.',gtInfoConnectBtn:'Connecter la traduction auto',gtInfoDisconnectBtn:'Déconnecter',gtSuggestionLabel:'Suggestion de traduction',accept:'Accepter',kbSuggestionLabel:'Mauvais clavier ?',kbAccept:'Corriger',quizPrompt:'Quelle est la traduction de :',checkBtn:'Vérifier ↵',nextBtn:'Suivant →',finishBtn:'Terminer',skipBtn:'Passer',correct:'✓ Correct !',wrongPrefix:'✗ Bonne réponse : ',scoreOf:'/',scoreGreat:'?? Excellent !',scoreOk:'?? Pas mal !',scorePoor:'?? Continuez !',resultsSubtitle:(c,t)=>`Vous avez eu ${c} sur ${t} correct`,retryWrong:'?? Revoir les erreurs',newQuiz:'?? Nouveau quiz',goHome:'?? Accueil',skipped:'(passé)',youAnswered:'Votre réponse :',uiLangTitle:'Langue de l\'app',uiLangSearch:'?? Rechercher...',wordPlaceholderA:'Mot',wordPlaceholderB:'Traduction',deleteTitle:'Supprimer',noResults:'Aucune langue trouvée',communityBtn:'Quiz collaboratif',communityBtnSub:'Parcourir et publier des quiz partagés',communityTitle:'Quiz collaboratifs',communitySub:'Trouver et publier des quiz partagés',createSharedTitle:'Nouveau quiz partagé',createBtn:'+ Créer',communitySearch:'?? Rechercher par thème...',sharedTopic:'Thème du quiz',topicPlaceholder:'ex. cuisine italienne...',sharedLangs:'Langues',sharedGTLabel:'Utiliser la traduction auto en ajoutant des mots',sharedAddWord:'+ Ajouter un mot',publishBtn:'?? Publier le quiz',publishingBtn:'Publication...',publishedBtn:'✓ Publié !',startQuizCard:'▶ Commencer',copyEdit:'?? Copier et modifier',noQuizzes:'Aucun quiz publié pour l\'instant.',noQuizzesSearch:(q)=>`Aucun quiz trouvé pour "${q}"`,storageUnavailable:'Stockage indisponible.',wordCount:(n)=>`?? ${n} mots`,savedBtn:'Mes quiz',savedBtnSub:'Voir les quiz sauvegardés',savedTitle:'?? Mes quiz',savedSub:'Quiz sauvegardés automatiquement',backToSaved:'?? Mes quiz',smartModeTitle:'?? Mode intelligent',smartModeDesc:'Activer une vérification des réponses plus intelligente :',smartModeTypo:'<strong>Fautes de frappe</strong> — 1-2 caractères erronés comptent quand même',smartModeSyn:'<strong>Même sens</strong> — synonymes et traductions équivalentes acceptés',smartModeNo:'Non, normal',smartModeYes:'Oui, intelligent ??',feedbackBtn:'Avis',feedbackDesc:'Une suggestion ou un bug ? Nous adorerions vous entendre!',feedbackOpenBtn:'Ouvrir le formulaire →',feedbackNote:'S\'ouvre dans un nouvel onglet',smartModeRemember:'Ne plus demander'},
   es:{settingsTitle:'⚙️ Configuración',settingsLang:'Idioma de la interfaz',settingsFeedback:'Comentarios',settingsFeedbackDesc:'Enviar sugerencias o reportar errores',appTitle:'Práctica de vocabulario',appSubtitle:'Agrega palabras y ponte a prueba',sectionLangs:'Idiomas',lang1:'Id 1:',lang2:'Id 2:',chooseLang:'Elegir...',sectionWords:'Palabras',addWord:'+ Agregar palabra',quizDir:'Dirección del quiz',dir1to2:'Id1 → Traducción',dir2to1:'Id2 → Traducción',dirRandom:'Aleatorio',startQuiz:'Iniciar quiz',connectGT:'Conectar traducción',gtConnected:'Traducción conectada',gtDisconnect:'Clic para desconectar',gtAuto:'Traducción automática',whatIsThis:'¿Qué es esto?',gtInfoTitle:'Traducción automática',gtF1t:'Sugerencias instantáneas',gtF1d:'Al escribir, una traducción aparece automáticamente.',gtF2t:'Teclado equivocado',gtF2d:'¿Escribiste en el teclado equivocado? La app detecta y sugiere.',gtF3t:'Siempre tu elección',gtF3d:'Las sugerencias nunca se aplican automáticamente.',gtInfoConnectBtn:'Conectar traducción auto',gtInfoDisconnectBtn:'Desconectar',gtSuggestionLabel:'Sugerencia de traducción',accept:'Aceptar',kbSuggestionLabel:'¿Teclado equivocado?',kbAccept:'Corregir',quizPrompt:'¿Cuál es la traducción de:',checkBtn:'Verificar ↵',nextBtn:'Siguiente →',finishBtn:'Finalizar',skipBtn:'Saltar',correct:'✓ ¡Correcto!',wrongPrefix:'✗ Respuesta correcta: ',scoreOf:'/',scoreGreat:'?? ¡Excelente!',scoreOk:'?? ¡No está mal!',scorePoor:'?? ¡Sigue intentando!',resultsSubtitle:(c,t)=>`Acertaste ${c} de ${t}`,retryWrong:'?? Repasar errores',newQuiz:'?? Nuevo quiz',goHome:'?? Inicio',skipped:'(omitido)',youAnswered:'Respondiste:',uiLangTitle:'Idioma de la app',uiLangSearch:'?? Buscar...',wordPlaceholderA:'Palabra',wordPlaceholderB:'Traducción',deleteTitle:'Eliminar',noResults:'No se encontraron idiomas',communityBtn:'Quiz colaborativo',communityBtnSub:'Explorar y publicar quiz compartidos',communityTitle:'Quiz colaborativos',communitySub:'Encontrar y publicar quiz compartidos',createSharedTitle:'Nuevo quiz compartido',createBtn:'+ Crear',communitySearch:'?? Buscar por tema...',sharedTopic:'Tema del quiz',topicPlaceholder:'ej. comida italiana...',sharedLangs:'Idiomas',sharedGTLabel:'Usar traducción auto al agregar palabras',sharedAddWord:'+ Agregar palabra',publishBtn:'?? Publicar quiz',publishingBtn:'Publicando...',publishedBtn:'✓ ¡Publicado!',startQuizCard:'▶ Iniciar',copyEdit:'?? Copiar y editar',noQuizzes:'Aún no hay quiz publicados.',noQuizzesSearch:(q)=>`No se encontraron quiz para "${q}"`,storageUnavailable:'Almacenamiento no disponible.',wordCount:(n)=>`?? ${n} palabras`,savedBtn:'Mis quiz',savedBtnSub:'Ver quiz guardados',savedTitle:'?? Mis quiz',savedSub:'Quiz guardados automáticamente',backToSaved:'?? Mis quiz',smartModeTitle:'?? Modo inteligente',smartModeDesc:'Activar verificación de respuestas más inteligente:',smartModeTypo:'<strong>Errores tipográficos</strong> — 1-2 caracteres incorrectos aún cuentan',smartModeSyn:'<strong>Mismo significado</strong> — sinónimos y traducciones equivalentes aceptados',smartModeNo:'No, normal',smartModeYes:'Sí, inteligente ??',feedbackBtn:'Opinión',feedbackDesc:'¿Tienes una sugerencia o encontraste un error? ¡Nos encantaría escucharte!',feedbackOpenBtn:'Abrir formulario →',feedbackNote:'Se abre en una nueva pestaña',smartModeRemember:'No preguntar de nuevo'},
@@ -1791,12 +1986,12 @@ function applyUILang(code) {
   // Memory preview labels in settings
   const mplEl=document.getElementById('memory-preview-label');if(mplEl)mplEl.textContent=t.memoryPreviewTime||'👁 Preview time:';
   const mpuEl=document.getElementById('memory-preview-unit');if(mpuEl)mpuEl.textContent=t.memoryPreviewSec||'sec';
-  set('multiplayer-btn-label', t.multiplayerBtn||'Multiplayer');
+  set('multiplayer-btn-label', t.multiplayerBtn||'Play with Friends');
   set('feedback-fab-label', t.feedbackBtn||'Feedback');
   set('wip-title', t.wipTitle||"We're Building This!");
   set('wip-sub', t.wipSub||'This feature is coming soon!');
   set('multiplayer-btn-sub', t.mpBtnSub||'Challenge a friend in real-time');
-  set('mp-title', t.mpTitle||'⚔️ Multiplayer');
+  set('mp-title', t.mpTitle||'⚔️ Play with Friends');
   set('mp-sub', t.mpSub||'Challenge a friend!');
   set('mp-create-label', t.mpCreateLabel||'Create Game');
   set('mp-join-label', t.mpJoinLabel||'Join');
@@ -2466,7 +2661,7 @@ function _checkMCQ(chosen, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -2513,7 +2708,7 @@ function _checkTF(userSaidTrue, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -4604,7 +4799,10 @@ function initMultiplayer() {
   _mpStatus('');
 
   // Create game
-  document.getElementById('mp-create-btn').onclick = () => _mpCreate();
+  document.getElementById('mp-create-btn').onclick = () => {
+    if(typeof mpOpenWizard === 'function') mpOpenWizard();
+    else _mpCreate();
+  };
 
   // Join game
   document.getElementById('mp-join-btn').onclick = () => {
@@ -4840,7 +5038,9 @@ function _mpShowWord() {
 function _mpCheckAnswer() {
   if (_mpIdx >= _mpWords.length) return;
   const ans = document.getElementById('mp-answer').value.trim();
-  const correct = normalize(ans) === normalize(_mpWords[_mpIdx].b);
+  const item = _mpWords[_mpIdx];
+  const allAnswers = Array.isArray(item.b) ? item.b : [item.b||''];
+  const correct = allAnswers.some(a => normalize(ans) === normalize(a));
   const fb = document.getElementById('mp-feedback');
   if (correct) {
     _mpMyScore++;
@@ -4848,16 +5048,44 @@ function _mpCheckAnswer() {
     fb.style.color = 'var(--success)';
     playCorrectSound();
     _mpSend({type:'score', score: _mpMyScore});
-    document.getElementById('mp-my-score2').textContent = _mpMyScore;
+    _mpUpdateMyProgress();
     _mpIdx++;
-    setTimeout(_mpShowWord, 500);
+    document.getElementById('mp-answer').value = '';
+    if (_mpIdx >= _mpWords.length) {
+      setTimeout(() => _mpEndGame(true), 500);
+    } else {
+      setTimeout(_mpShowWord, 500);
+    }
   } else {
-    fb.textContent = '✗ ' + (getT().wrongPrefix||'Answer: ') + _mpWords[_mpIdx].b;
+    fb.textContent = '✗ ' + (getT().wrongPrefix||'') + allAnswers[0];
     fb.style.color = 'var(--danger)';
     playWrongSound();
-    _mpIdx++;
+    // איפוס פס - חזור לתחילה
+    _mpMyScore = 0;
+    _mpIdx = 0;
+    _mpUpdateMyProgress();
+    _mpSend({type:'score', score: 0});
+    document.getElementById('mp-answer').value = '';
     setTimeout(_mpShowWord, 800);
   }
+}
+
+function _mpUpdateMyProgress() {
+  const total = _mpWords.length;
+  const pct = total > 0 ? (_mpMyScore / total * 100) : 0;
+  const bar = document.getElementById('mp-my-progress-bar');
+  const txt = document.getElementById('mp-my-prog-text');
+  if(bar) bar.style.width = pct + '%';
+  if(txt) txt.textContent = _mpMyScore + ' / ' + total;
+}
+
+function _mpUpdateOppProgress(score) {
+  const total = _mpWords.length;
+  const pct = total > 0 ? (score / total * 100) : 0;
+  const bar = document.getElementById('mp-opp-progress-bar');
+  const txt = document.getElementById('mp-opp-prog-text');
+  if(bar) bar.style.width = pct + '%';
+  if(txt) txt.textContent = score + ' / ' + total;
 }
 
 function _mpUpdateOppScore(score) {
@@ -4891,7 +5119,7 @@ function _mpDisconnect() {
 let _wizWords=[], _wizLang1=null, _wizLang2=null, _wizMode='classic', _wizSubTypes=['writing'];
 
 function _wizStep(n) {
-  [1,2,3,4].forEach(i=>{
+  [1,2,3,4,5,6].forEach(i=>{
     const el=document.getElementById('wiz-step-'+i); if(el) el.style.display=i===n?'':'none';
     const bar=document.querySelector('[data-step="'+i+'"]'); if(bar) bar.style.background=i<=n?'var(--accent)':'var(--border)';
   });
@@ -4907,14 +5135,15 @@ function _wizSetupHandlers() {
   document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
   document.getElementById('wiz-back-2').onclick=()=>{_wizStep(2); setTimeout(_wizRenderWords, 50);};
   document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
-  document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);};
+  document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(typeof _mpWizardMode!=='undefined'&&_mpWizardMode){if(smartModeSaved){_wizStep(5);_wizUpdatePlayersSlider(2);}else _wizStep(4);}else{if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);}};
   document.getElementById('wiz-back-3').onclick=()=>_wizStep(3);
-  document.getElementById('wiz-smart-yes').onclick=()=>{saveSmartModePreference(true);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
-  document.getElementById('wiz-smart-no').onclick=()=>{saveSmartModePreference(false);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;autoSaveQuiz();_doStartQuiz('normal',null);};
+  document.getElementById('wiz-smart-yes').onclick=()=>{saveSmartModePreference(true);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;if(typeof _mpWizardMode!=='undefined'&&_mpWizardMode){_wizStep(5);_wizUpdatePlayersSlider(2);}else{autoSaveQuiz();_doStartQuiz('normal',null);}};
+  document.getElementById('wiz-smart-no').onclick=()=>{saveSmartModePreference(false);if(document.getElementById('wiz-smart-remember')?.checked)smartModeSaved=true;if(typeof _mpWizardMode!=='undefined'&&_mpWizardMode){_wizStep(5);_wizUpdatePlayersSlider(2);}else{autoSaveQuiz();_doStartQuiz('normal',null);}};
   _wizCheckStep1();
 }
 
 function openCreateWizard() {
+  if(typeof _mpWizardMode !== 'undefined') _mpWizardMode = false;
   _wizWords=[{a:'',b:['']}];
   _wizLang1=selectedLang[0]||null; _wizLang2=selectedLang[1]||null;
   _wizMode='classic'; _wizSubTypes=['writing'];
@@ -5285,7 +5514,7 @@ function _mountSplitPane(which, screenName){
   const inner = document.getElementById('split-inner-'+which);
   const titleEl = document.getElementById('split-title-'+which);
   if(!inner||!titleEl) return;
-  const titles = {input:'תרגול מילים',wizard:'צור בוחן',saved:'הבחנים שלי',community:'קהילה',claori:'claori',multiplayer:'מרובה שחקנים'};
+  const titles = {input:'תרגול מילים',wizard:'צור בוחן',saved:'הבחנים שלי',community:'קהילה',claori:'claori',multiplayer:'שחק עם חברים'};
   titleEl.textContent = titles[screenName] || screenName;
   inner.innerHTML='';
   const screen = document.getElementById('screen-'+screenName);
@@ -5420,7 +5649,10 @@ async function clSend() {
   } catch(err){
     document.getElementById(typingId)?.remove();
     clRenderMsg('assistant','⚠️ '+(err.message||'שגיאה'));
-  } finally { _clStreaming=false; clSetStreamingUI(false); }
+  } finally {
+    _clStreaming=false; clSetStreamingUI(false);
+    clSaveCurrentChat();
+  }
 }
 function clStop(){ _clStreaming=false; clSetStreamingUI(false); }
 function clClearChat(){
@@ -5758,6 +5990,391 @@ function _runCustomGame(gameId, wordsArr) {
 }
 
 
+
+// ── Multiplayer Wizard ────────────────────────────────────────
+let _mpWizConfig = null; // שומר הגדרות המשחק
+
+let _mpWizardMode = false;
+function mpOpenWizard() {
+  _mpWizardMode = true;
+  _mpWizConfig = null; _mpPlayersCount = 2;
+  _wizWords = [{a:'',b:['']}];
+  _wizLang1 = selectedLang[0]||null;
+  _wizLang2 = selectedLang[1]||null;
+  _wizMode = 'classic'; _wizSubTypes = ['writing'];
+  showScreen('wizard');
+  _wizUpdateLangDisplay();
+  _wizSetupHandlers();
+
+  // הוסף שלבים 5+6 לפס ההתקדמות
+  const bars = document.querySelectorAll('.wiz-step');
+  if(bars.length === 4) {
+    [5,6].forEach(n => {
+      const b = document.createElement('div');
+      b.className = 'wiz-step'; b.dataset.step = n;
+      b.style.cssText = 'flex:1;height:4px;border-radius:2px;background:var(--border)';
+      bars[3].parentNode.appendChild(b);
+    });
+  }
+
+  _wizStep(1);
+}
+
+function mpFinishWizard() {
+  // שמור את הגדרות המשחק
+  _mpWizConfig = {
+    words: _wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&(Array.isArray(w.b)?w.b[0]||'':w.b||'').trim()))
+                   .map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x&&x.trim()):w.b})),
+    lang1: _wizLang1, lang2: _wizLang2,
+    mode: _wizMode, subTypes: quizSubTypes,
+    smartMode: smartModeEnabled,
+    maxPlayers: _mpPlayersCount || 2
+  };
+  // עדכן את words הגלובליים
+  words = _mpWizConfig.words;
+  selectedLang[0] = _wizLang1;
+  selectedLang[1] = _wizLang2;
+  // חזור למultiplayer
+  _mpWizardMode = false;
+  // שלב 6 - הצג קוד
+  _wizStep(6);
+  // צור קוד משחק
+  const code = _mpGenCode();
+  const codeEl = document.getElementById('wiz-mp-code');
+  if(codeEl) codeEl.textContent = code;
+  // עדכן מידע
+  const infoEl = document.getElementById('wiz-mp-game-info');
+  if(infoEl && _mpWizConfig) {
+    infoEl.innerHTML =
+      '📝 ' + _mpWizConfig.words.length + ' מילים<br>' +
+      '🌐 ' + (_mpWizConfig.lang1?.native||'') + ' ↔ ' + (_mpWizConfig.lang2?.native||'') + '<br>' +
+      '🎯 ' + (_mpWizConfig.mode==='classic'?'קלאסי':'מצב '+_mpWizConfig.mode) + '<br>' +
+      '👥 עד ' + (_mpWizConfig.maxPlayers||2) + ' שחקנים';
+  }
+  // שמור קוד ואתחל peer
+  _mpRoomCode = code;
+  _mpIsHost = true;
+  words = _mpWizConfig.words;
+  selectedLang[0] = _mpWizConfig.lang1;
+  selectedLang[1] = _mpWizConfig.lang2;
+  _mpInitPeer(code);
+}
+
+function _mpGenCode() {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  return Array.from({length:6}, ()=>chars[Math.floor(Math.random()*chars.length)]).join('');
+}
+
+function _wizCopyMpCode() {
+  const code = document.getElementById('wiz-mp-code')?.textContent||'';
+  navigator.clipboard?.writeText(code).then(()=>{
+    const btn = event.target;
+    btn.textContent = '✅ הועתק!';
+    setTimeout(()=>btn.textContent='📋 העתק קוד', 2000);
+  });
+}
+
+
+
+// ── Players Slider ────────────────────────────────────────────
+let _mpPlayersCount = 2;
+const SLIDER_COLORS = [
+  '#e53e3e','#dd6b20','#d69e2e','#38a169','#3182ce','#805ad5',
+  '#e53e3e','#dd6b20','#d69e2e','#38a169','#3182ce','#805ad5',
+  '#e53e3e','#dd6b20','#d69e2e'
+];
+
+function _wizUpdatePlayersSlider(val) {
+  val = parseInt(val);
+  _mpPlayersCount = val;
+  const max = 16, min = 2;
+  const pct = ((val - min) / (max - min)) * 100;
+  const color = SLIDER_COLORS[val - 2] || '#805ad5';
+
+  const numEl = document.getElementById('wiz-players-num');
+  if(numEl) numEl.textContent = val;
+  numEl.style.color = color;
+
+  const fill = document.getElementById('wiz-players-track-fill');
+  if(fill) { fill.style.width = pct + '%'; fill.style.background = color; }
+
+  const slider = document.getElementById('wiz-players-slider');
+  if(slider) slider.style.color = color;
+}
+
+
+
+// ════════════════════════════════════════════════════════════
+// RECORDING & REVIEW FEATURE
+// ════════════════════════════════════════════════════════════
+let _recMediaRecorder = null;
+let _recChunks = [];
+let _recIsRecording = false;
+let _recTimer = null;
+let _recSeconds = 0;
+
+function clOpenRecording() {
+  const panel = document.getElementById('cl-recording-panel');
+  if(panel) panel.classList.add('open');
+  clResetRecording();
+}
+function clCloseRecording() {
+  const panel = document.getElementById('cl-recording-panel');
+  if(panel) panel.classList.remove('open');
+  if(_recIsRecording) clStopRecording();
+}
+
+function clResetRecording() {
+  _recIsRecording = false; _recSeconds = 0;
+  clearInterval(_recTimer);
+  const btn = document.getElementById('cl-rec-btn');
+  const timer = document.getElementById('cl-rec-timer');
+  const result = document.getElementById('cl-rec-result');
+  if(btn) { btn.className='cl-rec-btn idle'; btn.textContent='🎙️'; }
+  if(timer) timer.textContent='לחץ להקלטה';
+  if(result) result.classList.remove('visible');
+}
+
+async function clToggleRecording() {
+  if(_recIsRecording) { clStopRecording(); return; }
+  
+  const text = document.getElementById('cl-rec-text')?.value?.trim();
+  if(!text) { alert('אנא כתוב טקסט להקלטה תחילה'); return; }
+
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+    _recChunks = [];
+    _recMediaRecorder = new MediaRecorder(stream);
+    _recMediaRecorder.ondataavailable = e => { if(e.data.size>0) _recChunks.push(e.data); };
+    _recMediaRecorder.onstop = clProcessRecording;
+    _recMediaRecorder.start();
+    _recIsRecording = true;
+    _recSeconds = 0;
+
+    const btn = document.getElementById('cl-rec-btn');
+    const timer = document.getElementById('cl-rec-timer');
+    if(btn) { btn.className='cl-rec-btn recording'; btn.textContent='⏹️'; }
+    _recTimer = setInterval(() => {
+      _recSeconds++;
+      const m = Math.floor(_recSeconds/60).toString().padStart(2,'0');
+      const s = (_recSeconds%60).toString().padStart(2,'0');
+      if(timer) timer.textContent = m+':'+s+' — מקליט...';
+      if(_recSeconds >= 120) clStopRecording(); // מקסימום 2 דקות
+    }, 1000);
+  } catch(err) {
+    alert('לא ניתן לגשת למיקרופון: ' + err.message);
+  }
+}
+
+function clStopRecording() {
+  if(!_recIsRecording) return;
+  _recIsRecording = false;
+  clearInterval(_recTimer);
+  _recMediaRecorder?.stop();
+  _recMediaRecorder?.stream?.getTracks().forEach(t=>t.stop());
+  const btn = document.getElementById('cl-rec-btn');
+  const timer = document.getElementById('cl-rec-timer');
+  if(btn) { btn.className='cl-rec-btn processing'; btn.textContent='⏳'; }
+  if(timer) timer.textContent='מנתח...';
+}
+
+async function clProcessRecording() {
+  const text = document.getElementById('cl-rec-text')?.value?.trim() || '';
+  const lang = document.getElementById('cl-rec-lang')?.value || 'he';
+  
+  // Speech-to-text עם Web Speech API
+  let transcribed = '';
+  try {
+    transcribed = await clSpeechToText(_recChunks, lang);
+  } catch(e) {
+    transcribed = '';
+  }
+
+  // שלח לGemini לביקורת
+  const langNames = {he:'Hebrew',en:'English',ar:'Arabic',fr:'French',es:'Spanish',de:'German',ru:'Russian',zh:'Chinese',ja:'Japanese',it:'Italian',pt:'Portuguese',tr:'Turkish'};
+  const langName = langNames[lang] || lang;
+  
+  const prompt = `You are a strict but encouraging pronunciation coach for ${langName}.
+
+The student was asked to read this text aloud:
+"${text}"
+
+${transcribed ? `The student's speech was transcribed as: "${transcribed}"
+
+Compare the original text to the transcription. Identify:
+- Words that were mispronounced (appear differently in transcription)
+- Words that were skipped or added
+- Overall fluency and accuracy` : `The student recorded audio. Transcription was unavailable. Analyze the text itself for pronunciation difficulty in ${langName} — identify challenging words, letter combinations, sounds.`}
+
+Give an HONEST score based on actual performance. Do NOT default to 70. Use the full range:
+- 90-100: near perfect
+- 75-89: good with minor issues  
+- 60-74: average, several mistakes
+- 40-59: significant difficulties
+- 0-39: major pronunciation issues
+
+Reply in ${lang === 'he' ? 'Hebrew' : langName} ONLY with valid JSON (no markdown):
+{"score":<number 0-100>,"feedback":"<2-3 sentences of specific feedback>","hardWords":["<word1>","<word2>"]}`;
+
+  try {
+    const res = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        contents:[{role:'user',parts:[{text:prompt}]}],
+        generationConfig:{maxOutputTokens:512,temperature:0.5}
+      })
+    });
+    const d = await res.json();
+    let t = (d?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
+    const tryParse = s => { const a=s.indexOf('{'),b=s.lastIndexOf('}'); if(a<0||b<0)return null; try{return JSON.parse(s.slice(a,b+1));}catch(e){return null;} };
+    const result = tryParse(t) || tryParse(t.replace(/```[a-z]*/g,'').replace(/```/g,'').trim());
+    
+    if(result && typeof result.score === 'number') {
+      clShowRecordingResult(result);
+    } else {
+      clShowRecordingResult({score:50, feedback:'ה-AI לא הצליח לנתח את ההקלטה. נסה שוב.', hardWords:[]});
+    }
+  } catch(err) {
+    clShowRecordingResult({score:0, feedback:'שגיאה: '+err.message, hardWords:[]});
+  }
+}
+
+function clShowRecordingResult(result) {
+  const score = result.score || 0;
+  const color = score>=80?'#3fd68a':score>=60?'#f6ad55':'#fc8181';
+  const emoji = score>=80?'🌟':score>=60?'👍':'💪';
+  
+  const scoreEl = document.getElementById('cl-rec-score');
+  const feedbackEl = document.getElementById('cl-rec-feedback');
+  const wordsEl = document.getElementById('cl-rec-bad-words');
+  const resultEl = document.getElementById('cl-rec-result');
+  const btn = document.getElementById('cl-rec-btn');
+  const timer = document.getElementById('cl-rec-timer');
+
+  if(scoreEl) { scoreEl.textContent = emoji+' '+score+'/100'; scoreEl.style.color = color; }
+  if(feedbackEl) feedbackEl.textContent = result.feedback || '';
+  if(wordsEl) {
+    wordsEl.innerHTML = '';
+    (result.hardWords||[]).forEach(w => {
+      const chip = document.createElement('div');
+      chip.className='cl-rec-word-bad'; chip.textContent=w;
+      wordsEl.appendChild(chip);
+    });
+  }
+  if(resultEl) resultEl.classList.add('visible');
+  if(btn) { btn.className='cl-rec-btn idle'; btn.textContent='🎙️'; }
+  if(timer) timer.textContent='לחץ להקלטה חדשה';
+}
+
+async function clSpeechToText(chunks, lang) {
+  // נסה Web Speech API
+  return new Promise((resolve) => {
+    if(!window.webkitSpeechRecognition && !window.SpeechRecognition) { resolve(''); return; }
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SR();
+    recognition.lang = lang+'-'+lang.toUpperCase();
+    recognition.onresult = e => resolve(e.results[0][0].transcript);
+    recognition.onerror = () => resolve('');
+    recognition.start();
+    setTimeout(()=>{ recognition.stop(); resolve(''); }, 5000);
+  });
+}
+
+
+
+// ════════════════════════════════════════════════════════════
+// CLAORI HISTORY
+// ════════════════════════════════════════════════════════════
+const CL_HIST_KEY = 'cl_chat_history';
+let _clCurrentChatId = null;
+
+function clSwitchTab(tab) {
+  ['settings','history'].forEach(t => {
+    document.getElementById('cl-tab-'+t)?.classList.toggle('active', t===tab);
+    document.getElementById('cl-pane-'+t)?.classList.toggle('active', t===tab);
+    if(t==='settings') {
+      const pane = document.getElementById('cl-pane-settings');
+      if(pane) pane.style.display = t===tab ? 'flex' : 'none';
+    }
+  });
+  if(tab==='history') clRenderHistory();
+}
+
+function clSaveCurrentChat() {
+  if(!_clMessages.length) return;
+  let history = [];
+  try { history = JSON.parse(localStorage.getItem(CL_HIST_KEY)||'[]'); } catch(e){}
+  const title = _clMessages[0]?.content?.slice(0,40) || 'שיחה';
+  const id = _clCurrentChatId || 'chat_'+Date.now();
+  _clCurrentChatId = id;
+  const existing = history.findIndex(h=>h.id===id);
+  const entry = { id, title, messages:_clMessages, date: Date.now() };
+  if(existing >= 0) history[existing] = entry;
+  else history.unshift(entry);
+  // שמור מקסימום 20 שיחות
+  history = history.slice(0,20);
+  localStorage.setItem(CL_HIST_KEY, JSON.stringify(history));
+}
+
+function clSaveAndClear() {
+  clSaveCurrentChat();
+  _clCurrentChatId = null;
+  clClearChat();
+}
+
+function clRenderHistory() {
+  const list = document.getElementById('cl-history-list');
+  if(!list) return;
+  let history = [];
+  try { history = JSON.parse(localStorage.getItem(CL_HIST_KEY)||'[]'); } catch(e){}
+  
+  if(!history.length) {
+    list.innerHTML = '<div class="cl-hist-empty">אין שיחות שמורות</div>';
+    return;
+  }
+  
+  list.innerHTML = '';
+  history.forEach(h => {
+    const item = document.createElement('div');
+    item.className = 'cl-hist-item';
+    const date = new Date(h.date);
+    const dateStr = date.toLocaleDateString('he-IL') + ' ' + date.toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'});
+    item.innerHTML = `
+      <button class="cl-hist-del" onclick="event.stopPropagation();clDeleteChat('${h.id}')" title="מחק">✕</button>
+      <div class="cl-hist-title">${h.title}</div>
+      <div class="cl-hist-date">${dateStr} · ${h.messages.length} הודעות</div>
+    `;
+    item.addEventListener('click', () => clLoadChat(h));
+    list.appendChild(item);
+  });
+}
+
+function clLoadChat(h) {
+  _clMessages = h.messages || [];
+  _clCurrentChatId = h.id;
+  const msgs = document.getElementById('cl-messages');
+  if(!msgs) return;
+  msgs.innerHTML = '';
+  _clMessages.forEach(m => clRenderMsg(m.role, m.content));
+  msgs.scrollTop = 999999;
+  clUpdateCount();
+  clSwitchTab('settings');
+  clCloseSidebar();
+}
+
+function clDeleteChat(id) {
+  let history = [];
+  try { history = JSON.parse(localStorage.getItem(CL_HIST_KEY)||'[]'); } catch(e){}
+  history = history.filter(h=>h.id!==id);
+  localStorage.setItem(CL_HIST_KEY, JSON.stringify(history));
+  if(_clCurrentChatId===id) _clCurrentChatId = null;
+  clRenderHistory();
+}
+
+// שמור אוטומטית כל הודעה
+const _origClSend = clSend;
+
+
 // ============================================================
 // FEEDBACK
 
@@ -5812,7 +6429,7 @@ function _runCustomGame(gameId, wordsArr) {
     },
     'multiplayer-btn': {
       he: 'מרובה משתתפים: הזמן חבר לאתגר בזמן אמת — כל אחד עונה על אותן מילים והמהיר/מדויק יותר מנצח.',
-      en: 'Multiplayer: challenge a friend in real-time — both answer the same words; the faster and more accurate one wins.'
+      en: 'Play with Friends: challenge a friend in real-time — both answer the same words; the faster and more accurate one wins.'
     }
   };
 
@@ -5968,6 +6585,14 @@ function _runCustomGame(gameId, wordsArr) {
         </div>
         <span style="color:var(--cl-muted);font-size:18px">›</span>
       </div>
+      <div class="cl-feature-card" onclick="clCloseFeaturesSheet();clOpenRecording()">
+        <div class="cl-feature-icon">🎙️</div>
+        <div class="cl-feature-info">
+          <div class="cl-feature-name">הקלטה וביקורת <span class="cl-beta-badge">BETA</span></div>
+          <div class="cl-feature-desc">קרא טקסט בקול — AI יעריך את ההגייה שלך</div>
+        </div>
+        <span style="color:var(--cl-muted);font-size:18px">›</span>
+      </div>
     </div>
   </div>
 
@@ -6017,6 +6642,46 @@ function _runCustomGame(gameId, wordsArr) {
     </div>
   </div>
 
+
+
+  <!-- RECORDING PANEL -->
+  <div id="cl-recording-panel">
+    <div class="cl-rec-header">
+      <div class="cl-rec-title">🎙️ הקלטה וביקורת</div>
+      <button class="cl-hbtn" onclick="clCloseRecording()">✕</button>
+    </div>
+
+    <div class="cl-gc-label">הטקסט שתקרא</div>
+    <textarea class="cl-rec-textarea" id="cl-rec-text" placeholder="כתוב כאן את הטקסט שתרצה לקרוא בקול..."></textarea>
+
+    <div class="cl-rec-lang-row">
+      <div class="cl-gc-label" style="margin:0;white-space:nowrap">שפה:</div>
+      <select class="cl-rec-lang-select" id="cl-rec-lang">
+        <option value="he">עברית</option>
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+        <option value="fr">Français</option>
+        <option value="es">Español</option>
+        <option value="de">Deutsch</option>
+        <option value="ru">Русский</option>
+        <option value="zh">中文</option>
+        <option value="ja">日本語</option>
+        <option value="it">Italiano</option>
+        <option value="pt">Português</option>
+        <option value="tr">Türkçe</option>
+      </select>
+    </div>
+
+    <button class="cl-rec-btn idle" id="cl-rec-btn" onclick="clToggleRecording()">🎙️</button>
+    <div class="cl-rec-timer" id="cl-rec-timer">לחץ להקלטה</div>
+
+    <div class="cl-rec-result" id="cl-rec-result">
+      <div class="cl-rec-score" id="cl-rec-score">--</div>
+      <div class="cl-rec-feedback" id="cl-rec-feedback"></div>
+      <div class="cl-rec-words" id="cl-rec-bad-words"></div>
+      <button onclick="clResetRecording()" style="width:100%;margin-top:12px;padding:10px;background:var(--cl-accent);border:none;border-radius:8px;color:white;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit">🔄 נסה שוב</button>
+    </div>
+  </div>
 
 </body>
 </html>
