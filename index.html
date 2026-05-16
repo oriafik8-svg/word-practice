@@ -5541,6 +5541,7 @@ Reply ONLY the JSON object, nothing else:`;
       body:JSON.stringify({contents:[{role:'user',parts:[{text:metaPrompt}]}],generationConfig:{maxOutputTokens:512,temperature:0.7}})
     });
     const d1 = await res1.json();
+    console.log('[GC] full API response:', JSON.stringify(d1).slice(0,500));
     let t1 = (d1?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
     // חלץ JSON מתוך הטקסט - תמיכה ב-nested
     let meta;
