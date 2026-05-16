@@ -366,99 +366,6 @@
   .flip-help.dark{background:var(--surface);border-color:var(--border);color:var(--text-muted);}
   .flip-help.dark:hover{background:var(--surface2);color:var(--text);}
 
-
-  /* ══ CLAORI DARK UI ══════════════════════════════════════ */
-  :root {
-    --cl-bg0:#0d0f14; --cl-bg1:#13161e; --cl-bg2:#1a1e28; --cl-bg3:#222736;
-    --cl-border:#2e3450; --cl-border-b:#3d4a6a;
-    --cl-text:#e8ecf4; --cl-text2:#8a93b0; --cl-muted:#4e5878;
-    --cl-accent:#7c6aff; --cl-accent-dim:#4e3fad; --cl-accent-glow:rgba(124,106,255,0.15);
-    --cl-accent2:#00d4aa; --cl-user-bg:#1e2540; --cl-ai-bg:#161a26;
-    --cl-red:#ff5e6a; --cl-green:#3fd68a; --cl-header-h:52px;
-  }
-  #screen-claori { background:var(--cl-bg0); padding:0!important; overflow:hidden; }
-  .cl-root { display:flex; flex-direction:column; height:100%; background:var(--cl-bg0); overflow:hidden; }
-  .cl-header { height:var(--cl-header-h); background:var(--cl-bg1); border-bottom:1px solid var(--cl-border); display:flex; align-items:center; gap:8px; padding:0 14px; flex-shrink:0; }
-  .cl-logo { font-weight:800; font-size:17px; flex:1; background:linear-gradient(135deg,#7c6aff,#00d4aa); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
-  .cl-badge { font-size:11px; padding:3px 8px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:4px; color:var(--cl-text2); font-family:monospace; }
-  .cl-hbtn { width:34px; height:34px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:8px; color:var(--cl-text2); cursor:pointer; font-size:15px; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:all .15s; }
-  .cl-hbtn:hover { background:var(--cl-bg3); color:var(--cl-text); }
-  .cl-mobile-only { display:none; } .cl-desktop-only { display:flex; }
-  .cl-body { display:flex; flex:1; overflow:hidden; position:relative; }
-  .cl-backdrop { display:none; }
-  .cl-backdrop:not(.hidden) { display:block; position:fixed; inset:var(--cl-header-h) 0 0 0; background:rgba(0,0,0,.5); z-index:199; }
-  .cl-sidebar { width:280px; background:var(--cl-bg1); border-left:1px solid var(--cl-border); display:flex; flex-direction:column; flex-shrink:0; overflow-y:auto; }
-  [dir="rtl"] .cl-sidebar { border-left:none; border-right:1px solid var(--cl-border); }
-  .cl-section { padding:14px 16px; border-bottom:1px solid var(--cl-border); }
-  .cl-label { font-size:10px; text-transform:uppercase; letter-spacing:1.5px; color:var(--cl-muted); margin-bottom:10px; font-family:monospace; }
-  .cl-textarea { width:100%; padding:9px 10px; background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:6px; color:var(--cl-text); font-size:12.5px; outline:none; resize:vertical; min-height:90px; line-height:1.5; font-family:inherit; transition:border-color .15s; }
-  .cl-textarea:focus { border-color:var(--cl-accent); }
-  .cl-param { display:flex; justify-content:space-between; font-size:12px; color:var(--cl-text2); margin-bottom:6px; }
-  .cl-val { font-family:monospace; font-size:11px; color:var(--cl-accent); }
-  .cl-slider { width:100%; accent-color:var(--cl-accent); cursor:pointer; }
-  .cl-sidebar-footer { padding:14px 16px; margin-top:auto; border-top:1px solid var(--cl-border); }
-  .cl-clear-btn { width:100%; padding:9px; background:transparent; border:1px solid var(--cl-border); border-radius:6px; color:var(--cl-text2); font-size:13px; cursor:pointer; font-family:inherit; transition:all .15s; }
-  .cl-clear-btn:hover { background:rgba(255,94,106,.08); border-color:var(--cl-red); color:var(--cl-red); }
-  .cl-chat { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
-  .cl-messages { flex:1; overflow-y:auto; padding:20px 16px; display:flex; flex-direction:column; gap:8px; scroll-behavior:smooth; }
-  .cl-messages::-webkit-scrollbar { width:4px; } .cl-messages::-webkit-scrollbar-thumb { background:var(--cl-border); border-radius:2px; }
-  .cl-welcome { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; gap:14px; text-align:center; padding:40px 20px; }
-  .cl-welcome-icon { font-size:42px; font-weight:800; background:linear-gradient(135deg,#7c6aff,#00d4aa); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; animation:cl-pulse 3s ease-in-out infinite; }
-  @keyframes cl-pulse { 0%,100%{filter:drop-shadow(0 0 16px rgba(124,106,255,0.3))} 50%{filter:drop-shadow(0 0 32px rgba(124,106,255,0.7))} }
-  .cl-welcome-title { font-size:24px; font-weight:800; color:var(--cl-text); margin:0; }
-  .cl-welcome-sub { font-size:14px; color:var(--cl-text2); margin:0; max-width:300px; line-height:1.6; }
-  .cl-chips { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:6px; }
-  .cl-chip { padding:8px 14px; background:var(--cl-bg2); border:1px solid var(--cl-border); border-radius:20px; font-size:12.5px; cursor:pointer; color:var(--cl-text2); font-family:inherit; transition:all .15s; }
-  .cl-chip:hover { border-color:var(--cl-accent); color:var(--cl-accent); background:var(--cl-accent-glow); }
-  .cl-msg { display:flex; gap:10px; padding:3px 0; animation:cl-up .2s ease; }
-  .cl-msg.user { flex-direction:row-reverse; }
-  @keyframes cl-up { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:none} }
-  .cl-avatar { width:30px; height:30px; border-radius:8px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:700; }
-  .cl-avatar.user { background:var(--cl-accent-dim); color:#cfc7ff; }
-  .cl-avatar.ai { background:var(--cl-bg3); border:1px solid var(--cl-border); }
-  .cl-bubble { max-width:80%; padding:11px 14px; border-radius:12px; line-height:1.65; font-size:14px; word-wrap:break-word; overflow-wrap:anywhere; }
-  .cl-bubble.user { background:var(--cl-user-bg); border:1px solid var(--cl-border-b); border-top-right-radius:4px; white-space:pre-wrap; color:var(--cl-text); }
-  .cl-bubble.ai { background:var(--cl-ai-bg); border:1px solid var(--cl-border); border-top-left-radius:4px; color:var(--cl-text); }
-  [dir="rtl"] .cl-bubble.user { border-top-right-radius:12px; border-top-left-radius:4px; }
-  [dir="rtl"] .cl-bubble.ai { border-top-left-radius:12px; border-top-right-radius:4px; }
-  .cl-bubble p { margin:0 0 8px; } .cl-bubble p:last-child { margin:0; }
-  .cl-bubble strong { color:#b8aaff; }
-  .cl-bubble code { font-family:monospace; font-size:12.5px; background:rgba(255,255,255,.06); padding:1px 5px; border-radius:4px; }
-  .cl-bubble pre { background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:6px; padding:12px; margin:8px 0; overflow-x:auto; font-size:12px; line-height:1.6; font-family:monospace; }
-  .cl-typing { display:flex; gap:4px; align-items:center; padding:4px 0; }
-  .cl-typing span { width:6px; height:6px; background:var(--cl-muted); border-radius:50%; animation:cl-bounce .8s infinite; }
-  .cl-typing span:nth-child(2){animation-delay:.15s} .cl-typing span:nth-child(3){animation-delay:.3s}
-  @keyframes cl-bounce { 0%,100%{transform:translateY(0);opacity:.4} 50%{transform:translateY(-5px);opacity:1} }
-  .cl-input-area { padding:12px 14px calc(14px + env(safe-area-inset-bottom)); border-top:1px solid var(--cl-border); background:var(--cl-bg1); flex-shrink:0; }
-  .cl-input-box { display:flex; align-items:flex-end; gap:8px; background:var(--cl-bg0); border:1px solid var(--cl-border); border-radius:14px; padding:8px 8px 8px 12px; transition:border-color .2s,box-shadow .2s; }
-  .cl-input-box:focus-within { border-color:var(--cl-accent); box-shadow:0 0 0 3px var(--cl-accent-glow); }
-  .cl-input { flex:1; background:none; border:none; outline:none; color:var(--cl-text); font-family:inherit; font-size:15px; resize:none; line-height:1.5; max-height:160px; min-height:24px; padding:4px 0; }
-  .cl-input::placeholder { color:var(--cl-muted); }
-  .cl-input-actions { display:flex; gap:4px; align-items:flex-end; }
-  .cl-send-btn { width:38px; height:38px; border:none; border-radius:10px; background:var(--cl-accent); color:white; cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; transition:all .15s; }
-  .cl-send-btn:hover { background:#9180ff; }
-  .cl-stop-btn { width:38px; height:38px; border-radius:10px; cursor:pointer; background:rgba(255,94,106,.15); border:1px solid var(--cl-red); color:var(--cl-red); font-size:16px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
-  .cl-status { display:flex; justify-content:space-between; align-items:center; padding:6px 4px 0; font-size:11px; font-family:monospace; color:var(--cl-muted); gap:8px; }
-  .cl-status-badge { padding:2px 8px; background:var(--cl-bg3); border:1px solid var(--cl-border); border-radius:4px; color:var(--cl-text2); }
-  .cl-quiz-card { background:var(--cl-bg2); border:1px solid var(--cl-accent-dim); border-radius:12px; padding:14px; margin-top:10px; }
-  .cl-quiz-card-title { font-size:13px; font-weight:700; color:var(--cl-accent); margin-bottom:10px; }
-  .cl-quiz-start-btn { width:100%; padding:10px; background:var(--cl-accent); border:none; border-radius:8px; color:white; font-size:14px; cursor:pointer; font-family:inherit; font-weight:700; transition:background .15s; margin-top:8px; }
-  .cl-quiz-start-btn:hover { background:#9180ff; }
-  .cl-toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:10px 20px; border-radius:8px; font-size:13px; font-family:monospace; z-index:9999; pointer-events:none; max-width:90vw; text-align:center; animation:cl-toast-in .25s ease; }
-  .cl-toast.error { background:rgba(255,94,106,.12); border:1px solid var(--cl-red); color:#ff8a93; }
-  .cl-toast.ok { background:rgba(63,214,138,.12); border:1px solid var(--cl-green); color:var(--cl-green); }
-  @keyframes cl-toast-in { from{opacity:0;transform:translate(-50%,10px)} to{opacity:1;transform:translate(-50%,0)} }
-  @media (max-width:600px) {
-    .cl-mobile-only { display:flex; } .cl-desktop-only { display:none; }
-    .cl-badge { display:none; }
-    .cl-sidebar { position:fixed; top:var(--cl-header-h); right:0; height:calc(100dvh - var(--cl-header-h)); width:min(300px,88vw); z-index:200; transform:translateX(100%); transition:transform .25s ease; border-left:none; border-right:1px solid var(--cl-border); }
-    [dir="rtl"] .cl-sidebar { right:auto; left:0; transform:translateX(-100%); border-right:none; border-left:1px solid var(--cl-border); }
-    .cl-sidebar.open { transform:translateX(0)!important; box-shadow:-8px 0 24px rgba(0,0,0,.5); }
-    .cl-backdrop:not(.hidden) { display:block; }
-    .cl-bubble { max-width:88%; font-size:14px; }
-    .cl-input { font-size:16px; }
-  }
-
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -789,24 +696,12 @@
 
   <!-- RESULTS SCREEN -->
   <div class="screen" id="screen-results">
-    <div class="scroll-area" style="padding:16px;padding-bottom:32px;">
-      <div class="score-circle-wrap">
-        <div class="score-circle">
-          <div class="score-num" id="score-num">0</div>
-          <div class="score-denom" id="score-denom">/ 0</div>
-          <div class="score-pct" id="score-pct">0%</div>
-        </div>
+    <div class="scroll-area">
+    <!-- Create Quiz Card -->
+    
       </div>
-      <div class="results-title" id="results-title">—</div>
-      <div class="results-subtitle" id="results-subtitle"></div>
-      <div class="results-list" id="results-list"></div>
-      <div class="result-btns">
-        <button class="start-btn" id="btn-retry-wrong" style="display:none"></button>
-        <button class="res-btn" id="btn-new-quiz"></button>
-        <button class="res-btn" id="btn-share-result"></button>
-        <button class="res-btn secondary" id="btn-back-saved" style="display:none"></button>
-        <button class="res-btn secondary" id="btn-home"></button>
-      </div>
+      <div id="daily-missions-full-list" style="display:flex;flex-direction:column;gap:10px"></div>
+      <div id="daily-streak" style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)"></div>
     </div>
   </div>
 
@@ -1030,69 +925,88 @@
 
   <!-- CLAORI SCREEN -->
   <div class="screen" id="screen-claori">
-  <div class="cl-root">
-    <header class="cl-header">
-      <button class="cl-hbtn cl-mobile-only" onclick="clToggleSidebar()">☰</button>
-      <div class="cl-logo">✦ claori</div>
-      <div class="cl-badge">Gemini Flash</div>
-      <button class="cl-hbtn cl-desktop-only" onclick="clToggleSidebar()">⚙</button>
-      <button class="cl-hbtn" onclick="showScreen('input')">✕</button>
-    </header>
-    <div class="cl-body">
-      <div class="cl-backdrop hidden" id="cl-backdrop" onclick="clCloseSidebar()"></div>
-      <aside class="cl-sidebar" id="cl-sidebar">
-        <div class="cl-section">
-          <div class="cl-label">System Prompt</div>
-          <textarea class="cl-textarea" id="cl-system-prompt">You are claori, a friendly AI assistant built into a vocabulary quiz app. Help users learn words and create quizzes. Reply in the user's language. When creating a quiz respond with: <action>{"action":"create_quiz","topic":"...","lang1":"en","lang1flag":"🇺🇸","lang2":"he","lang2flag":"🇮🇱","words":[{"a":"hello","b":"שלום"}]}</action></textarea>
-        </div>
-        <div class="cl-section">
-          <div class="cl-label">פרמטרים</div>
-          <div class="cl-param"><span>Temperature</span><span class="cl-val" id="cl-temp-val">0.70</span></div>
-          <input type="range" class="cl-slider" id="cl-temp" min="0" max="1" step="0.05" value="0.7" oninput="document.getElementById('cl-temp-val').textContent=parseFloat(this.value).toFixed(2)">
-          <div class="cl-param" style="margin-top:12px"><span>Max Tokens</span><span class="cl-val" id="cl-tokens-val">1024</span></div>
-          <input type="range" class="cl-slider" id="cl-tokens" min="128" max="4096" step="64" value="1024" oninput="document.getElementById('cl-tokens-val').textContent=this.value">
-        </div>
-        <div class="cl-section">
-          <div class="cl-label">מילים נוכחיות</div>
-          <div style="font-size:12px;color:var(--cl-muted,#888)" id="cl-words-info">0 מילים</div>
-        </div>
-        <div class="cl-sidebar-footer">
-          <button class="cl-clear-btn" onclick="clClearChat()">🗑 נקה שיחה</button>
-        </div>
-      </aside>
-      <main class="cl-chat">
-        <div class="cl-messages" id="cl-messages">
-          <div class="cl-welcome" id="cl-welcome">
-            <div class="cl-welcome-icon">✦</div>
-            <h2 class="cl-welcome-title">claori</h2>
-            <p class="cl-welcome-sub">העוזר החכם שלך ללמידת אוצר מילים</p>
-            <div class="cl-chips">
-              <button class="cl-chip" onclick="clQuickSend('צור לי בוחן 10 מילים אנגלית-עברית')">📚 צור בוחן</button>
-              <button class="cl-chip" onclick="clQuickSend('תן לי טיפים לשינון מילים')">💡 טיפים לשינון</button>
-              <button class="cl-chip" onclick="clQuickSend('בחן אותי על המילים הנוכחיות שלי')">🔄 בחן אותי</button>
-              <button class="cl-chip" onclick="clQuickSend('מהם הביטויים הנפוצים ביותר בספרדית?')">🌍 ביטויים בספרדית</button>
-            </div>
-          </div>
-        </div>
-        <div class="cl-input-area">
-          <div class="cl-input-box">
-            <textarea class="cl-input" id="cl-input" placeholder="שאל אותי משהו..." rows="1" dir="auto"
-              oninput="clAutoResize(this)"
-              onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();clSend()}"></textarea>
-            <div class="cl-input-actions">
-              <button class="cl-send-btn" id="cl-send-btn" onclick="clSend()">➤</button>
-              <button class="cl-stop-btn" id="cl-stop-btn" onclick="clStop()" style="display:none">■</button>
-            </div>
-          </div>
-          <div class="cl-status">
-            <span id="cl-msg-count">0 הודעות</span>
-            <span class="cl-status-badge">Gemini 1.5 Flash</span>
-          </div>
-        </div>
-      </main>
+    <div class="claori-wrap">
+      <div class="claori-bg" id="claori-bg"></div>
+      <!-- BG picker panel -->
+      <div class="claori-bg-panel" id="claori-bg-panel"></div>
+<!-- CLAORI SIDEBAR BACKDROP -->
+<div id="claori-sidebar-backdrop" style="display:none;position:absolute;inset:0;z-index:19;background:rgba(0,0,0,0.4)" onclick="closeClaoriSidebar()"></div>
+<!-- CLAORI CHAT LIST SIDEBAR -->
+<div class="claori-sidebar" id="claori-sidebar">
+  <div class="claori-sidebar-header">
+    <button class="claori-sidebar-close" id="claori-sidebar-close">✕</button>
+    <div style="font-size:15px;font-weight:700;color:#fff">Chats</div>
+    <button class="claori-sidebar-new" id="claori-sidebar-new-btn">+ New</button>
+  </div>
+  <!-- Search -->
+  <div style="padding:8px 12px">
+    <input id="claori-search-input" placeholder="🔍 Search chats..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;color:#fff;font-family:'Heebo',sans-serif;font-size:13px;padding:7px 10px;outline:none">
+  </div>
+  <!-- Projects section -->
+  <div id="claori-projects-section" style="padding:0 12px 6px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+      <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px">Projects</div>
+      <button id="claori-new-project-btn" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:18px;cursor:pointer;padding:0;line-height:1" title="New project">+</button>
+    </div>
+    <div id="claori-projects-list"></div>
+    <div id="claori-new-proj-form" style="display:none;margin-top:6px;display:none">
+      <input id="claori-proj-name-input" placeholder="Project name..." style="width:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.25);border-radius:7px;color:#fff;font-family:'Heebo',sans-serif;font-size:12px;padding:6px 9px;outline:none;box-sizing:border-box;margin-bottom:5px">
+      <div style="display:flex;gap:5px">
+        <button id="claori-proj-create-btn" style="flex:1;padding:5px;background:rgba(102,126,234,0.4);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer;font-family:'Heebo',sans-serif">Create</button>
+        <button id="claori-proj-cancel-btn" style="padding:5px 8px;background:rgba(255,255,255,0.1);border:none;border-radius:6px;color:#fff;font-size:12px;cursor:pointer">✕</button>
+      </div>
     </div>
   </div>
+  <!-- Chats list -->
+  <div style="padding:0 12px 6px">
+    <div style="font-size:10px;color:rgba(255,255,255,0.45);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">All Chats</div>
+    <div id="claori-chats-list" style="display:flex;flex-direction:column;gap:2px"></div>
+  </div>
 </div>
+<!-- Drop zone indicator (shows when dragging over project) -->
+<div id="claori-drop-hint" style="display:none;position:fixed;inset:0;background:rgba(102,126,234,0.15);z-index:9999;pointer-events:none;border:3px dashed rgba(102,126,234,0.6);border-radius:16px"></div>
+
+      <!-- Header -->
+      <div class="claori-header">
+        <div class="claori-header-left">
+          <button class="back-btn" id="claori-back" style="color:#fff;border-color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.08)">←</button>
+          <div class="claori-avatar">🤖</div>
+          <div>
+            <div class="claori-name">claori</div>
+            <div class="claori-sub" id="claori-sub-text">Your vocabulary assistant</div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:6px">
+          <button class="claori-chats-btn" id="claori-chats-toggle" title="Chat history">☰</button>
+          <button class="claori-bg-btn" id="claori-share-chat" title="Share chat">↑</button>
+          <button class="claori-bg-btn" id="claori-bg-toggle" title="Change background">🎨</button>
+        </div>
+      </div>
+      <!-- Messages -->
+      <div class="claori-messages-wrap" id="claori-messages"></div>
+      <!-- Input bar -->
+      <div class="claori-input-bar">
+        <div id="claori-image-preview" style="display:none;margin-bottom:8px;position:relative">
+          <img id="claori-preview-img" style="max-height:70px;border-radius:10px;border:1px solid rgba(255,255,255,0.2)">
+          <button onclick="if(typeof clearClaoriImage!=='undefined')clearClaoriImage()" style="position:absolute;top:-6px;right:-6px;background:#e05555;border:none;border-radius:50%;width:20px;height:20px;color:#fff;font-size:12px;cursor:pointer">✕</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-end">
+          <!-- Gallery button -->
+          <label class="claori-img-btn" title="Choose image from gallery" style="position:relative">
+            <input type="file" id="claori-file" accept="image/*" style="display:none" onchange="handleClaoriImage(event)">
+            🖼️
+          </label>
+          <!-- Camera button (mobile) -->
+          <label class="claori-img-btn" title="Take photo" style="position:relative">
+            <input type="file" id="claori-camera" accept="image/*" capture="environment" style="display:none" onchange="handleClaoriImage(event)">
+            📷
+          </label>
+          <textarea id="claori-input" class="claori-input" id="claori-placeholder" placeholder="Ask me anything..." rows="1" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendClaoriMessage();}"></textarea>
+          <button class="claori-send-btn" onclick="if(typeof sendClaoriMessage!=='undefined')sendClaoriMessage()">➤</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- AIRPLANE GAME SCREEN -->
   <div class="screen" id="screen-airplane">
@@ -1465,12 +1379,10 @@ function getLangDisplayName(lang) { return lang.names[currentUILang] || lang.nam
 function getSortedLangs() { return [...ALL_LANGS].sort((a,b)=>getLangDisplayName(a).localeCompare(getLangDisplayName(b),currentUILang,{sensitivity:'base'})); }
 
 function showScreen(name) {
-  if(typeof _splitActive!=='undefined'&&_splitActive) _restoreAllScreens();
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const el=document.getElementById('screen-'+name);
-  if(el) el.classList.add('active');
-  requestAnimationFrame(()=>{ window.scrollTo({top:0,behavior:'instant'}); document.documentElement.scrollTop=0; document.body.scrollTop=0; if(el){const sa=el.querySelector('.scroll-area');if(sa)sa.scrollTop=0;} });
-  if(name==='claori') setTimeout(initClaoriScreen,50);
+  const el = document.getElementById('screen-'+name);
+  if (el) el.classList.add('active');
+  window.scrollTo(0,0);
 }
 
 // ============================================================
@@ -1651,7 +1563,8 @@ function renderModalList(f) {
         document.getElementById('langname'+(activePicker+1)).textContent=getLangDisplayName(lang);
         updateLangHeaders(); updateStartBtn();
       }
-      overlay.classList.remove('open'); sharedActivePicker=-1;
+      document.getElementById('lang-modal-overlay').classList.remove('open');
+      sharedActivePicker=-1;
     });
     modalList.appendChild(div);
   });
@@ -1797,17 +1710,48 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
+  // Try Anthropic API first (works in Claude.ai)
   try {
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001', max_tokens:120,
+        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      const raw = data?.content?.[0]?.text?.trim();
+      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
+    }
+  } catch(e) {}
+
+  // Fallback: MyMemory free translation API (works everywhere, no key needed)
+  try {
+    // Map lang native names to ISO codes for MyMemory
+    const langMap = {
+      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
+      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
+      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
+      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
+      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
+      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
+      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
+    };
+    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
+    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
       const translation = data?.responseData?.translatedText;
-      if (translation && translation.trim().length > 0 && !translation.toLowerCase().startsWith('invalid')) {
-        return { keyboardFix: null, translation: translation.trim() };
+      if (translation && translation !== text) {
+        return { keyboardFix: null, translation };
       }
     }
   } catch(e) {}
+
   return null;
 }
 
@@ -1828,8 +1772,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.id:lang2.id;
-  const tgtLang=side==='a'?lang2.id:lang1.id;
+  const srcLang=side==='a'?lang1.native:lang2.native;
+  const tgtLang=side==='a'?lang2.native:lang1.native;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -1870,17 +1814,9 @@ async function smartCheck(userAns,correctAns) {
   const maxDist=c.length<=4?1:c.length<=9?2:3;
   if(levenshtein(u,c)<=maxDist) return {correct:true,reason:'✏️ שגיאת כתיב קטנה'};
   try {
-    const res=await fetch('https://gemini-proxy.oriafik8.workers.dev',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        systemInstruction:{parts:[{text:'You are a vocabulary quiz checker. Reply YES or NO only.'}]},
-        contents:[{role:'user',parts:[{text:`Vocabulary quiz. Expected: "${correctAns}". Student wrote: "${userAns}". Valid synonym or equivalent translation? Reply YES or NO only.`}]}],
-        generationConfig:{maxOutputTokens:5,temperature:0}
-      })
-    });
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:10,messages:[{role:'user',content:`Vocabulary quiz. Expected: "${correctAns}". Student wrote: "${userAns}". Valid synonym or equivalent translation? Reply YES or NO only.`}]})});
     const data=await res.json();
-    const reply=(data?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim().toUpperCase();
-    if(reply.startsWith('YES')) return {correct:true,reason:'💡 פירוש זהה'};
+    if((data?.content?.[0]?.text||'').trim().toUpperCase().startsWith('YES')) return {correct:true,reason:'💡 פירוש זהה'};
   } catch(e){}
   return {correct:false,reason:null};
 }
@@ -2179,7 +2115,7 @@ function _checkMCQ(chosen, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -2226,7 +2162,7 @@ function _checkTF(userSaidTrue, item) {
     if (isLast) {
       checkBtn.style.display=''; checkBtn.textContent=t.finishBtn;
       checkBtn.className='quiz-next-btn primary';
-      checkBtn.onclick=()=>{checkBtn.onclick=null; showResults();};
+      checkBtn.onclick=()=>{checkBtn.onclick=null; nextQuestion();};
     } else {
       checkBtn.style.display='none';
       setTimeout(()=>{checkBtn.onclick=null; checkBtn.style.display=''; nextQuestion();}, 600);
@@ -2296,7 +2232,7 @@ async function checkAnswer() {
     quizFeedback.className='quiz-feedback correct';
     playCorrectSound();
     const isLast=currentIdx>=quizItems.length-1;
-    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';checkBtn.onclick=()=>{checkBtn.onclick=null;showResults();};}
+    if(isLast){checkBtn.textContent=t.finishBtn;checkBtn.className='quiz-next-btn primary';skipBtn.style.display='none';}
     else{checkBtn.style.display='none';skipBtn.style.display='none';setTimeout(()=>{checkBtn.style.display='';nextQuestion();},600);}
   } else {
     quizAnswer.classList.add('wrong');
@@ -2763,8 +2699,28 @@ function clearClaoriChat() {
   initClaori();
 }
 
-function initClaori() {
-  initClaoriScreen();
+async function initClaori() {
+  if (claoriInitialized) return;
+  claoriInitialized = true;
+  // Load all chat data
+  await loadClaoriData();
+  // Resume current chat or create new one
+  const existingChat = claoriCurrentChatId && claoriChats[claoriCurrentChatId];
+  if (existingChat) {
+    const chat = claoriChats[claoriCurrentChatId];
+    claoriHistory = chat.messages || [];
+    const msgs = document.getElementById('claori-messages');
+    if (msgs) msgs.innerHTML = '';
+    claoriHistory.forEach(m => _appendClaoriMsgOnly(m.role, m.content));
+    if (msgs) msgs.scrollTop = 99999;
+    if (claoriHistory.length > 0) return; // resumed successfully
+  }
+  // No valid chat — create fresh one
+  claoriCurrentChatId = createNewChat('New chat');
+  claoriHistory = [];
+  // Show welcome
+  const wt = getT();
+  appendClaoriMsg('assistant', wt.claoriWelcome || 'Hi! I\'m **claori** 👋 I can help you with the app and create quizzes for you.');
 }
 
 function _appendClaoriMsgOnly(role, text) {
@@ -2822,6 +2778,293 @@ function appendClaoriMsg(role, text) {
   }
 }
 
+async function _autoTitleChat() {
+  if (!claoriCurrentChatId) return;
+  const chat = claoriChats[claoriCurrentChatId];
+  if (!chat || chat.title !== 'New chat') return;
+  const userMsg = claoriHistory.find(m => m.role === 'user');
+  if (!userMsg) return;
+  try {
+    const uiLang = currentUILang || 'en';
+    const langName = {'he':'Hebrew','ar':'Arabic','fr':'French','es':'Spanish','de':'German',
+      'ru':'Russian','zh':'Chinese','ja':'Japanese','ko':'Korean','pt':'Portuguese',
+      'it':'Italian','nl':'Dutch','tr':'Turkish','pl':'Polish','uk':'Ukrainian',
+      'sv':'Swedish','fi':'Finnish','da':'Danish','no':'Norwegian'}[uiLang] || 'English';
+    // Use last 3 exchanges for better context
+    const ctx = chat.messages.slice(-6).map(m=>
+      (m.role==='user'?'User: ':'AI: ')+(typeof m.content==='string'?m.content:'[image]').slice(0,80)
+    ).join('\n');
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001', max_tokens:15,
+        messages:[{role:'user', content:
+          `Based on this conversation, generate a short 2-4 word title in ${langName}. Reply with ONLY the title, no quotes, no punctuation.\n\n${ctx}`
+        }]
+      })
+    });
+    const data = await res.json();
+    const title = (data?.content?.[0]?.text || '').trim().replace(/["\']/g,'').slice(0,40);
+    if (title && chat) {
+      chat.title = title;
+      await saveClaoriData();
+      renderClaoriChatList();
+    }
+  } catch(e) {}
+}
+
+async function sendClaoriMessage() {
+  const inp = document.getElementById('claori-input');
+  const text = inp.value.trim();
+  if (!text && !claoriImageBase64) return;
+  inp.value = ''; inp.style.height = 'auto';
+
+  appendClaoriMsg('user', text || '📷 Image');
+
+  // Build user content
+  const imgB64 = claoriImageBase64, imgType = claoriImageType;
+  const userContent = [];
+  if (imgB64) userContent.push({type:'image',source:{type:'base64',media_type:imgType,data:imgB64}});
+  userContent.push({type:'text', text: text || 'Please create a vocabulary quiz from this image.'});
+  clearClaoriImage();
+
+  // Typing indicator
+  const msgs = document.getElementById('claori-messages');
+  const typingDiv = document.createElement('div');
+  typingDiv.className = 'claori-msg-ai';
+  typingDiv.innerHTML = '<div class="claori-bubble-ai" style="color:rgba(255,255,255,0.5);font-size:13px">...</div>';
+  msgs.appendChild(typingDiv);
+  msgs.scrollTop = 99999;
+
+  // System prompt (concise)
+  const curWords = words.filter(w=>w.a.trim()&&w.b.trim());
+  const uiLangName = {'he':'Hebrew','ar':'Arabic','fr':'French','es':'Spanish','de':'German',
+    'ru':'Russian','zh':'Chinese','ja':'Japanese','ko':'Korean','pt':'Portuguese',
+    'it':'Italian','nl':'Dutch','tr':'Turkish','pl':'Polish','uk':'Ukrainian',
+    'sv':'Swedish','fi':'Finnish','da':'Danish','no':'Norwegian'}[currentUILang]||'English';
+
+  const systemPrompt = `You are claori, a friendly AI assistant built into a vocabulary quiz app.
+About yourself: You are claori (lowercase), an AI assistant built with Claude by Anthropic. You are part of this vocabulary learning app. You help users learn words, create quizzes, and use the app. You have no message limits from your side. You are always available as long as the app is open.
+You can help with:
+- Everything about the vocabulary quiz app
+- Questions about yourself — answer naturally and directly, without saying "that's a question about me"
+- Vocabulary, language tips, learning strategies
+- Creating quizzes on any topic
+For completely unrelated topics (politics, news, cooking, etc.), politely decline.
+State: ${curWords.length} words, langs=${selectedLang[0]?getLangDisplayName(selectedLang[0]):'?'}↔${selectedLang[1]?getLangDisplayName(selectedLang[1]):'?'}, theme=${document.documentElement.getAttribute('data-theme')||'dark'}, GT=${gtConnected?'on':'off'}, undoAvail=${_wordHistory.length>0}, redoAvail=${_wordFuture.length>0}
+Features available: quiz modes (classic/airplane/memory), multiplayer, community quizzes, saved quizzes, daily missions, feedback form, auto-translate, accent colors (red/orange/yellow/green/blue/purple), share quiz, undo/redo words
+LANGUAGE: Always reply in ${uiLangName}. Never switch language.
+Actions (output JSON + 1 sentence explanation):
+- Quiz: {"action":"create_quiz","topic":"...","lang1":"...","lang2":"...","lang1id":"en","lang2id":"he","lang1flag":"🇬🇧","lang2flag":"🇮🇱","words":[{"a":"...","b":"..."},...]}
+- Publish shared quiz: {"action":"publish_quiz"}
+- Navigation: {"action":"go_home"} {"action":"open_community"} {"action":"open_saved"} {"action":"open_multiplayer"} {"action":"open_feedback"} {"action":"new_chat"} {"action":"delete_chat"}
+- Theme: {"action":"toggle_theme"} or {"action":"set_theme","value":"dark|light"}
+- Accent color: {"action":"set_accent","value":"red|orange|yellow|green|blue|purple"}
+- BG (claori): {"action":"change_bg","bg_id":"ID"} IDs: rose_pink,ocean1-5,mtn1-5,sky1-5,des1-5,aurora,sunset,night,emerald,cherry,mint,carbon,midnight,obsidian,slate,cloud,peach,lavender,sky_l,sage
+- Language: {"action":"change_lang","code":"he|en|ar|fr|es|de|ru|zh|ja|ko|pt|it|nl|tr|pl|sv|da|no|fi|uk|cs|hu|ro|el|hi|id|ms|vi|fa|ur"}
+- Auto-translate: {"action":"toggle_translate"}
+- Words: {"action":"add_word","a":"word","b":"translation"} {"action":"clear_words"} {"action":"undo_words"} {"action":"redo_words"}
+- Quiz mode: {"action":"set_quiz_mode","value":"classic|airplane|memory"} {"action":"start_quiz"}
+- Share current quiz: {"action":"share_quiz"}
+- Daily missions: {"action":"open_daily_missions"}
+- Project: {"action":"create_project","value":"Name"}`;
+
+  // Smart history — keep as many messages as possible within ~12000 chars
+  // Skips image payloads, truncates very long messages
+  const buildHistory = () => {
+    const recent = claoriHistory.slice(0, -1);
+    const out = []; let chars = 0;
+    for (let i = recent.length - 1; i >= 0; i--) {
+      const m = recent[i];
+      if (!m || !m.content) continue;
+      if (Array.isArray(m.content)) continue; // skip image messages
+      if (typeof m.content !== 'string') continue;
+      let content = m.content;
+      // Truncate long messages (e.g. quiz JSON)
+      if (content.length > 1500) content = content.slice(0, 1500) + '…';
+      if (chars + content.length > 10000 && out.length >= 2) break;
+      out.unshift({role: m.role, content});
+      chars += content.length;
+    }
+    return out;
+  };
+
+  const messages = [...buildHistory(), {role:'user', content: imgB64 ? userContent : (text || 'help')}];
+
+  // API call with retry on transient errors
+  const callAPI = async (attempt) => {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body: JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:1200, system:systemPrompt, messages})
+    });
+    return res.json();
+  };
+
+  try {
+    let data, attempt = 0;
+    while (attempt < 3) {
+      try {
+        data = await callAPI(attempt);
+      } catch(fetchErr) {
+        // Network error — retry
+        attempt++;
+        if (attempt < 3) await new Promise(r => setTimeout(r, 1000 * attempt));
+        continue;
+      }
+      if (!data?.error || data.error.type !== 'overloaded_error') break;
+      attempt++;
+      if (attempt < 3) await new Promise(r => setTimeout(r, 1500 * attempt));
+    }
+
+    typingDiv.remove();
+
+    if (data?.error) {
+      const t = getT();
+      const errType = data.error.type || '';
+      let errMsg = t.claoriError || 'Something went wrong. Please try again.';
+      if (errType === 'overloaded_error') errMsg = t.claoriOverloaded || 'Busy — please try again in a moment.';
+      else if (errType === 'rate_limit_error') errMsg = t.claoriRateLimit || 'Too many messages — please wait a moment.';
+      appendClaoriMsg('assistant', errMsg);
+      return;
+    }
+
+    const reply = data?.content?.[0]?.text || '';
+    if (!reply) { appendClaoriMsg('assistant', getT().claoriError || 'No response. Please try again.'); return; }
+
+    // Parse action JSON
+    let action = null;
+    try {
+      const cleaned = reply.replace(/```json\s*/gi,'').replace(/```\s*/g,'').trim();
+      const ai = cleaned.indexOf('"action"');
+      if (ai !== -1) {
+        let s = ai; while(s>0 && cleaned[s]!=='{') s--;
+        let depth=0, e=s;
+        for(let i=s;i<cleaned.length;i++){
+          if(cleaned[i]==='{') depth++;
+          else if(cleaned[i]==='}'){depth--;if(depth===0){e=i;break;}}
+        }
+        action = JSON.parse(cleaned.slice(s, e+1));
+      }
+    } catch(e) { action = null; }
+
+    if (action) {
+      const jsonStr = JSON.stringify(action);
+      const textAround = reply.replace(reply.slice(reply.indexOf('{'), reply.lastIndexOf('}')+1),'').trim();
+
+      switch(action.action) {
+        case 'create_quiz':
+          handleClaoriQuizCreated(action); return;
+        case 'publish_quiz':
+          await claoriPublishQuiz();
+          appendClaoriMsg('assistant', textAround || '✅ Published!'); return;
+        case 'new_chat':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(()=>startNewClaoriChat(), 600); return;
+        case 'toggle_theme':
+          toggleTheme();
+          appendClaoriMsg('assistant', textAround || (document.documentElement.getAttribute('data-theme')==='light'?'☀️':'🌙')); return;
+        case 'set_theme':
+          const isLight = document.documentElement.getAttribute('data-theme')==='light';
+          if((action.value==='light'&&!isLight)||(action.value==='dark'&&isLight)) toggleTheme();
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'toggle_translate':
+          toggleGT();
+          appendClaoriMsg('assistant', textAround || (gtConnected?'🔗 Connected!':'🔌 Disconnected.')); return;
+        case 'change_bg':
+          let bgFound = null;
+          for(const cat of CLAORI_BACKGROUNDS){ bgFound=cat.items.find(b=>b.id===action.bg_id); if(bgFound)break; }
+          if(bgFound){ claoriBgId=bgFound.id; applyClaoriBg(bgFound.css); try{window.storage.set('_claoriBg',bgFound.id+'|||'+bgFound.css);}catch(e){} }
+          appendClaoriMsg('assistant', textAround || (bgFound?`🎨 ${bgFound.label}`:'❓ Background not found')); return;
+        case 'change_lang':
+          if(action.code){ applyUILang(action.code); }
+          appendClaoriMsg('assistant', textAround || '🌐'); return;
+        case 'go_home':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(()=>showScreen('input'), 400); return;
+        case 'open_community':
+          loadCommunityQuizzes(''); showScreen('community');
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'open_saved':
+          loadSavedQuizzes().then(qs=>{renderSavedQuizzesList(qs);showScreen('saved');});
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'add_word':
+          if(action.a&&action.b){words.push({a:action.a,b:action.b});renderWords();updateStartBtn();}
+          appendClaoriMsg('assistant', textAround || `✅ ${action.a} → ${action.b}`); return;
+        case 'clear_words':
+          words=[{a:'',b:''},{a:'',b:''}];renderWords();updateStartBtn();
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'set_quiz_mode':
+          if(['classic','airplane','memory'].includes(action.value)){
+            quizMode=action.value;
+            document.querySelectorAll('.mode-btn').forEach(b=>b.classList.toggle('active',b.dataset.mode===action.value));
+          }
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'start_quiz':
+          appendClaoriMsg('assistant', textAround || '✅');
+          setTimeout(()=>{showScreen('input');setTimeout(()=>{
+            if(quizMode==='airplane')startAirplaneGame(null);
+            else if(quizMode==='memory')startMemoryGame(null);
+            else _launchClassicQuiz(null,true);
+          },300);},400); return;
+        case 'delete_chat':
+          if(claoriCurrentChatId&&claoriChats[claoriCurrentChatId]){
+            delete claoriChats[claoriCurrentChatId]; saveClaoriData(); startNewClaoriChat();
+          }
+          appendClaoriMsg('assistant', textAround || '✅'); return;
+        case 'create_project':
+          createProject(action.value||'New Project');
+          appendClaoriMsg('assistant', textAround || `✅ "${action.value}"`); return;
+
+        // ── New actions ──────────────────────────────────────
+        case 'open_multiplayer':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(()=>{ initMultiplayer(); showScreen('multiplayer'); }, 400); return;
+
+        case 'open_feedback':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(()=>{
+            const fab = document.getElementById('feedback-fab');
+            if(fab) fab.click();
+          }, 400); return;
+
+        case 'open_daily_missions':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(openDailyMissions, 400); return;
+
+        case 'set_accent':
+          if(action.value) applyAccent(action.value);
+          appendClaoriMsg('assistant', textAround || '🎨 Color changed!'); return;
+
+        case 'share_quiz':
+          if(textAround) appendClaoriMsg('assistant', textAround);
+          setTimeout(shareCurrentQuiz, 400); return;
+
+        case 'undo_words':
+          undoWords();
+          appendClaoriMsg('assistant', textAround || '↩ ' + (getT().undone||'Undone!')); return;
+
+        case 'redo_words':
+          redoWords();
+          appendClaoriMsg('assistant', textAround || '↪ ' + (getT().redone||'Redone!')); return;
+      }
+    }
+    appendClaoriMsg('assistant', reply);
+
+  } catch(e) {
+    try { typingDiv.remove(); } catch(_) {}
+    const errMsg = e?.message || '';
+    const t = getT();
+    // Show specific error if possible
+    let msg = t.claoriError || 'Something went wrong. Try again.';
+    if (errMsg.includes('Failed to fetch') || errMsg.includes('NetworkError')) {
+      msg = t.claoriNetworkError || 'Network error. Check your connection.';
+    }
+    appendClaoriMsg('assistant', msg);
+    console.error('[claori error]', e);
+  }
+}
 
 
 function handleClaoriQuizCreated(action) {
@@ -4616,8 +4859,8 @@ function openCreateWizard() {
   _wizLang1=selectedLang[0]||null; _wizLang2=selectedLang[1]||null;
   _wizMode='classic'; _wizSubTypes=['writing'];
   showScreen('wizard'); _wizStep(1); _wizUpdateLangDisplay();
-  document.getElementById('wiz-pick-lang1').onclick=()=>{window._wizPickSide=0; activePicker=0; document.getElementById('lang-modal-overlay').classList.add('open');};
-  document.getElementById('wiz-pick-lang2').onclick=()=>{window._wizPickSide=1; activePicker=1; document.getElementById('lang-modal-overlay').classList.add('open');};
+  document.getElementById('wiz-pick-lang1').onclick=()=>{openLangPickerFor(0, (lang)=>{ activePicker=0; selectLang(lang); _wizLang1=lang; _wizUpdateLangDisplay(); });};
+  document.getElementById('wiz-pick-lang2').onclick=()=>{openLangPickerFor(1, (lang)=>{ activePicker=1; selectLang(lang); _wizLang2=lang; _wizUpdateLangDisplay(); });};
   document.getElementById('wiz-next-1').onclick=()=>{if(_wizLang1){activePicker=0;selectLangDirect(_wizLang1);}if(_wizLang2){activePicker=1;selectLangDirect(_wizLang2);}_wizStep(2);_wizRenderWords();};
   document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:''});_wizRenderWords();};
   document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&w.b.trim());renderWords();saveWordsToStorage();_wizStep(3);};
@@ -4898,288 +5141,42 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// ============================================================
-// GEMINI API — claori
-// ============================================================
-const GEMINI_API_KEY = null; // המפתח נמצא ב-Cloudflare Worker
 
-// ════════════════════════════════════════════════════════════
-// SPLIT SCREEN
-// ════════════════════════════════════════════════════════════
-let _splitActive = false;
-let _splitScreens = {top:null, bottom:null};
+// ── פונקציית בחירת שפה שעובדת ─────────────────────────────
+function openLangPickerFor(side, onSelect) {
+  const ul = document.getElementById('ui-modal-list');
+  const overlay = document.getElementById('ui-lang-modal-overlay');
+  const search = document.getElementById('ui-modal-search');
+  if(!ul || !overlay) return;
 
-function openSplit(topScreen, bottomScreen){
-  _splitActive = true;
-  _splitScreens = {top:topScreen, bottom:bottomScreen};
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  const mainHeader = document.querySelector('.app > .header');
-  if(mainHeader) mainHeader.style.display='none';
-  document.getElementById('split-container')?.classList.add('active');
-  _mountSplitPane('top', topScreen);
-  _mountSplitPane('bottom', bottomScreen);
-  _initSplitDrag();
-}
-
-function _mountSplitPane(which, screenName){
-  const inner = document.getElementById('split-inner-'+which);
-  const titleEl = document.getElementById('split-title-'+which);
-  if(!inner||!titleEl) return;
-  const titles = {input:'תרגול מילים',wizard:'צור בוחן',saved:'הבחנים שלי',community:'קהילה',claori:'claori',multiplayer:'מרובה שחקנים'};
-  titleEl.textContent = titles[screenName] || screenName;
-  inner.innerHTML='';
-  const screen = document.getElementById('screen-'+screenName);
-  if(!screen) return;
-  screen.classList.add('active');
-  screen.style.flex='1';
-  screen.style.minHeight='0';
-  inner.appendChild(screen);
-}
-
-function closeSplitPane(which){
-  const other = which==='top'?'bottom':'top';
-  const otherScreen = _splitScreens[other];
-  _restoreAllScreens();
-  if(otherScreen) showScreen(otherScreen);
-}
-
-function toggleSplitFullscreen(which){
-  const pane = document.getElementById('split-pane-'+which);
-  const other = which==='top'?'bottom':'top';
-  const otherPane = document.getElementById('split-pane-'+other);
-  const divider = document.getElementById('split-divider');
-  const isFS = pane?.classList.contains('fullscreen');
-  document.querySelectorAll('.split-pane').forEach(p=>{
-    p.classList.remove('fullscreen');
-    p.querySelector('.split-fullscreen-btn').textContent='⛶';
-  });
-  if(divider) divider.style.display='';
-  if(otherPane) otherPane.style.display='';
-  if(!isFS && pane){
-    pane.classList.add('fullscreen');
-    pane.querySelector('.split-fullscreen-btn').textContent='⊡';
-    if(divider) divider.style.display='none';
-    if(otherPane) otherPane.style.display='none';
-  }
-}
-
-function _restoreAllScreens(){
-  _splitActive = false;
-  const mainHeader = document.querySelector('.app > .header');
-  if(mainHeader) mainHeader.style.display='';
-  const app = document.querySelector('.app');
-  ['top','bottom'].forEach(which=>{
-    const inner = document.getElementById('split-inner-'+which);
-    if(!inner) return;
-    while(inner.firstChild){
-      const child = inner.firstChild;
-      child.style.flex=''; child.style.minHeight='';
-      child.classList.remove('active');
-      app.appendChild(child);
-    }
-  });
-  document.getElementById('split-container')?.classList.remove('active');
-}
-
-function _initSplitDrag(){
-  const divider = document.getElementById('split-divider');
-  const topPane = document.getElementById('split-pane-top');
-  const botPane = document.getElementById('split-pane-bottom');
-  if(!divider||!topPane||!botPane) return;
-  const newDiv = divider.cloneNode(true);
-  divider.parentNode.replaceChild(newDiv, divider);
-  let dragging=false, startY=0, startTopH=0, startBotH=0;
-  const onStart = e=>{ dragging=true; newDiv.classList.add('dragging');
-    startY=e.touches?e.touches[0].clientY:e.clientY;
-    startTopH=topPane.offsetHeight; startBotH=botPane.offsetHeight; e.preventDefault(); };
-  const onMove = e=>{ if(!dragging)return;
-    const y=e.touches?e.touches[0].clientY:e.clientY;
-    const dy=y-startY, total=startTopH+startBotH;
-    const newTop=Math.max(80,Math.min(total-80,startTopH+dy));
-    topPane.style.flex='none'; topPane.style.height=newTop+'px';
-    botPane.style.flex='none'; botPane.style.height=(total-newTop)+'px';
-    e.preventDefault(); };
-  const onEnd=()=>{ dragging=false; newDiv.classList.remove('dragging'); };
-  newDiv.addEventListener('mousedown',onStart);
-  newDiv.addEventListener('touchstart',onStart,{passive:false});
-  document.addEventListener('mousemove',onMove);
-  document.addEventListener('touchmove',onMove,{passive:false});
-  document.addEventListener('mouseup',onEnd);
-  document.addEventListener('touchend',onEnd);
-}
-
-// ════════════════════════════════════════════════════════════
-// CLAORI — Gemini-powered AI chat
-// ════════════════════════════════════════════════════════════
-let _clMessages = [];
-let _clStreaming = false;
-let _clSidebarOpen = false;
-
-function initClaoriScreen() {
-  const inp = document.getElementById('cl-input');
-  if(inp){ inp.value=''; clAutoResize(inp); }
-  const info = document.getElementById('cl-words-info');
-  if(info){ const n=(words||[]).filter(w=>w.a&&w.b).length; info.textContent=n?n+' מילים טעונות':'אין מילים'; }
-  const welcome = document.getElementById('cl-welcome');
-  if(welcome) welcome.style.display=_clMessages.length?'none':'flex';
-}
-
-function clQuickSend(text){ const inp=document.getElementById('cl-input'); if(inp){inp.value=text;clSend();} }
-
-async function clSend() {
-  if(_clStreaming) return;
-  const inp = document.getElementById('cl-input');
-  const text = (inp?.value||'').trim();
-  if(!text) return;
-  inp.value=''; clAutoResize(inp);
-  const welcome=document.getElementById('cl-welcome');
-  if(welcome) welcome.style.display='none';
-  _clMessages.push({role:'user',content:text});
-  clRenderMsg('user',text);
-  const typingId='cl-typing-'+Date.now();
-  clRenderTyping(typingId);
-  _clStreaming=true; clSetStreamingUI(true);
-  try {
-    const sysTa=document.getElementById('cl-system-prompt');
-    const systemPrompt=sysTa?sysTa.value:'You are claori, a helpful vocabulary assistant.';
-    const temp=parseFloat(document.getElementById('cl-temp')?.value||'0.7');
-    const maxTok=parseInt(document.getElementById('cl-tokens')?.value||'1024');
-    const curWords=(words||[]).filter(w=>w.a&&w.b);
-    const wordsCtx=curWords.length?'\nCurrent words: '+curWords.slice(0,20).map(w=>w.a+'='+w.b).join(', '):'\nNo words loaded.';
-    const geminiMsgs=_clMessages.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
-    const res=await fetch('https://gemini-proxy.oriafik8.workers.dev',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        systemInstruction:{parts:[{text:systemPrompt+wordsCtx}]},
-        contents:geminiMsgs,
-        generationConfig:{maxOutputTokens:maxTok,temperature:temp}
-      })
+  // בנה רשימה מ-ALL_LANGS
+  const buildList = (f) => {
+    ul.innerHTML = '';
+    const langs = (ALL_LANGS||[]).filter(l => !f ||
+      getLangDisplayName(l).toLowerCase().includes(f.toLowerCase()) ||
+      (l.native||'').toLowerCase().includes(f.toLowerCase()));
+    langs.forEach(lang => {
+      const div = document.createElement('div');
+      div.className = 'lang-option' + (selectedLang[side]?.id===lang.id?' selected':'');
+      div.innerHTML = `<span class="opt-flag">${lang.flag}</span><span class="opt-name">${getLangDisplayName(lang)}</span><span class="opt-native">${lang.native}</span><span class="opt-check">✓</span>`;
+      div.addEventListener('click', () => {
+        overlay.classList.remove('open');
+        if(search) search.value = '';
+        onSelect(lang);
+      });
+      ul.appendChild(div);
     });
-    const data=await res.json();
-    document.getElementById(typingId)?.remove();
-    if(data.error) throw new Error(data.error.message||'API error');
-    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text||'';
-    if(!reply) throw new Error('No response');
-    _clMessages.push({role:'assistant',content:reply});
-    clProcessResponse(reply);
-    clUpdateCount();
-  } catch(err){
-    document.getElementById(typingId)?.remove();
-    clRenderMsg('assistant','⚠️ '+(err.message||'שגיאה'));
-  } finally { _clStreaming=false; clSetStreamingUI(false); }
-}
+  };
 
-function clStop(){ _clStreaming=false; clSetStreamingUI(false); }
-
-function clClearChat(){
-  _clMessages=[];
-  const msgs=document.getElementById('cl-messages');
-  if(msgs){
-    msgs.innerHTML='';
-    const w=document.createElement('div');
-    w.className='cl-welcome'; w.id='cl-welcome';
-    w.innerHTML=`<div class="cl-welcome-icon">✦</div><h2 class="cl-welcome-title">claori</h2><p class="cl-welcome-sub">העוזר החכם שלך</p><div class="cl-chips"><button class="cl-chip" onclick="clQuickSend('צור לי בוחן 10 מילים אנגלית-עברית')">📚 צור בוחן</button><button class="cl-chip" onclick="clQuickSend('תן לי טיפים לשינון מילים')">💡 טיפים</button><button class="cl-chip" onclick="clQuickSend('בחן אותי על המילים שלי')">🔄 בחן אותי</button></div>`;
-    msgs.appendChild(w);
+  buildList('');
+  if(search) {
+    search.value = '';
+    search.oninput = () => buildList(search.value);
   }
-  clUpdateCount();
+  overlay.classList.add('open');
+  setTimeout(() => search?.focus(), 100);
 }
 
-function clExecuteAction(action) {
-  try {
-    switch(action.action) {
-      case 'navigate': showScreen(action.screen); return '✅ עברתי ל-'+action.screen;
-      case 'set_words':
-        words=(action.words||[]).map(w=>({a:w.a||'',b:w.b||''}));
-        renderWords(); saveWordsToStorage(); return '✅ '+words.length+' מילים נטענו';
-      case 'add_word': words.push({a:action.a||'',b:action.b||''}); renderWords(); saveWordsToStorage(); return '✅ נוספה: '+action.a+' = '+action.b;
-      case 'clear_words': words=[{a:'',b:''}]; renderWords(); saveWordsToStorage(); return '✅ מילים נוקו';
-      case 'set_lang':
-        const lg=ALL_LANGS.find(l=>l.id===action.lang_id);
-        if(!lg) return '❌ שפה לא נמצאה';
-        activePicker=(action.side||1)-1; selectLang(lg); return '✅ שפה הוגדרה';
-      case 'set_ui_lang': applyUILang(action.lang); return '✅ שפת ממשק: '+action.lang;
-      case 'create_quiz':
-        _loadClaoriQuizIntoApp(action);
-        clHandleQuizCreated(action); return null;
-      case 'start_quiz':
-        if(action.type==='memory') startMemoryGame&&startMemoryGame();
-        else if(action.type==='airplane') startAirplaneGame&&startAirplaneGame();
-        else _doStartQuiz('normal',null);
-        return '✅ בוחן הופעל';
-      case 'set_smart_mode':
-        smartModeEnabled=action.enabled!==false;
-        saveSmartModePreference(smartModeEnabled);
-        return '✅ מצב חכם '+(smartModeEnabled?'מופעל':'כבוי');
-      case 'open_wizard': openCreateWizard(); return '✅ אשף נפתח';
-      case 'set_theme':
-        const cur=document.documentElement.getAttribute('data-theme');
-        if((action.theme==='dark'&&cur!=='dark')||(action.theme==='light'&&cur==='dark')) toggleTheme();
-        return '✅ ערכת נושא: '+action.theme;
-      case 'get_state':
-        return '📊 מסך: '+(document.querySelector('.screen.active')?.id?.replace('screen-','')||'?')+
-          ', מילים: '+((words||[]).filter(w=>w.a&&w.b).length)+
-          ', שפה 1: '+(selectedLang?.[0]?.native||'?')+
-          ', שפה 2: '+(selectedLang?.[1]?.native||'?');
-      default: return '❌ פעולה לא מוכרת: '+action.action;
-    }
-  } catch(err){ return '❌ '+err.message; }
-}
-
-function clHandleQuizCreated(data) {
-  const wc=(data.words||[]).length;
-  const msgs=document.getElementById('cl-messages');
-  if(!msgs) return;
-  const msgDiv=document.createElement('div');
-  msgDiv.className='cl-msg ai';
-  const preview=(data.words||[]).slice(0,5).map(w=>`<div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid rgba(255,255,255,0.06);font-size:12px"><span>${w.a}</span><span style="color:var(--cl-text2)">${w.b}</span></div>`).join('');
-  msgDiv.innerHTML=`<div class="cl-avatar ai">✦</div><div><div class="cl-bubble ai">✅ יצרתי בוחן על "<strong>${data.topic||'מילים'}</strong>" עם <strong>${wc} מילים</strong>!</div><div class="cl-quiz-card"><div class="cl-quiz-card-title">📚 ${data.lang1flag||''} ${data.lang1||''} ↔ ${data.lang2flag||''} ${data.lang2||''}</div>${preview}${wc>5?`<div style="font-size:11px;color:var(--cl-muted);margin-top:6px">+${wc-5} נוספות</div>`:''}<button class="cl-quiz-start-btn" onclick="showScreen('input');setTimeout(()=>document.getElementById('start-btn')?.scrollIntoView({behavior:'smooth'}),200)">▶ התחל לתרגל</button></div></div>`;
-  msgs.appendChild(msgDiv);
-  msgs.scrollTop=999999;
-  clUpdateCount();
-}
-
-function clProcessResponse(text) {
-  const actionRegex=/<action>(.*?)<\/action>/gs;
-  let match; let displayText=text; const results=[];
-  while((match=actionRegex.exec(text))!==null){
-    try{ const d=JSON.parse(match[1].trim()); const r=clExecuteAction(d); if(r)results.push(r); displayText=displayText.replace(match[0],''); }
-    catch(e){ results.push('❌ שגיאה בפענוח'); }
-  }
-  displayText=displayText.trim();
-  if(displayText) clRenderMsg('assistant',displayText);
-  if(results.length) clRenderMsg('assistant',results.join('\n'));
-}
-
-function clRenderMsg(role,text,isError=false){
-  const msgs=document.getElementById('cl-messages'); if(!msgs)return;
-  const div=document.createElement('div'); div.className='cl-msg '+role;
-  const avatar=role==='user'?'<div class="cl-avatar user">א</div>':'<div class="cl-avatar ai">✦</div>';
-  const bubble=role==='user'?`<div class="cl-bubble user">${escHtml(text)}</div>`:`<div class="cl-bubble ai">${clRenderMarkdown(text)}</div>`;
-  div.innerHTML=avatar+bubble; msgs.appendChild(div); msgs.scrollTop=999999;
-}
-
-function clRenderTyping(id){
-  const msgs=document.getElementById('cl-messages'); if(!msgs)return;
-  const div=document.createElement('div'); div.className='cl-msg ai'; div.id=id;
-  div.innerHTML='<div class="cl-avatar ai">✦</div><div class="cl-bubble ai"><div class="cl-typing"><span></span><span></span><span></span></div></div>';
-  msgs.appendChild(div); msgs.scrollTop=999999;
-}
-
-function clRenderMarkdown(text){
-  let out=text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>`<pre><code>${code.trim()}</code></pre>`)
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\*\*([^*]+)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
-  return '<p>'+out.replace(/\n\n/g,'</p><p>').replace(/\n/g,'<br>')+'</p>';
-}
-
-function clUpdateCount(){ const el=document.getElementById('cl-msg-count'); if(el)el.textContent=_clMessages.length+' הודעות'; }
-function clSetStreamingUI(s){ const send=document.getElementById('cl-send-btn'),stop=document.getElementById('cl-stop-btn'); if(send)send.style.display=s?'none':'flex'; if(stop)stop.style.display=s?'flex':'none'; }
-function clAutoResize(ta){ if(!ta)return; ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,160)+'px'; }
-function clToggleSidebar(){ _clSidebarOpen=!_clSidebarOpen; const sb=document.getElementById('cl-sidebar'),bd=document.getElementById('cl-backdrop'); if(sb)sb.classList.toggle('open',_clSidebarOpen); if(bd)bd.classList.toggle('hidden',!_clSidebarOpen); }
-function clCloseSidebar(){ _clSidebarOpen=false; document.getElementById('cl-sidebar')?.classList.remove('open'); document.getElementById('cl-backdrop')?.classList.add('hidden'); }
-function clShowToast(msg,isError=false){ const existing=document.querySelector('.cl-toast'); if(existing)existing.remove(); const t=document.createElement('div'); t.className='cl-toast '+(isError?'error':'ok'); t.textContent=msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3500); }
 
 // ============================================================
 // FEEDBACK
