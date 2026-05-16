@@ -2764,28 +2764,8 @@ function clearClaoriChat() {
   initClaori();
 }
 
-async function initClaori() {
-  if (claoriInitialized) return;
-  claoriInitialized = true;
-  // Load all chat data
-  await loadClaoriData();
-  // Resume current chat or create new one
-  const existingChat = claoriCurrentChatId && claoriChats[claoriCurrentChatId];
-  if (existingChat) {
-    const chat = claoriChats[claoriCurrentChatId];
-    claoriHistory = chat.messages || [];
-    const msgs = document.getElementById('claori-messages');
-    if (msgs) msgs.innerHTML = '';
-    claoriHistory.forEach(m => _appendClaoriMsgOnly(m.role, m.content));
-    if (msgs) msgs.scrollTop = 99999;
-    if (claoriHistory.length > 0) return; // resumed successfully
-  }
-  // No valid chat — create fresh one
-  claoriCurrentChatId = createNewChat('New chat');
-  claoriHistory = [];
-  // Show welcome
-  const wt = getT();
-  appendClaoriMsg('assistant', wt.claoriWelcome || 'Hi! I\'m **claori** 👋 I can help you with the app and create quizzes for you.');
+function initClaori() {
+  initClaoriScreen();
 }
 
 function _appendClaoriMsgOnly(role, text) {
