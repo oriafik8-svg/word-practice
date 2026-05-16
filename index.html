@@ -5516,96 +5516,68 @@ async function clGenerateGame() {
   const desc = document.getElementById('cl-gc-desc')?.value?.trim();
   if(!desc){ alert('אנא תאר את המשחק שתרצה'); return; }
   const wordsEx = document.getElementById('cl-gc-words-example')?.value?.trim();
-  
+
   document.getElementById('cl-gc-gen-btn').disabled=true;
   document.getElementById('cl-gc-status').style.display='flex';
   document.getElementById('cl-gc-status-text').textContent='ה-AI בונה את המשחק...';
   document.getElementById('cl-gc-preview').style.display='none';
 
-  const currentWords = (words||[]).filter(w=>w.a&&w.b).slice(0,8)
-    .map(w=>w.a+'='+w.b).join(', ');
+  const currentWords = (words||[]).filter(w=>w.a&&w.b).slice(0,8).map(w=>w.a+'='+w.b).join(', ');
+  const gameId = 'cg'+Date.now().toString(36);
 
-  // שלב 1: קבל מטא-דאטה של המשחק
-  const metaPrompt = `You are building a vocabulary quiz game. User wants: "${desc.replace(/`/g,"'")}"
+  const prompt = `You are building a vocabulary quiz game for a web app.
+User wants: "${desc.replace(/`/g,"'")}"
 ${wordsEx?'Example words: '+wordsEx:''}
 ${currentWords?'App words: '+currentWords:''}
 
-Reply ONLY with valid JSON. Use ONLY ASCII characters in name and description (transliterate Hebrew to English letters if needed).
-Example: {"name":"Card Match","icon":"🃏","description":"Match cards to their translations","exampleWords":[{"a":"dog","b":"kelev"},{"a":"cat","b":"hatul"},{"a":"house","b":"bayit"}]}
-Reply ONLY the JSON object, nothing else:`;
+Reply with ONLY a JSON object (no markdown). Use only ASCII in name/description.
+The gameCode must be a complete self-contained JS function named startGame_${gameId}(wordsArray).
+It creates a fullscreen overlay div (id="cgame_${gameId}"), uses wordsArray as [{a,b}],
+dark theme (bg:#0d0f14,text:#e8ecf4,accent:#7c6aff), and has a finish button calling:
+document.getElementById("cgame_${gameId}").remove(); showScreen("input");
+Append overlay to document.body at the end of the function.
+Keep gameCode under 1800 chars.
+
+JSON format:
+{"name":"...","icon":"emoji","description":"...","exampleWords":[{"a":"...","b":"..."}],"gameCode":"function startGame_${gameId}(wordsArray){...}"}`;
 
   try {
-    // שלב 1: מטא-דאטה
-    const res1 = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{role:'user',parts:[{text:metaPrompt}]}],generationConfig:{maxOutputTokens:512,temperature:0.7}})
+    const res = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        contents:[{role:'user',parts:[{text:prompt}]}],
+        generationConfig:{maxOutputTokens:2048,temperature:0.6}
+      })
     });
-    const d1 = await res1.json();
-    console.log('[GC] full API response:', JSON.stringify(d1).slice(0,500));
-    let t1 = (d1?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
-    // חלץ JSON מתוך הטקסט - תמיכה ב-nested
-    let meta;
-    const tryParseJSON = (str) => {
-      // מצא את ה-{ הראשון וה-} האחרון
-      const start = str.indexOf('{');
-      const end = str.lastIndexOf('}');
-      if(start===-1||end===-1) return null;
-      try { return JSON.parse(str.slice(start, end+1)); } catch(e) { return null; }
+    const d = await res.json();
+    if(d.error) throw new Error(d.error.message||'שגיאת API');
+    let t = (d?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
+
+    // חלץ JSON
+    const tryParse = (str) => {
+      const s=str.indexOf('{'), e=str.lastIndexOf('}');
+      if(s===-1||e===-1) return null;
+      try{ return JSON.parse(str.slice(s,e+1)); }catch(e2){ return null; }
     };
-    console.log('[GC] AI response:', t1);
-    meta = tryParseJSON(t1);
-    if(!meta) {
-      const cleaned = t1.replace(/```[a-z]*/g,'').replace(/```/g,'').trim();
-      console.log('[GC] cleaned:', cleaned);
-      meta = tryParseJSON(cleaned);
-    }
+    let meta = tryParse(t) || tryParse(t.replace(/```[a-z]*/g,'').replace(/```/g,'').trim());
     if(!meta) throw new Error('לא הצלחתי לפענח את תגובת ה-AI. נסה שוב.');
 
-    document.getElementById('cl-gc-status-text').textContent='כותב את קוד המשחק...';
+    _gcCurrentGame = { ...meta, gameId };
 
-    // שלב 2: קוד המשחק בנפרד
-    const gameId = 'cg'+Date.now().toString(36);
-    const codePrompt = `Write a JavaScript function for this vocabulary game: "${desc}"
-Game name: ${meta.name}
-Function signature: function startGame_${gameId}(wordsArray)
-- wordsArray is [{a:"word",b:"translation"}]
-- Create a full-screen overlay div with id="cgame_${gameId}"
-- Dark theme: background #0d0f14, text #e8ecf4, accent #7c6aff
-- Include a finish button that does: document.getElementById('cgame_${gameId}')?.remove(); showScreen('input');
-- Append overlay to document.body and start the game
-- Keep code under 1500 chars, use only vanilla JS
-
-Reply with ONLY the JavaScript code, no explanation, no markdown.`;
-
-    const res2 = await fetch('https://gemini-proxy.oriafik8.workers.dev',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({contents:[{role:'user',parts:[{text:codePrompt}]}],generationConfig:{maxOutputTokens:2048,temperature:0.5}})
-    });
-    const d2 = await res2.json();
-    const gameCode = (d2?.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/```javascript|```js|```/g,'').trim();
-
-    if(!gameCode) throw new Error('לא התקבל קוד משחק');
-
-    _gcCurrentGame = { ...meta, gameCode, gameId };
-
-    // הצג תצוגה מקדימה
     document.getElementById('cl-gc-preview-icon').textContent = meta.icon||'🎮';
     document.getElementById('cl-gc-preview-name').textContent = meta.name||'משחק חדש';
     document.getElementById('cl-gc-preview-desc').textContent = meta.description||'';
-    
-    const wordsPreview = document.getElementById('cl-gc-preview-words');
-    wordsPreview.innerHTML='';
+
+    const wp = document.getElementById('cl-gc-preview-words');
+    wp.innerHTML='';
     (meta.exampleWords||[]).slice(0,6).forEach(w=>{
-      const chip=document.createElement('div');
-      chip.className='cl-gc-word-chip';
-      chip.textContent=w.a+' = '+w.b;
-      wordsPreview.appendChild(chip);
+      const c=document.createElement('div'); c.className='cl-gc-word-chip';
+      c.textContent=w.a+' = '+w.b; wp.appendChild(c);
     });
-    
+
     document.getElementById('cl-gc-status').style.display='none';
     document.getElementById('cl-gc-preview').style.display='block';
     document.getElementById('cl-gc-gen-btn').disabled=false;
-
   } catch(err) {
     document.getElementById('cl-gc-status-text').textContent='שגיאה: '+err.message+' — נסה שוב';
     document.getElementById('cl-gc-gen-btn').disabled=false;
