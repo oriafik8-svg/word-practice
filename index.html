@@ -366,6 +366,36 @@
   .flip-help.dark{background:var(--surface);border-color:var(--border);color:var(--text-muted);}
   .flip-help.dark:hover{background:var(--surface2);color:var(--text);}
 
+
+  /* ── MULTI-TRANSLATION ──────────────────────────────────── */
+  .word-row { align-items: stretch; }
+  .word-cell-a {
+    display: flex; align-items: center;
+    flex: 1; min-width: 0;
+  }
+  .word-cell-b {
+    display: flex; flex-direction: column; gap: 4px;
+    flex: 1; min-width: 0; position: relative;
+  }
+  .translation-row {
+    display: flex; align-items: center; gap: 4px;
+  }
+  .add-translation-btn {
+    background: none; border: 1px dashed var(--border);
+    border-radius: 6px; color: var(--accent);
+    font-size: 16px; width: 26px; height: 26px;
+    cursor: pointer; display: flex; align-items: center;
+    justify-content: center; flex-shrink: 0; transition: all .15s;
+    line-height: 1;
+  }
+  .add-translation-btn:hover { background: var(--accent-glow); border-color: var(--accent); }
+  .remove-translation-btn {
+    background: none; border: none; color: var(--text-muted);
+    font-size: 13px; cursor: pointer; padding: 2px 4px;
+    flex-shrink: 0; opacity: 0.6;
+  }
+  .remove-translation-btn:hover { color: var(--danger); opacity: 1; }
+
 </style>
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -1710,48 +1740,22 @@ function toggleGT() {
 }
 
 async function analyzeInput(text, srcLang, tgtLang) {
-  // Try Anthropic API first (works in Claude.ai)
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
-      body: JSON.stringify({
-        model:'claude-haiku-4-5-20251001', max_tokens:120,
-        messages:[{role:'user',content:`Translate "${text}" from ${srcLang} to ${tgtLang}. Reply ONLY with JSON: {"keyboardFix":null,"translation":"word"}`}]
-      })
-    });
-    if (res.ok) {
-      const data = await res.json();
-      const raw = data?.content?.[0]?.text?.trim();
-      if (raw) return JSON.parse(raw.replace(/```json|```/g,'').trim());
-    }
-  } catch(e) {}
-
-  // Fallback: MyMemory free translation API (works everywhere, no key needed)
-  try {
-    // Map lang native names to ISO codes for MyMemory
-    const langMap = {
-      'english':'en','hebrew':'עברית','arabic':'ar','french':'fr','spanish':'es',
-      'german':'de','russian':'ru','chinese':'zh','japanese':'ja','korean':'ko',
-      'portuguese':'pt','italian':'it','dutch':'nl','turkish':'tr','polish':'pl',
-      'swedish':'sv','danish':'da','norwegian':'no','finnish':'fi','ukrainian':'uk',
-      'עברית':'he','العربية':'ar','français':'fr','español':'es','deutsch':'de',
-      'русский':'ru','中文':'zh','日本語':'ja','한국어':'ko','português':'pt',
-      'italiano':'it','nederlands':'nl','türkçe':'tr','polski':'pl'
-    };
-    const srcCode = langMap[srcLang.toLowerCase()] || srcLang.slice(0,2).toLowerCase();
-    const tgtCode = langMap[tgtLang.toLowerCase()] || tgtLang.slice(0,2).toLowerCase();
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcCode}|${tgtCode}`;
+    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${srcLang}|${tgtLang}`;
     const res = await fetch(url);
     if (res.ok) {
       const data = await res.json();
-      const translation = data?.responseData?.translatedText;
-      if (translation && translation !== text) {
-        return { keyboardFix: null, translation };
-      }
+      const main = data?.responseData?.translatedText;
+      if (!main || main.trim().length === 0 || main.toLowerCase().startsWith('invalid')) return null;
+      // תרגומים נוספים מ-matches
+      const extras = (data?.matches||[])
+        .filter(m => m.translation && !m.translation.toLowerCase().startsWith('invalid') && m.translation.trim().toLowerCase() !== main.trim().toLowerCase())
+        .map(m => m.translation.trim())
+        .filter((v,i,a) => a.indexOf(v)===i)
+        .slice(0,4);
+      return { keyboardFix: null, translation: main.trim(), allTranslations: [main.trim(), ...extras] };
     }
   } catch(e) {}
-
   return null;
 }
 
@@ -1772,8 +1776,8 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
   const text=inputEl.value.trim();
   if(!text){rowEl.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));return;}
   if(!gtConnected||!lang1||!lang2) return;
-  const srcLang=side==='a'?lang1.native:lang2.native;
-  const tgtLang=side==='a'?lang2.native:lang1.native;
+  const srcLang=side==='a'?lang1.id:lang2.id;
+  const tgtLang=side==='a'?lang2.id:lang1.id;
   const otherInput=rowEl.querySelector(`[data-side="${targetSide}"]`);
   const kbSugg=rowEl.querySelector('.kb-suggestion-'+side);
   const trSugg=rowEl.querySelector('.gt-suggestion-'+targetSide);
@@ -1783,7 +1787,23 @@ function triggerAnalysis(rowEl, inputEl, targetSide, wordsArr, lang1, lang2, isS
     const result=await analyzeInput(text,srcLang,tgtLang);
     if(!result){if(kbSugg)kbSugg.classList.remove('visible');if(trSugg)trSugg.classList.remove('visible');return;}
     if(result.keyboardFix) showSuggestionEl(kbSugg,result.keyboardFix,t.kbSuggestionLabel,t.kbAccept); else if(kbSugg)kbSugg.classList.remove('visible');
-    if(!otherInput||!otherInput.value.trim()) showSuggestionEl(trSugg,result.translation,t.gtSuggestionLabel,t.accept); else if(trSugg)trSugg.classList.remove('visible');
+    if(!otherInput||!otherInput.value.trim()) {
+        // תרגומים מרובים בוויזארד
+        const allT = result.allTranslations || [result.translation];
+        const bInputs = rowEl.querySelectorAll('input[data-side="b"]');
+        if(bInputs.length > 1 && allT.length > 1) {
+          bInputs.forEach((inp, bi) => {
+            if(allT[bi] && !inp.value.trim()) {
+              inp.value = allT[bi];
+              const wi = +inp.dataset.idx;
+              if(wordsArr[wi] && Array.isArray(wordsArr[wi].b)) wordsArr[wi].b[bi] = allT[bi];
+            }
+          });
+          if(trSugg) trSugg.classList.remove('visible');
+        } else {
+          showSuggestionEl(trSugg,allT[0],t.gtSuggestionLabel,t.accept);
+        }
+      } else if(trSugg) trSugg.classList.remove('visible');
   },700);
 }
 
@@ -2041,7 +2061,22 @@ function _doStartQuiz(mode, wrongOnly) {
   quizMode=mode;
   const validWords=words.filter(w=>w.a.trim()&&w.b.trim());
   const pool=wrongOnly||validWords;
-  quizItems=pool.map(w=>{let prompt,answer;if(quizDirection==='1to2'){prompt=w.a;answer=w.b;}else if(quizDirection==='2to1'){prompt=w.b;answer=w.a;}else{if(Math.random()>0.5){prompt=w.a;answer=w.b;}else{prompt=w.b;answer=w.a;}}return{prompt,answer,original:w};});
+  quizItems=pool.map(w=>{
+  let prompt,answer,answers;
+  const bArr=Array.isArray(w.b)?w.b.filter(x=>x.trim()):[w.b||''];
+  const bMain=bArr[0]||'';
+  if(quizDirection==='1to2'){
+    prompt=w.a; answer=bMain; answers=bArr;
+  } else if(quizDirection==='2to1'){
+    // אם יש מספר תרגומים, בחר אחד אקראי לשאלה
+    const pick=bArr[Math.floor(Math.random()*bArr.length)];
+    prompt=pick; answer=w.a; answers=[w.a];
+  } else {
+    if(Math.random()>0.5){ prompt=w.a; answer=bMain; answers=bArr; }
+    else { const pick=bArr[Math.floor(Math.random()*bArr.length)]; prompt=pick; answer=w.a; answers=[w.a]; }
+  }
+  return{prompt,answer,answers,original:w};
+});
   shuffle(quizItems);currentIdx=0;results=[];showScreen('quiz');showQuestion();
 }
 
@@ -4855,15 +4890,15 @@ function _wizStep(n) {
 }
 
 function openCreateWizard() {
-  _wizWords=[{a:'',b:''}];
+  _wizWords=[{a:'',b:['']}];
   _wizLang1=selectedLang[0]||null; _wizLang2=selectedLang[1]||null;
   _wizMode='classic'; _wizSubTypes=['writing'];
   showScreen('wizard'); _wizStep(1); _wizUpdateLangDisplay();
-  document.getElementById('wiz-pick-lang1').onclick=()=>{openLangPickerFor(0, (lang)=>{ activePicker=0; selectLang(lang); _wizLang1=lang; _wizUpdateLangDisplay(); });};
-  document.getElementById('wiz-pick-lang2').onclick=()=>{openLangPickerFor(1, (lang)=>{ activePicker=1; selectLang(lang); _wizLang2=lang; _wizUpdateLangDisplay(); });};
+  document.getElementById('wiz-pick-lang1').onclick=()=>{window._wizPickSide=0; activePicker=0; document.getElementById('lang-modal-overlay').classList.add('open');};
+  document.getElementById('wiz-pick-lang2').onclick=()=>{window._wizPickSide=1; activePicker=1; document.getElementById('lang-modal-overlay').classList.add('open');};
   document.getElementById('wiz-next-1').onclick=()=>{if(_wizLang1){activePicker=0;selectLangDirect(_wizLang1);}if(_wizLang2){activePicker=1;selectLangDirect(_wizLang2);}_wizStep(2);_wizRenderWords();};
   document.getElementById('wiz-add-word').onclick=()=>{_wizWords.push({a:'',b:''});_wizRenderWords();};
-  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&w.b.trim());renderWords();saveWordsToStorage();_wizStep(3);};
+  document.getElementById('wiz-next-2').onclick=()=>{words=_wizWords.filter(w=>w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x.trim()):w.b.trim())).map(w=>({a:w.a,b:Array.isArray(w.b)?w.b.filter(x=>x.trim()):w.b}));renderWords();saveWordsToStorage();_wizStep(3);};
   document.getElementById('wiz-back-1').onclick=()=>_wizStep(1);
   document.querySelectorAll('.wiz-mode-btn').forEach(btn=>{btn.onclick=()=>{_wizMode=btn.dataset.mode;document.querySelectorAll('.wiz-mode-btn').forEach(b=>{b.style.borderColor=b===btn?'var(--accent)':'var(--border)';b.style.background=b===btn?'rgba(233,69,96,0.1)':'transparent';});const opts=document.getElementById('wiz-classic-opts');if(opts)opts.style.display=_wizMode==='classic'?'':'none';};});
   document.getElementById('wiz-next-3').onclick=()=>{quizMode=_wizMode;_wizSubTypes=[];if(document.getElementById('wiz-sub-writing')?.checked)_wizSubTypes.push('writing');if(document.getElementById('wiz-sub-mcq')?.checked)_wizSubTypes.push('mcq');if(document.getElementById('wiz-sub-tf')?.checked)_wizSubTypes.push('tf');if(!_wizSubTypes.length)_wizSubTypes=['writing'];quizSubTypes=_wizSubTypes;if(smartModeSaved){autoSaveQuiz();_doStartQuiz('normal',null);}else _wizStep(4);};
@@ -4900,46 +4935,114 @@ function _wizUpdateLangDisplay() {
 function _wizCheckStep1(){const btn=document.getElementById('wiz-next-1');if(btn){btn.disabled=!(_wizLang1&&_wizLang2);btn.style.opacity=(_wizLang1&&_wizLang2)?'1':'0.4';}}
 function _wizRenderWords(){
   const container=document.getElementById('wiz-words-list');if(!container)return;
-  if(!_wizWords.length)_wizWords=[{a:'',b:''}];
+  if(!_wizWords.length)_wizWords=[{a:'',b:['']}];
   container.innerHTML='';
-  const t=getT();
   _wizWords.forEach((w,i)=>{
-    const row=document.createElement('div');row.className='word-row';
-    row.innerHTML=`<div class="word-cell"><input class="word-input" data-idx="${i}" data-side="a" value="${escHtml(w.a)}" placeholder="${_wizLang1?.native||'Word'}" style="text-align:right">
-      <div class="gt-suggestion gt-suggestion-a" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
-    </div><span style="color:var(--text-muted);font-size:16px;align-self:center">→</span><div class="word-cell"><input class="word-input" data-idx="${i}" data-side="b" value="${escHtml(w.b)}" placeholder="${_wizLang2?.native||'Translation'}" style="text-align:right">
-      <div class="gt-suggestion gt-suggestion-b" data-suggestion=""><div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button></div>
-    </div><button class="delete-btn" data-del="${i}">✕</button>`;
+    // וודא ש-b הוא תמיד array
+    if(!Array.isArray(w.b)) w.b=[w.b||''];
+    const row=document.createElement('div');
+    row.className='word-row';
+    row.style.cssText='display:flex;gap:8px;align-items:stretch;margin-bottom:6px;';
+
+    // צד א - מילה
+    const cellA=document.createElement('div');
+    cellA.className='word-cell-a';
+    cellA.style.cssText='flex:1;display:flex;align-items:center;';
+    cellA.innerHTML=`<input class="word-input" data-idx="${i}" data-side="a" value="${escHtml(w.a)}" placeholder="${_wizLang1?.native||'Word'}" style="width:100%;text-align:right">`;
+
+    // חץ
+    const arrow=document.createElement('span');
+    arrow.textContent='→';
+    arrow.style.cssText='color:var(--text-muted);font-size:16px;align-self:center;flex-shrink:0;';
+
+    // צד ב - תרגומים (מרובים)
+    const cellB=document.createElement('div');
+    cellB.className='word-cell-b';
+    cellB.style.cssText='flex:1;display:flex;flex-direction:column;gap:4px;';
+
+    const rebuildB = () => {
+      cellB.innerHTML='';
+      w.b.forEach((bVal, bi)=>{
+        const tRow=document.createElement('div');
+        tRow.style.cssText='display:flex;align-items:center;gap:4px;';
+        const inp=document.createElement('input');
+        inp.className='word-input';
+        inp.style.cssText='flex:1;text-align:right;';
+        inp.placeholder=_wizLang2?.native||'Translation';
+        inp.value=escHtml(bVal);
+        inp.dataset.idx=i; inp.dataset.bidx=bi; inp.dataset.side='b';
+        inp.addEventListener('input',()=>{
+          w.b[bi]=inp.value; _wizCount();
+          if(bi===0&&gtConnected&&_wizLang1&&_wizLang2){
+            triggerAnalysis(row,inp,'b',_wizWords,_wizLang1,_wizLang2,false);
+          }
+        });
+        tRow.appendChild(inp);
+        // כפתור הסרת תרגום (רק אם יש יותר מאחד)
+        if(w.b.length>1){
+          const rmBtn=document.createElement('button');
+          rmBtn.className='remove-translation-btn';
+          rmBtn.textContent='✕';
+          rmBtn.title='הסר תרגום';
+          rmBtn.onclick=()=>{ w.b.splice(bi,1); rebuildB(); _wizCount(); };
+          tRow.appendChild(rmBtn);
+        }
+        cellB.appendChild(tRow);
+      });
+      // כפתור הוספת תרגום
+      const addBtn=document.createElement('button');
+      addBtn.className='add-translation-btn';
+      addBtn.textContent='+';
+      addBtn.title='הוסף תרגום';
+      addBtn.onclick=()=>{ w.b.push(''); rebuildB(); _wizCount(); };
+      cellB.appendChild(addBtn);
+    };
+    rebuildB();
+
+    // כפתור מחיקת שורה
+    const delBtn=document.createElement('button');
+    delBtn.className='delete-btn';
+    delBtn.dataset.del=i;
+    delBtn.textContent='✕';
+    delBtn.onclick=()=>{ if(_wizWords.length>1){_wizWords.splice(i,1);_wizRenderWords();} };
+
+    cellA.querySelector('input').addEventListener('input',e=>{
+      w.a=e.target.value; _wizCount();
+      if(gtConnected&&_wizLang1&&_wizLang2){
+        const inp=cellA.querySelector('input');
+        triggerAnalysis(row,inp,'b',_wizWords,_wizLang1,_wizLang2,false);
+      }
+    });
+
+    // gt-suggestion לצד א
+    const gtSuggA=document.createElement('div');
+    gtSuggA.className='gt-suggestion gt-suggestion-a'; gtSuggA.dataset.suggestion='';
+    gtSuggA.innerHTML='<div class="gt-spinner" style="display:none"></div><span class="gt-suggestion-text"></span><button class="gt-accept-btn" type="button" title="אשר">✓</button><button class="gt-reject-btn" type="button" title="בטל">✕</button>';
+    cellA.appendChild(gtSuggA);
+
+    row.appendChild(cellA);
+    row.appendChild(arrow);
+    row.appendChild(cellB);
+    row.appendChild(delBtn);
+
+    // gt-suggestion click handlers
+    row.addEventListener('click',e=>{
+      const rej=e.target.closest('.gt-reject-btn');
+      if(rej){const sg=rej.closest('.gt-suggestion');sg.classList.remove('visible');sg.dataset.suggestion='';return;}
+      const acc=e.target.closest('.gt-accept-btn');
+      if(acc){
+        const sg=acc.closest('.gt-suggestion');const sug=sg.dataset.suggestion;if(!sug)return;
+        // הכנס לשדה ב הראשון
+        const firstB=row.querySelector('input[data-side="b"]');
+        if(firstB){firstB.value=sug;w.b[0]=sug;sg.classList.remove('visible');_wizCount();}
+      }
+    });
+
     container.appendChild(row);
-  });
-  container.querySelectorAll('input').forEach(inp=>inp.addEventListener('input',()=>{
-    _wizWords[+inp.dataset.idx][inp.dataset.side]=inp.value;
-    _wizCount();
-    if(gtConnected && _wizLang1 && _wizLang2){
-      const row=inp.closest('.word-row');
-      const targetSide=inp.dataset.side==='a'?'b':'a';
-      triggerAnalysis(row, inp, targetSide, _wizWords, _wizLang1, _wizLang2, false);
-    }
-  }));
-  container.querySelectorAll('[data-del]').forEach(btn=>btn.addEventListener('click',()=>{
-    if(_wizWords.length>1){_wizWords.splice(+btn.dataset.del,1);_wizRenderWords();}
-  }));
-  container.addEventListener('click',e=>{
-    const rej=e.target.closest('.gt-reject-btn');
-    if(rej){const sg=rej.closest('.gt-suggestion');sg.classList.remove('visible');sg.dataset.suggestion='';return;}
-    const acc=e.target.closest('.gt-accept-btn');
-    if(acc){
-      const sg=acc.closest('.gt-suggestion');
-      const sug=sg.dataset.suggestion;
-      if(!sug)return;
-      const cell=sg.closest('.word-cell');
-      const inp=cell.querySelector('.word-input');
-      if(inp){inp.value=sug;_wizWords[+inp.dataset.idx][inp.dataset.side]=sug;cell.querySelectorAll('.gt-suggestion').forEach(s=>s.classList.remove('visible'));_wizCount();}
-    }
   });
   _wizCount();
 }
-function _wizCount(){const v=_wizWords.filter(w=>w.a.trim()&&w.b.trim()).length;const el=document.getElementById('wiz-words-count');if(el)el.textContent=v>=3?`✅ ${v} words ready`:`${v}/3 (min 3)`;const btn=document.getElementById('wiz-next-2');if(btn){btn.disabled=v<3;btn.style.opacity=v>=3?'1':'0.4';}}
+function _wizCount(){const v=_wizWords.filter(w=>w.a&&w.a.trim()&&(Array.isArray(w.b)?w.b.some(x=>x&&x.trim()):w.b&&w.b.trim())).length;const el=document.getElementById('wiz-words-count');if(el)el.textContent=v>=3?`✅ ${v} words ready`:`${v}/3 (min 3)`;const btn=document.getElementById('wiz-next-2');if(btn){btn.disabled=v<3;btn.style.opacity=v>=3?'1':'0.4';}}
 
 document.addEventListener('DOMContentLoaded', () => {
   wordsList = document.getElementById('words-list') || document.createElement('div');
@@ -5139,43 +5242,6 @@ document.addEventListener('DOMContentLoaded', () => {
   checkShareLink();
   initDailyMissions();
 });
-
-
-
-// ── פונקציית בחירת שפה שעובדת ─────────────────────────────
-function openLangPickerFor(side, onSelect) {
-  const ul = document.getElementById('ui-modal-list');
-  const overlay = document.getElementById('ui-lang-modal-overlay');
-  const search = document.getElementById('ui-modal-search');
-  if(!ul || !overlay) return;
-
-  // בנה רשימה מ-ALL_LANGS
-  const buildList = (f) => {
-    ul.innerHTML = '';
-    const langs = (ALL_LANGS||[]).filter(l => !f ||
-      getLangDisplayName(l).toLowerCase().includes(f.toLowerCase()) ||
-      (l.native||'').toLowerCase().includes(f.toLowerCase()));
-    langs.forEach(lang => {
-      const div = document.createElement('div');
-      div.className = 'lang-option' + (selectedLang[side]?.id===lang.id?' selected':'');
-      div.innerHTML = `<span class="opt-flag">${lang.flag}</span><span class="opt-name">${getLangDisplayName(lang)}</span><span class="opt-native">${lang.native}</span><span class="opt-check">✓</span>`;
-      div.addEventListener('click', () => {
-        overlay.classList.remove('open');
-        if(search) search.value = '';
-        onSelect(lang);
-      });
-      ul.appendChild(div);
-    });
-  };
-
-  buildList('');
-  if(search) {
-    search.value = '';
-    search.oninput = () => buildList(search.value);
-  }
-  overlay.classList.add('open');
-  setTimeout(() => search?.focus(), 100);
-}
 
 
 // ============================================================
