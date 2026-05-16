@@ -5541,8 +5541,21 @@ Reply ONLY the JSON object, nothing else:`;
       body:JSON.stringify({contents:[{role:'user',parts:[{text:metaPrompt}]}],generationConfig:{maxOutputTokens:512,temperature:0.7}})
     });
     const d1 = await res1.json();
-    const t1 = (d1?.candidates?.[0]?.content?.parts?.[0]?.text||'').replace(/```json|```/g,'').trim();
-    const meta = JSON.parse(t1);
+    let t1 = (d1?.candidates?.[0]?.content?.parts?.[0]?.text||'').trim();
+    // חלץ JSON מתוך הטקסט
+    const jsonMatch = t1.match(/\{[^{}]*\}/s);
+    if(!jsonMatch) throw new Error('לא נמצא JSON בתגובה');
+    t1 = jsonMatch[0];
+    let meta;
+    try { meta = JSON.parse(t1); }
+    catch(e) {
+      // נקה תווים בעייתיים
+      t1 = t1.replace(/[\u0590-\u05FF]/g, c => {
+        const map = {'א':'a','ב':'b','ג':'g','ד':'d','ה':'h','ו':'v','ז':'z','ח':'ch','ט':'t','י':'y','כ':'k','ל':'l','מ':'m','נ':'n','ס':'s','ע':'e','פ':'p','צ':'ts','ק':'k','ר':'r','ש':'sh','ת':'t'};
+        return map[c]||'';
+      });
+      meta = JSON.parse(t1);
+    }
 
     document.getElementById('cl-gc-status-text').textContent='כותב את קוד המשחק...';
 
