@@ -5526,12 +5526,13 @@ async function clGenerateGame() {
     .map(w=>w.a+'='+w.b).join(', ');
 
   // שלב 1: קבל מטא-דאטה של המשחק
-  const metaPrompt = `You are building a vocabulary quiz game. User wants: "${desc}"
+  const metaPrompt = `You are building a vocabulary quiz game. User wants: "${desc.replace(/`/g,"'")}"
 ${wordsEx?'Example words: '+wordsEx:''}
 ${currentWords?'App words: '+currentWords:''}
 
-Reply ONLY with this JSON (no markdown, no extra text):
-{"name":"Game name","icon":"emoji","description":"1-2 sentence description","exampleWords":[{"a":"word1","b":"trans1"},{"a":"word2","b":"trans2"},{"a":"word3","b":"trans3"}]}`;
+Reply ONLY with valid JSON. Use ONLY ASCII characters in name and description (transliterate Hebrew to English letters if needed).
+Example: {"name":"Card Match","icon":"🃏","description":"Match cards to their translations","exampleWords":[{"a":"dog","b":"kelev"},{"a":"cat","b":"hatul"},{"a":"house","b":"bayit"}]}
+Reply ONLY the JSON object, nothing else:`;
 
   try {
     // שלב 1: מטא-דאטה
